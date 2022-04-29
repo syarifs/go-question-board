@@ -1,0 +1,9 @@
+server:
+  PORT: "8080"
+db:
+  # Database Driver (mysql, sqlite)
+  DRIVER: "mysql"
+  DATABASE: "question_board"
+  USERNAME: "root"
+  PASSWORD: "toor"
+  HOST: "localhost"
