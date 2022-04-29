@@ -20,7 +20,6 @@ func (srv UserService) CreateUser(user models.UserModel) (res response.UserRespo
 		res = response.UserResponse{
 			Name: user.Name,
 			Email: user.Email,
-			Level: models.LevelModel{ID: user.LevelID},
 			Status: user.Status,
 		}
 	}
@@ -36,6 +35,9 @@ func (srv UserService) ReadUser() (res []response.UserResponse, err error) {
 				Name: um.Name,
 				Email: um.Email,
 				Level: um.Level,
+				Major: um.Major,
+				Tags: um.Tags,
+				Subject: um.Subject,
 				Status: um.Status,
 			})
 		}
@@ -50,6 +52,9 @@ func (srv UserService) UpdateUser(id int, user models.UserModel) (res response.U
 			Name: user.Name,
 			Email: user.Email,
 			Level: user.Level,
+			Major: user.Major,
+			Tags: user.Tags,
+			Subject: user.Subject,
 			Status: user.Status,
 		}
 	}

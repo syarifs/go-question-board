@@ -15,20 +15,6 @@ type AuthRepository struct {
 	mock.Mock
 }
 
-// CreateLevel provides a mock function with given fields: _a0
-func (_m *AuthRepository) CreateLevel(_a0 request.LevelRequest) error {
-	ret := _m.Called(_a0)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(request.LevelRequest) error); ok {
-		r0 = rf(_a0)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
 // Login provides a mock function with given fields: _a0
 func (_m *AuthRepository) Login(_a0 request.LoginRequest) (response.UserResponse, error) {
 	ret := _m.Called(_a0)
@@ -48,4 +34,9 @@ func (_m *AuthRepository) Login(_a0 request.LoginRequest) (response.UserResponse
 	}
 
 	return r0, r1
+}
+
+// RefreshToken provides a mock function with given fields:
+func (_m *AuthRepository) RefreshToken() {
+	_m.Called()
 }

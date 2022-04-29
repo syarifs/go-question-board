@@ -16,7 +16,7 @@ func NewUserRepository(db *gorm.DB) *userRepository {
 }
 
 func (repo userRepository) CreateUser(user m.UserModel) (err error) {
-	err = repo.db.Save(&user).Error
+	err = repo.db.Omit("Major", "Level").Create(&user).Error
 	return
 }
 

@@ -1,6 +1,10 @@
 package database
 
-import "gorm.io/gorm"
+import (
+	"go-question-board/internal/framework/database/seeds"
+
+	"gorm.io/gorm"
+)
 
 func InitDatabase(driver string) (db *gorm.DB) {
 	var err error
@@ -16,6 +20,7 @@ func InitDatabase(driver string) (db *gorm.DB) {
 	if err != nil {
 		panic(err)
 	}
+	seeds.NewSeeders(db)
 
 	return db
 }

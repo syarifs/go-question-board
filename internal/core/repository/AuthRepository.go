@@ -6,6 +6,6 @@ import (
 )
 
 type AuthRepository interface {
-	CreateLevel(req.LevelRequest) error
 	Login(req.LoginRequest) (res.UserResponse, error)
+	RefreshToken()
 }
