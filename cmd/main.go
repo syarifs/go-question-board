@@ -17,18 +17,13 @@ func main() {
 	utils.LoadConfig()
 
 	db := database.InitDatabase(utils.DB_DRIVER)
-	userRepo := repository.NewUserRepository(db)
-	userService := service.NewUserService(userRepo)
-	userController := controller.NewUserController(userService)
-	
-	authRepo := repository.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepo)
-	authController := controller.NewAuthController(authService)
+	repo := repository.NewRepository(db)
+	serv := service.NewService(repo)
+	ctrl := controller.NewController(serv)
 
 	e := echo.New()
-	routes.NewUserRoutes(e, userController, middleware.JWT())
-	routes.NewAuthRoutes(e, authController)
-
+	routes.NewRoutes(e, ctrl)
+	
 	middleware.Logging(e)
 
 	e.Start(":" + utils.SERVER_PORT)

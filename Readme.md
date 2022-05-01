@@ -24,9 +24,9 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Implementasi **JWT Middleware**.
 - [x] Implementasi **Logging Middleware**.
 - [ ] Menyimpan *Log* ke Firebase.
-- [ ] Menambahkan CRUD untuk manajemen **Subject**.
-- [ ] Menambahkan CRUD untuk manajemen **Tag**.
-- [ ] Menambahkan CRUD untuk manajemen **Major**.
+- [x] Menambahkan CRUD untuk manajemen **Subject**.
+- [x] Menambahkan CRUD untuk manajemen **Tag**.
+- [x] Menambahkan CRUD untuk manajemen **Major**.
 - [ ] Menambahkan CRUD untuk manajemen **Questionnaire**.
 - [ ] Menambahkan fitur **Filter by Tag** untuk **Questionnaire**.
 - [ ] Menambahkan fitur **Email Notification** untuk pemberitahuan **Questionnaire** yang dapat dikerjakan.
