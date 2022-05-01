@@ -34,3 +34,8 @@ func (repo userRepository) ReadUser() (user *[]m.UserModel, err error) {
 	err = repo.db.Preload(clause.Associations).Find(&user).Error
 	return
 }
+
+func (repo userRepository) ReadUserByID(id int) (user *m.UserModel, err error) {
+	err = repo.db.Preload(clause.Associations).Find(&user, id).Error
+	return
+}

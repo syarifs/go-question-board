@@ -49,6 +49,22 @@ func (ucon UserController) ReadUser(c echo.Context) error {
 	}
 }
 
+func (ucon UserController) ReadUserByID(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	user, err := ucon.srv.ReadUserByID(id)
+	if err == nil {
+		return c.JSON(http.StatusOK, echo.Map{
+			"message": "User Fetched",
+			"data": user,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, echo.Map{
+			"message": "Failed to Fetch User",
+			"error": err,
+		})
+	}
+}
+
 func (ucon UserController) UpdateUser(c echo.Context) error {
 	user := models.UserModel{}
 	id, _ := strconv.Atoi(c.Param("id"))

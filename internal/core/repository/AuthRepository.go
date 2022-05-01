@@ -1,11 +1,11 @@
 package repository
 
 import (
+	"go-question-board/internal/core/models"
 	req "go-question-board/internal/core/models/request"
-	res "go-question-board/internal/core/models/response"
 )
 
 type AuthRepository interface {
-	Login(req.LoginRequest) (res.UserResponse, error)
-	RefreshToken()
+	Login(req.LoginRequest) (models.UserModel, error)
+	RefreshToken(models.TokenModel) (models.TokenModel, error)
 }

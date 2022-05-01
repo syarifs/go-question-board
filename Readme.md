@@ -9,10 +9,8 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 ##### Common Feature
 - Authenication.
 - Evaluate Teacher.
-- Create Survey.
-- View Survey Result.
-- Create Polling.
-- View Polling Result.
+- Create Survey or Polling.
+- View Survey or Polling Status.
 
 ## Todo
 - [x] ERD.
@@ -21,10 +19,10 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Menggunakan file `config.yaml` untuk memuat *environment variables*.
 - [x] Membuat Database Seeder.
 - [x] CRUD One to One Relation.
-- [ ] CRUD Many to Many Relation.
-- [ ] Menambahkan Login Path.
-- [ ] Implementasi **JWT Middleware**.
-- [ ] Implementasi **Logging Middleware**.
+- [x] CRUD Many to Many Relation.
+- [x] Menambahkan Login Path.
+- [x] Implementasi **JWT Middleware**.
+- [x] Implementasi **Logging Middleware**.
 - [ ] Menyimpan *Log* ke Firebase.
 - [ ] Menambahkan CRUD untuk manajemen **Subject**.
 - [ ] Menambahkan CRUD untuk manajemen **Tag**.

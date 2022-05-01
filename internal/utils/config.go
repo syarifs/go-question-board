@@ -1,6 +1,8 @@
 package utils
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+)
 
 var (
 	DB_USERNAME string
@@ -9,6 +11,7 @@ var (
 	DB_HOST string
 	DB_DRIVER string
 	SERVER_PORT string
+	SERVER_SECRET []byte
 )
 
 func LoadConfig() {
@@ -25,4 +28,5 @@ func LoadConfig() {
 	DB_HOST = viper.Get("db.HOST").(string)
 	DB_DRIVER = viper.Get("db.DRIVER").(string)
 	SERVER_PORT = viper.Get("server.PORT").(string)
+	SERVER_SECRET= []byte(viper.GetString("server.SECRET"))
 }

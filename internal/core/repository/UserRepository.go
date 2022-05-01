@@ -9,4 +9,5 @@ type UserRepository interface {
 	UpdateUser(int, m.UserModel) error
 	DeleteUser(int) error
 	ReadUser() (*[]m.UserModel, error)
+	ReadUserByID(int) (*m.UserModel, error)
 }

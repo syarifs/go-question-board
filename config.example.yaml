@@ -1,4 +1,5 @@
 server:
+  SECRET: "13550350a8681c84c861aac2e5b440161c2b33a3e4f302ac680ca5b686de48de"
   PORT: "8080"
 db:
   # Database Driver (mysql, sqlite)
