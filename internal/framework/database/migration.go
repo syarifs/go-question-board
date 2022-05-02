@@ -8,8 +8,11 @@ import (
 
 func migrateDB(db *gorm.DB) (err error) {
 	err = db.AutoMigrate(
-		models.UserModel{},
-		models.LevelModel{},
+		models.User{},
+		models.Level{},
+		models.Questionnaire{},
+		models.Question{},
+		models.AnswerOption{},
 	)
 	return
 }

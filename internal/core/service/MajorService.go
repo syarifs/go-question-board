@@ -13,14 +13,14 @@ func NewMajorService(repo repository.MajorRepository) *MajorService {
 	return &MajorService{repo: repo}
 }
 
-func (srv MajorService) CreateMajor(major models.MajorModel) (res models.MajorModel, err error) {
+func (srv MajorService) CreateMajor(major models.Major) (res models.Major, err error) {
 	err  = srv.repo.CreateMajor(major)
 	res = major
 	return
 }
 
-func (srv MajorService) ReadMajor() (res []models.MajorModel, err error) {
-	var major *[]models.MajorModel
+func (srv MajorService) ReadMajor() (res []models.Major, err error) {
+	var major *[]models.Major
 	major, err  = srv.repo.ReadMajor()
 	if err == nil {
 		for _, um := range *major {
@@ -30,7 +30,7 @@ func (srv MajorService) ReadMajor() (res []models.MajorModel, err error) {
 	return
 }
 
-func (srv MajorService) UpdateMajor(id int, major models.MajorModel) (res models.MajorModel, err error) {
+func (srv MajorService) UpdateMajor(id int, major models.Major) (res models.Major, err error) {
 	err  = srv.repo.UpdateMajor(id, major)
 	if err == nil {
 		res = major

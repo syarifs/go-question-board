@@ -18,7 +18,7 @@ func NewMajorController(srv *service.MajorService) *MajorController {
 }
 
 func (ucon MajorController) CreateMajor(c echo.Context) error {
-	major := models.MajorModel{}
+	major := models.Major{}
 	c.Bind(&major)
 	res, err := ucon.srv.CreateMajor(major)
 	if err == nil {
@@ -50,7 +50,7 @@ func (ucon MajorController) ReadMajor(c echo.Context) error {
 }
 
 func (ucon MajorController) UpdateMajor(c echo.Context) error {
-	major := models.MajorModel{}
+	major := models.Major{}
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.Bind(&major)
 	res, err := ucon.srv.UpdateMajor(id, major)

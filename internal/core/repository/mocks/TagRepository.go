@@ -14,11 +14,11 @@ type TagRepository struct {
 }
 
 // CreateTag provides a mock function with given fields: _a0
-func (_m *TagRepository) CreateTag(_a0 models.TagModel) error {
+func (_m *TagRepository) CreateTag(_a0 models.Tag) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.TagModel) error); ok {
+	if rf, ok := ret.Get(0).(func(models.Tag) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -42,15 +42,15 @@ func (_m *TagRepository) DeleteTag(_a0 int) error {
 }
 
 // ReadTag provides a mock function with given fields:
-func (_m *TagRepository) ReadTag() (*[]models.TagModel, error) {
+func (_m *TagRepository) ReadTag() (*[]models.Tag, error) {
 	ret := _m.Called()
 
-	var r0 *[]models.TagModel
-	if rf, ok := ret.Get(0).(func() *[]models.TagModel); ok {
+	var r0 *[]models.Tag
+	if rf, ok := ret.Get(0).(func() *[]models.Tag); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.TagModel)
+			r0 = ret.Get(0).(*[]models.Tag)
 		}
 	}
 
@@ -65,11 +65,11 @@ func (_m *TagRepository) ReadTag() (*[]models.TagModel, error) {
 }
 
 // UpdateTag provides a mock function with given fields: _a0, _a1
-func (_m *TagRepository) UpdateTag(_a0 int, _a1 models.TagModel) error {
+func (_m *TagRepository) UpdateTag(_a0 int, _a1 models.Tag) error {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.TagModel) error); ok {
+	if rf, ok := ret.Get(0).(func(int, models.Tag) error); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)

@@ -7,11 +7,11 @@ import (
 )
 
 func majorSeeder() Seed {
-	seeds := []models.MajorModel{
+	seeds := []models.Major{
 		{Code: "INF", Name: "Informatika"},
 		{Code: "SI", Name: "Sistem Informasi"},
 	}
-	model := &models.MajorModel{}
+	model := &models.Major{}
 
 	return Seed{
 		models: model,

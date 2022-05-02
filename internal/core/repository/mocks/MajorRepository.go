@@ -14,11 +14,11 @@ type MajorRepository struct {
 }
 
 // CreateMajor provides a mock function with given fields: _a0
-func (_m *MajorRepository) CreateMajor(_a0 models.MajorModel) error {
+func (_m *MajorRepository) CreateMajor(_a0 models.Major) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.MajorModel) error); ok {
+	if rf, ok := ret.Get(0).(func(models.Major) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -42,15 +42,15 @@ func (_m *MajorRepository) DeleteMajor(_a0 int) error {
 }
 
 // ReadMajor provides a mock function with given fields:
-func (_m *MajorRepository) ReadMajor() (*[]models.MajorModel, error) {
+func (_m *MajorRepository) ReadMajor() (*[]models.Major, error) {
 	ret := _m.Called()
 
-	var r0 *[]models.MajorModel
-	if rf, ok := ret.Get(0).(func() *[]models.MajorModel); ok {
+	var r0 *[]models.Major
+	if rf, ok := ret.Get(0).(func() *[]models.Major); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.MajorModel)
+			r0 = ret.Get(0).(*[]models.Major)
 		}
 	}
 
@@ -65,11 +65,11 @@ func (_m *MajorRepository) ReadMajor() (*[]models.MajorModel, error) {
 }
 
 // UpdateMajor provides a mock function with given fields: _a0, _a1
-func (_m *MajorRepository) UpdateMajor(_a0 int, _a1 models.MajorModel) error {
+func (_m *MajorRepository) UpdateMajor(_a0 int, _a1 models.Major) error {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.MajorModel) error); ok {
+	if rf, ok := ret.Get(0).(func(int, models.Major) error); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)

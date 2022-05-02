@@ -14,22 +14,22 @@ func NewTagRepository(db *gorm.DB) *tagRepository {
 	return &tagRepository{db: db}
 }
 
-func (repo tagRepository) CreateTag(tag m.TagModel) (err error) {
+func (repo tagRepository) CreateTag(tag m.Tag) (err error) {
 	err = repo.db.Save(&tag).Error
 	return
 }
 
-func (repo tagRepository) UpdateTag(id int, tag m.TagModel) (err error) {
+func (repo tagRepository) UpdateTag(id int, tag m.Tag) (err error) {
 	err = repo.db.Where("id = ?", id).Updates(&tag).Error
 	return
 }
 
 func (repo tagRepository) DeleteTag(id int) (err error) {
-	err = repo.db.Delete(&m.TagModel{}, id).Error
+	err = repo.db.Delete(&m.Tag{}, id).Error
 	return
 }
 
-func (repo tagRepository) ReadTag() (tag *[]m.TagModel, err error) {
+func (repo tagRepository) ReadTag() (tag *[]m.Tag, err error) {
 	err = repo.db.Find(&tag).Error
 	return
 }

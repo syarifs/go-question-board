@@ -5,8 +5,8 @@ import (
 )
 
 type TagRepository interface {
-	CreateTag(m.TagModel) error
-	UpdateTag(int, m.TagModel) error
+	CreateTag(m.Tag) error
+	UpdateTag(int, m.Tag) error
 	DeleteTag(int) error
-	ReadTag() (*[]m.TagModel, error)
+	ReadTag() (*[]m.Tag, error)
 }

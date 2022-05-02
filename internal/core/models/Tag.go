@@ -2,12 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type TagModel struct {
+type Tag struct {
 	gorm.Model
 	Name string `json:"name"`
 	Value string `json:"value"`
 }
 
-func (*TagModel) TableName() string {
+func (*Tag) TableName() string {
 	return "tags"
 }

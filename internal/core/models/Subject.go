@@ -2,12 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type SubjectModel struct {
+type Subject struct {
 	gorm.Model
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
 
-func (*SubjectModel) TableName() string {
+func (*Subject) TableName() string {
 	return "subjects"
 }

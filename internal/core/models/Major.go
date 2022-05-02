@@ -2,12 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type MajorModel struct {
+type Major struct {
 	gorm.Model
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
 
-func (*MajorModel) TableName() string {
+func (*Major) TableName() string {
 	return "majors"
 }

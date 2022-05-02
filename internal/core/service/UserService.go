@@ -14,7 +14,7 @@ func NewUserService(repo repository.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (srv UserService) CreateUser(user models.UserModel) (res response.UserListResponse, err error) {
+func (srv UserService) CreateUser(user models.User) (res response.UserListResponse, err error) {
 	err  = srv.repo.CreateUser(user)
 	if err == nil {
 		res = response.UserListResponse{
@@ -28,7 +28,7 @@ func (srv UserService) CreateUser(user models.UserModel) (res response.UserListR
 }
 
 func (srv UserService) ReadUser() (res []response.UserListResponse, err error) {
-	var user *[]models.UserModel
+	var user *[]models.User
 	user, err  = srv.repo.ReadUser()
 	if err == nil {
 		for _, um := range *user {
@@ -45,7 +45,7 @@ func (srv UserService) ReadUser() (res []response.UserListResponse, err error) {
 }
 
 func (srv UserService) ReadUserByID(id int) (res response.UserDetailsResponse, err error) {
-	var user *models.UserModel
+	var user *models.User
 	user, err  = srv.repo.ReadUserByID(id)
 	if err == nil {
 		res = response.UserDetailsResponse{
@@ -62,7 +62,7 @@ func (srv UserService) ReadUserByID(id int) (res response.UserDetailsResponse, e
 	return
 }
 
-func (srv UserService) UpdateUser(id int, user models.UserModel) (res response.UserDetailsResponse, err error) {
+func (srv UserService) UpdateUser(id int, user models.User) (res response.UserDetailsResponse, err error) {
 	err  = srv.repo.UpdateUser(id, user)
 	if err == nil {
 		res = response.UserDetailsResponse{

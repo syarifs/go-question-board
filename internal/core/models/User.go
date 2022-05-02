@@ -2,7 +2,7 @@ package models
 
 import "github.com/jinzhu/gorm"
 
-type UserModel struct {
+type User struct {
 	gorm.Model
 	Email string `json:"email"`
 	Name string `json:"name"`
@@ -11,12 +11,12 @@ type UserModel struct {
 	LevelID int `json:"level_id"`
 	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
-	Tags []TagModel `json:"tags" gorm:"many2many:user_tag"`
-	Subject []SubjectModel `gorm:"many2many:user_subject"`
-	Level LevelModel
-	Major MajorModel
+	Tags []Tag `json:"tags" gorm:"many2many:user_tag"`
+	Subject []Subject `json:"subject" gorm:"many2many:user_subject"`
+	Level Level
+	Major Major
 }
 
-func (*UserModel) TableName() string {
+func (*User) TableName() string {
 	return "users"
 }

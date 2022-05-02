@@ -6,6 +6,6 @@ import (
 )
 
 type AuthRepository interface {
-	Login(req.LoginRequest) (models.UserModel, error)
-	RefreshToken(models.TokenModel) (models.TokenModel, error)
+	Login(req.LoginRequest) (models.User, error)
+	RefreshToken(models.Token) (models.Token, error)
 }

@@ -7,11 +7,11 @@ import (
 )
 
 func subjectSeeder() Seed {
-	seeds := []models.SubjectModel{
+	seeds := []models.Subject{
 		{Code: "BSPGM", Name: "Basic Programming"},
 		{Code: "PRALG", Name: "Programming Algorithm"},
 	}
-	model := &models.SubjectModel{}
+	model := &models.Subject{}
 
 	return Seed{
 		models: model,

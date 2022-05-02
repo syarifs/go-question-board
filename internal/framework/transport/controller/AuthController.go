@@ -45,7 +45,7 @@ func (acon AuthController) Login(c echo.Context) error {
 }
 
 func (acon AuthController) RefreshToken(c echo.Context) error {
-	rtoken := models.TokenModel{}
+	rtoken := models.Token{}
 	c.Bind(&rtoken)
 	token, err := acon.srv.RefreshToken(rtoken)
 	

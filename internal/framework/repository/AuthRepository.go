@@ -17,12 +17,12 @@ func NewAuthRepository(db *gorm.DB) *authRepository {
 	return &authRepository{db: db}
 }
 
-func (repo authRepository) Login(user request.LoginRequest) (users m.UserModel, err error) {
+func (repo authRepository) Login(user request.LoginRequest) (users m.User, err error) {
 	err = repo.db.Preload(clause.Associations).Where("email = ? AND password = ?", user.Email, user.Password).First(&users).Error
 	return
 }
 
-func (repo authRepository) RefreshToken(str m.TokenModel) (token m.TokenModel, err error) {
+func (repo authRepository) RefreshToken(str m.Token) (token m.Token, err error) {
 	token, err = middleware.RefreshToken(str)
 	return
 }

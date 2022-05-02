@@ -20,7 +20,7 @@ func NewTagController(srv *service.TagService) *TagController {
 }
 
 func (ucon TagController) CreateTag(c echo.Context) error {
-	tag := models.TagModel{}
+	tag := models.Tag{}
 	c.Bind(&tag)
 	fmt.Println(tag)
 	res, err := ucon.srv.CreateTag(tag)
@@ -53,7 +53,7 @@ func (ucon TagController) ReadTag(c echo.Context) error {
 }
 
 func (ucon TagController) UpdateTag(c echo.Context) error {
-	tag := models.TagModel{}
+	tag := models.Tag{}
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.Bind(&tag)
 	fmt.Println(tag)

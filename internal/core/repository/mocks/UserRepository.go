@@ -14,11 +14,11 @@ type UserRepository struct {
 }
 
 // CreateUser provides a mock function with given fields: _a0
-func (_m *UserRepository) CreateUser(_a0 models.UserModel) error {
+func (_m *UserRepository) CreateUser(_a0 models.User) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.UserModel) error); ok {
+	if rf, ok := ret.Get(0).(func(models.User) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -42,15 +42,15 @@ func (_m *UserRepository) DeleteUser(_a0 int) error {
 }
 
 // ReadUser provides a mock function with given fields:
-func (_m *UserRepository) ReadUser() (*[]models.UserModel, error) {
+func (_m *UserRepository) ReadUser() (*[]models.User, error) {
 	ret := _m.Called()
 
-	var r0 *[]models.UserModel
-	if rf, ok := ret.Get(0).(func() *[]models.UserModel); ok {
+	var r0 *[]models.User
+	if rf, ok := ret.Get(0).(func() *[]models.User); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.UserModel)
+			r0 = ret.Get(0).(*[]models.User)
 		}
 	}
 
@@ -65,15 +65,15 @@ func (_m *UserRepository) ReadUser() (*[]models.UserModel, error) {
 }
 
 // ReadUserByID provides a mock function with given fields: _a0
-func (_m *UserRepository) ReadUserByID(_a0 int) (*models.UserModel, error) {
+func (_m *UserRepository) ReadUserByID(_a0 int) (*models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *models.UserModel
-	if rf, ok := ret.Get(0).(func(int) *models.UserModel); ok {
+	var r0 *models.User
+	if rf, ok := ret.Get(0).(func(int) *models.User); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.UserModel)
+			r0 = ret.Get(0).(*models.User)
 		}
 	}
 
@@ -88,11 +88,11 @@ func (_m *UserRepository) ReadUserByID(_a0 int) (*models.UserModel, error) {
 }
 
 // UpdateUser provides a mock function with given fields: _a0, _a1
-func (_m *UserRepository) UpdateUser(_a0 int, _a1 models.UserModel) error {
+func (_m *UserRepository) UpdateUser(_a0 int, _a1 models.User) error {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.UserModel) error); ok {
+	if rf, ok := ret.Get(0).(func(int, models.User) error); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)

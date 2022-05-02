@@ -19,7 +19,7 @@ func JWT() echo.MiddlewareFunc {
 	})
 }
 
-func CreateToken(level string) (t models.TokenModel, err error) {
+func CreateToken(level string) (t models.Token, err error) {
 	expTime := time.Now().Add(time.Minute * 1).Unix()
 	claims := jwt.MapClaims{}
 	claims["role"] = level
@@ -39,7 +39,7 @@ func CreateToken(level string) (t models.TokenModel, err error) {
 	return
 }
 
-func RefreshToken(token_string models.TokenModel) (t models.TokenModel, err error) {
+func RefreshToken(token_string models.Token) (t models.Token, err error) {
 	token, err := jwt.Parse(token_string.RefreshToken, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])

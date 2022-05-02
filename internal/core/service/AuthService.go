@@ -16,7 +16,7 @@ func NewAuthService(repo repository.AuthRepository) *AuthService {
 }
 
 func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetailsResponse, err error) {
-	var user models.UserModel
+	var user models.User
 	user, err  = srv.repo.Login(login)
 	res.ID = user.ID
 	res.Email = user.Email
@@ -29,7 +29,7 @@ func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetai
 	return
 }
 
-func (srv AuthService) RefreshToken(str models.TokenModel) (token models.TokenModel, err error) {
+func (srv AuthService) RefreshToken(str models.Token) (token models.Token, err error) {
 	token, err = srv.repo.RefreshToken(str)
 	return
 }

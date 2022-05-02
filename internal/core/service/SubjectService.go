@@ -13,14 +13,14 @@ func NewSubjectService(repo repository.SubjectRepository) *SubjectService {
 	return &SubjectService{repo: repo}
 }
 
-func (srv SubjectService) CreateSubject(subject models.SubjectModel) (res models.SubjectModel, err error) {
+func (srv SubjectService) CreateSubject(subject models.Subject) (res models.Subject, err error) {
 	err  = srv.repo.CreateSubject(subject)
 	res = subject
 	return
 }
 
-func (srv SubjectService) ReadSubject() (res []models.SubjectModel, err error) {
-	var subject *[]models.SubjectModel
+func (srv SubjectService) ReadSubject() (res []models.Subject, err error) {
+	var subject *[]models.Subject
 	subject, err  = srv.repo.ReadSubject()
 	if err == nil {
 		for _, um := range *subject {
@@ -30,7 +30,7 @@ func (srv SubjectService) ReadSubject() (res []models.SubjectModel, err error) {
 	return
 }
 
-func (srv SubjectService) UpdateSubject(id int, subject models.SubjectModel) (res models.SubjectModel, err error) {
+func (srv SubjectService) UpdateSubject(id int, subject models.Subject) (res models.Subject, err error) {
 	err  = srv.repo.UpdateSubject(id, subject)
 	if err == nil {
 		res = subject

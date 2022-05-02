@@ -13,14 +13,14 @@ func NewTagService(repo repository.TagRepository) *TagService {
 	return &TagService{repo: repo}
 }
 
-func (srv TagService) CreateTag(tag models.TagModel) (res models.TagModel, err error) {
+func (srv TagService) CreateTag(tag models.Tag) (res models.Tag, err error) {
 	err  = srv.repo.CreateTag(tag)
 	res = tag
 	return
 }
 
-func (srv TagService) ReadTag() (res []models.TagModel, err error) {
-	var tag *[]models.TagModel
+func (srv TagService) ReadTag() (res []models.Tag, err error) {
+	var tag *[]models.Tag
 	tag, err  = srv.repo.ReadTag()
 	if err == nil {
 		for _, um := range *tag {
@@ -30,7 +30,7 @@ func (srv TagService) ReadTag() (res []models.TagModel, err error) {
 	return
 }
 
-func (srv TagService) UpdateTag(id int, tag models.TagModel) (res models.TagModel, err error) {
+func (srv TagService) UpdateTag(id int, tag models.Tag) (res models.Tag, err error) {
 	err  = srv.repo.UpdateTag(id, tag)
 	if err == nil {
 		res = tag

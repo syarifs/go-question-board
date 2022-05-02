@@ -16,14 +16,14 @@ type AuthRepository struct {
 }
 
 // Login provides a mock function with given fields: _a0
-func (_m *AuthRepository) Login(_a0 request.LoginRequest) (models.UserModel, error) {
+func (_m *AuthRepository) Login(_a0 request.LoginRequest) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 models.UserModel
-	if rf, ok := ret.Get(0).(func(request.LoginRequest) models.UserModel); ok {
+	var r0 models.User
+	if rf, ok := ret.Get(0).(func(request.LoginRequest) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(models.UserModel)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
@@ -37,18 +37,18 @@ func (_m *AuthRepository) Login(_a0 request.LoginRequest) (models.UserModel, err
 }
 
 // RefreshToken provides a mock function with given fields: _a0
-func (_m *AuthRepository) RefreshToken(_a0 models.TokenModel) (models.TokenModel, error) {
+func (_m *AuthRepository) RefreshToken(_a0 models.Token) (models.Token, error) {
 	ret := _m.Called(_a0)
 
-	var r0 models.TokenModel
-	if rf, ok := ret.Get(0).(func(models.TokenModel) models.TokenModel); ok {
+	var r0 models.Token
+	if rf, ok := ret.Get(0).(func(models.Token) models.Token); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(models.TokenModel)
+		r0 = ret.Get(0).(models.Token)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(models.TokenModel) error); ok {
+	if rf, ok := ret.Get(1).(func(models.Token) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)

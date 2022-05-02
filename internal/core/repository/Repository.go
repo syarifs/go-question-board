@@ -6,5 +6,6 @@ type Repository struct {
 	Tag TagRepository
 	Subject SubjectRepository
 	Major MajorRepository
+	Questionnaire QuestionnaireRepository
 }
 

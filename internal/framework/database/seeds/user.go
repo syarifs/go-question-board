@@ -8,7 +8,7 @@ import (
 
 func userSeeder() Seed {
 	major := 1
-	seeds := []models.UserModel{
+	seeds := []models.User{
 		{
 			Name: "Administrator",
 			Email: "admin@web.io",
@@ -33,7 +33,7 @@ func userSeeder() Seed {
 			MajorID: &major,
 		},
 	}
-	model := &models.UserModel{}
+	model := &models.User{}
 
 	return Seed{
 		models: model,

@@ -5,8 +5,8 @@ import (
 )
 
 type MajorRepository interface {
-	CreateMajor(m.MajorModel) error
-	UpdateMajor(int, m.MajorModel) error
+	CreateMajor(m.Major) error
+	UpdateMajor(int, m.Major) error
 	DeleteMajor(int) error
-	ReadMajor() (*[]m.MajorModel, error)
+	ReadMajor() (*[]m.Major, error)
 }

@@ -7,14 +7,14 @@ import (
 )
 
 func tagSeeder() Seed {
-	seeds := []models.TagModel{
+	seeds := []models.Tag{
 		{Name: "Year", Value: "2019"},
 		{Name: "Year", Value: "2020"},
 		{Name: "Year", Value: "2021"},
 		{Name: "Class", Value: "A"},
 		{Name: "Class", Value: "B"},
 	}
-	model := &models.TagModel{}
+	model := &models.Tag{}
 
 	return Seed{
 		models: model,

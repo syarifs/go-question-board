@@ -14,11 +14,11 @@ type SubjectRepository struct {
 }
 
 // CreateSubject provides a mock function with given fields: _a0
-func (_m *SubjectRepository) CreateSubject(_a0 models.SubjectModel) error {
+func (_m *SubjectRepository) CreateSubject(_a0 models.Subject) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.SubjectModel) error); ok {
+	if rf, ok := ret.Get(0).(func(models.Subject) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -42,15 +42,15 @@ func (_m *SubjectRepository) DeleteSubject(_a0 int) error {
 }
 
 // ReadSubject provides a mock function with given fields:
-func (_m *SubjectRepository) ReadSubject() (*[]models.SubjectModel, error) {
+func (_m *SubjectRepository) ReadSubject() (*[]models.Subject, error) {
 	ret := _m.Called()
 
-	var r0 *[]models.SubjectModel
-	if rf, ok := ret.Get(0).(func() *[]models.SubjectModel); ok {
+	var r0 *[]models.Subject
+	if rf, ok := ret.Get(0).(func() *[]models.Subject); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.SubjectModel)
+			r0 = ret.Get(0).(*[]models.Subject)
 		}
 	}
 
@@ -65,11 +65,11 @@ func (_m *SubjectRepository) ReadSubject() (*[]models.SubjectModel, error) {
 }
 
 // UpdateSubject provides a mock function with given fields: _a0, _a1
-func (_m *SubjectRepository) UpdateSubject(_a0 int, _a1 models.SubjectModel) error {
+func (_m *SubjectRepository) UpdateSubject(_a0 int, _a1 models.Subject) error {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.SubjectModel) error); ok {
+	if rf, ok := ret.Get(0).(func(int, models.Subject) error); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)

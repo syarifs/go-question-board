@@ -18,7 +18,7 @@ func NewUserController(srv *service.UserService) *UserController {
 }
 
 func (ucon UserController) CreateUser(c echo.Context) error {
-	user := models.UserModel{}
+	user := models.User{}
 	c.Bind(&user)
 	res, err := ucon.srv.CreateUser(user)
 	if err == nil {
@@ -66,7 +66,7 @@ func (ucon UserController) ReadUserByID(c echo.Context) error {
 }
 
 func (ucon UserController) UpdateUser(c echo.Context) error {
-	user := models.UserModel{}
+	user := models.User{}
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.Bind(&user)
 	res, err := ucon.srv.UpdateUser(id, user)

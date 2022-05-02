@@ -20,7 +20,7 @@ func NewSubjectController(srv *service.SubjectService) *SubjectController {
 }
 
 func (ucon SubjectController) CreateSubject(c echo.Context) error {
-	subject := models.SubjectModel{}
+	subject := models.Subject{}
 	c.Bind(&subject)
 	fmt.Println(subject)
 	res, err := ucon.srv.CreateSubject(subject)
@@ -53,7 +53,7 @@ func (ucon SubjectController) ReadSubject(c echo.Context) error {
 }
 
 func (ucon SubjectController) UpdateSubject(c echo.Context) error {
-	subject := models.SubjectModel{}
+	subject := models.Subject{}
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.Bind(&subject)
 	fmt.Println(subject)
