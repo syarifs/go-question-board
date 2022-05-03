@@ -8,6 +8,7 @@ type Service struct {
 	Tag *TagService
 	Major *MajorService
 	Subject *SubjectService
+	Question *QuestionnaireService
 }
 
 func NewService(r *repository.Repository) *Service {
@@ -17,5 +18,6 @@ func NewService(r *repository.Repository) *Service {
 		Tag: NewTagService(r.Tag),
 		Major: NewMajorService(r.Major),
 		Subject: NewSubjectService(r.Subject),
+		Question: NewQuestionnaireService(r.Questionnaire),
 	}
 }

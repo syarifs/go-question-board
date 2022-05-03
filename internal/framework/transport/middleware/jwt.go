@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/utils"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -15,12 +17,25 @@ import (
 func JWT() echo.MiddlewareFunc {
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: utils.SERVER_SECRET,
-		TokenLookup: "header:x-auth-token",
 	})
 }
 
+func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		header := c.Request().Header.Get("Authorization")
+		header = strings.Split(header, " ")[1]
+		extract, _ := extractToken(header)
+		if extract.(jwt.MapClaims)["role"] != "Administrator" {
+			return c.JSON(http.StatusForbidden, map[string]string{
+				"message": "access blocked. for administartor only",
+			})
+		}
+		return next(c)
+	}
+}
+
 func CreateToken(level string) (t models.Token, err error) {
-	expTime := time.Now().Add(time.Minute * 1).Unix()
+	expTime := time.Now().Add(time.Minute * 15).Unix()
 	claims := jwt.MapClaims{}
 	claims["role"] = level
 	claims["exp"] = expTime
@@ -29,9 +44,9 @@ func CreateToken(level string) (t models.Token, err error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	t.AccessToken, err = token.SignedString(utils.SERVER_SECRET)
 
-	expTime = time.Now().Add(time.Hour * 24).Unix()
+	rexpTime := time.Now().Add(time.Hour * 24).Unix()
 	rclaims := jwt.MapClaims{}
-	rclaims["exp"] = expTime
+	rclaims["exp"] = rexpTime
 	rclaims["iat"] = time.Now().Unix()
 	rclaims["nbf"] = time.Now().Unix()
 	rtoken := jwt.NewWithClaims(jwt.SigningMethodHS256, rclaims)
@@ -39,19 +54,28 @@ func CreateToken(level string) (t models.Token, err error) {
 	return
 }
 
-func RefreshToken(token_string models.Token) (t models.Token, err error) {
-	token, err := jwt.Parse(token_string.RefreshToken, func(t *jwt.Token) (interface{}, error) {
+func extractToken(tkn string) (token interface{}, err error) {
+	token, err = jwt.Parse(tkn, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])
 		}
 		return utils.SERVER_SECRET, nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	return token.(*jwt.Token).Claims, nil
+}
 
-	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		tkn, _ := jwt.Parse(token_string.AccessToken, nil)
-		if role := tkn.Claims.(jwt.MapClaims)["role"]; role != nil {
+func RefreshToken(token_string models.Token) (t models.Token, err error) {
+	token, err := extractToken(token_string.RefreshToken)
+	if _, ok := token.(jwt.MapClaims); ok {
+		tkn, _ := extractToken(token_string.AccessToken)
+		if role := tkn.(jwt.MapClaims)["role"]; role != nil {
 			return CreateToken(role.(string))
 		}
 	}
 	return t, errors.New("failed to generate new token")
 }
+
+

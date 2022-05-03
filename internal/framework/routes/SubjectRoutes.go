@@ -7,8 +7,9 @@ import (
 )
 
 func NewSubjectRoutes(e *echo.Echo, ucon *controller.SubjectController, middleware ...echo.MiddlewareFunc) {
-	e.GET("/subject", ucon.ReadSubject, middleware...)
-	e.POST("/subject", ucon.CreateSubject, middleware...)
-	e.PUT("/subject/:id/update", ucon.UpdateSubject, middleware...)
-	e.DELETE("/subject/:id/delete", ucon.DeleteSubject, middleware...)
+	group := e.Group("/subject", middleware...)
+	group.GET("", ucon.ReadSubject)
+	group.POST("", ucon.CreateSubject)
+	group.PUT("/:id/update", ucon.UpdateSubject)
+	group.DELETE("/:id/delete", ucon.DeleteSubject)
 }

@@ -13,5 +13,6 @@ func NewRepository(db *gorm.DB) *repository.Repository {
 		Tag: NewTagRepository(db),
 		Subject: NewSubjectRepository(db),
 		Major: NewMajorRepository(db),
+		Questionnaire: NewQuestionnaireRepository(db),
 	}
 }

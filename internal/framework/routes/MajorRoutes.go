@@ -7,8 +7,9 @@ import (
 )
 
 func NewMajorRoutes(e *echo.Echo, ucon *controller.MajorController, middleware ...echo.MiddlewareFunc) {
-	e.GET("/major", ucon.ReadMajor, middleware...)
-	e.POST("/major", ucon.CreateMajor, middleware...)
-	e.PUT("/major/:id/update", ucon.UpdateMajor, middleware...)
-	e.DELETE("/major/:id/delete", ucon.DeleteMajor, middleware...)
+	group := e.Group("/major", middleware...)
+	group.GET("", ucon.ReadMajor)
+	group.POST("", ucon.CreateMajor)
+	group.PUT("/:id/update", ucon.UpdateMajor)
+	group.DELETE("/:id/delete", ucon.DeleteMajor)
 }

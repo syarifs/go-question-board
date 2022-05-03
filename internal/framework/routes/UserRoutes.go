@@ -7,9 +7,10 @@ import (
 )
 
 func NewUserRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
-	e.GET("/user", ucon.ReadUser, middleware...)
-	e.GET("/user/:id", ucon.ReadUserByID, middleware...)
-	e.POST("/user", ucon.CreateUser, middleware...)
-	e.PUT("/user/:id/update", ucon.UpdateUser, middleware...)
-	e.DELETE("/user/:id/delete", ucon.DeleteUser, middleware...)
+	group := e.Group("/user", middleware...)
+	group.GET("", ucon.ReadUser)
+	group.POST("", ucon.CreateUser)
+	group.GET("/:id", ucon.ReadUserByID)
+	group.PUT("/:id/update", ucon.UpdateUser)
+	group.DELETE("/:id/delete", ucon.DeleteUser)
 }

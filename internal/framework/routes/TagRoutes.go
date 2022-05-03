@@ -7,8 +7,9 @@ import (
 )
 
 func NewTagRoutes(e *echo.Echo, ucon *controller.TagController, middleware ...echo.MiddlewareFunc) {
-	e.GET("/tag", ucon.ReadTag, middleware...)
-	e.POST("/tag", ucon.CreateTag, middleware...)
-	e.PUT("/tag/:id/update", ucon.UpdateTag, middleware...)
-	e.DELETE("/tag/:id/delete", ucon.DeleteTag, middleware...)
+	group := e.Group("/tag", middleware...)
+	group.GET("", ucon.ReadTag)
+	group.POST("", ucon.CreateTag)
+	group.PUT("/:id/update", ucon.UpdateTag)
+	group.DELETE("/:id/delete", ucon.DeleteTag)
 }

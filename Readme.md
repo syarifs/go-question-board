@@ -26,7 +26,7 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Menambahkan CRUD untuk manajemen **Subject**.
 - [x] Menambahkan CRUD untuk manajemen **Tag**.
 - [x] Menambahkan CRUD untuk manajemen **Major**.
-- [ ] Membuat proteksi role untuk route admin.
+- [x] Membuat proteksi role untuk route admin.
 - [ ] Membuat **Unit Test** untuk modul **User**, **Tag**, **Subject**, dan **Major**.
 - [ ] Menambahkan CRUD untuk manajemen **Questionnaire**.
 - [ ] Menambahkan fitur **Filter by Tag** untuk **Questionnaire**.
