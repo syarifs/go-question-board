@@ -26,14 +26,14 @@ func (acon AuthController) Login(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Log User In",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 	jwt, err := middleware.CreateToken(res.Level.Name)
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, echo.Map{
-			"message": "Failed to Log User In",
-			"error": err,
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to Createn Token",
+			"error": err.Error(),
 		})
 	}
 
@@ -52,7 +52,7 @@ func (acon AuthController) RefreshToken(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Refresh Token",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 

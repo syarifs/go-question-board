@@ -29,7 +29,7 @@ func (ucon MajorController) CreateMajor(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Create Major",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -44,7 +44,7 @@ func (ucon MajorController) ReadMajor(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Fetch Major",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -62,7 +62,7 @@ func (ucon MajorController) UpdateMajor(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Update Major",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -77,7 +77,7 @@ func (ucon MajorController) DeleteMajor(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Delete Major",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }

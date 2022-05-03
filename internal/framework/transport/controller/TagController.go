@@ -32,7 +32,7 @@ func (ucon TagController) CreateTag(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Create Tag",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -47,7 +47,7 @@ func (ucon TagController) ReadTag(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Fetch Tag",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -66,7 +66,7 @@ func (ucon TagController) UpdateTag(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Update Tag",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -81,7 +81,7 @@ func (ucon TagController) DeleteTag(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Delete Tag",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }

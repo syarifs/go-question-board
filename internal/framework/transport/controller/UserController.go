@@ -29,7 +29,7 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Create User",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -44,7 +44,7 @@ func (ucon UserController) ReadUser(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Fetch User",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -60,7 +60,7 @@ func (ucon UserController) ReadUserByID(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, echo.Map{
 			"message": "Failed to Fetch User",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -78,7 +78,7 @@ func (ucon UserController) UpdateUser(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Update User",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
@@ -93,7 +93,7 @@ func (ucon UserController) DeleteUser(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusNotModified, echo.Map{
 			"message": "Failed to Delete User",
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 }
