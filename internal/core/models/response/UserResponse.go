@@ -14,9 +14,9 @@ type UserDetailsResponse struct {
 	ID uint `json:"id"`
 	Email string `json:"email"`
 	Name string `json:"name"`
-	Tags []m.Tag `json:"tags" gorm:"many2many:user_tag"`
-	Subject []m.Subject `gorm:"many2many:user_subject"`
-	Level m.Level
-	Major m.Major
+	Tags []m.Tag `json:"tags"`
+	Subject []m.Subject `json:"subject"`
+	Level m.Level `json:"level"`
+	Major m.Major `json:"major"`
 	Status int `json:"status"`
 }

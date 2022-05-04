@@ -19,6 +19,17 @@ func NewAuthController(srv *service.AuthService) *AuthController {
 	return &AuthController{srv}
 }
 
+// CreateResource godoc
+// @Summary Login
+// @Description Login and get Authorization Token
+// @Tags Authorization
+// @Accept json
+// @Produce json
+// @Param data  body  request.LoginRequest{}  true "send request email, password"
+// @Success 200 {object} response.UserDetailsResponse{} success
+// @Failure 417 {object} response.ErrorResponse{} error
+// @Failure 500 {object} response.ErrorResponse{} error
+// @Router /login [post]
 func (acon AuthController) Login(c echo.Context) error {
 	var login request.LoginRequest
 	c.Bind(&login)
@@ -44,6 +55,17 @@ func (acon AuthController) Login(c echo.Context) error {
 	})
 }
 
+// CreateResource godoc
+// @Summary Refresh Token
+// @Description Route Path for Get New Access Token
+// @Tags Authorization
+// @Accept json
+// @Produce json
+// @Param data  body  models.Token{}  true "send request access_token, refresh_token"
+// @Success 200 {object} models.Token{} success
+// @Failure 417 {object} response.ErrorResponse{} error
+// @Failure 500 {object} response.ErrorResponse{} error
+// @Router /refresh_token [post]
 func (acon AuthController) RefreshToken(c echo.Context) error {
 	rtoken := models.Token{}
 	c.Bind(&rtoken)

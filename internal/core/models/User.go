@@ -1,9 +1,9 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import "time"
 
 type User struct {
-	gorm.Model
+	ID        uint `gorm:"primary_key"`
 	Email string `json:"email"`
 	Name string `json:"name"`
 	Password string `json:"password"`
@@ -15,6 +15,9 @@ type User struct {
 	Subject []Subject `json:"subject" gorm:"many2many:user_subject"`
 	Level Level
 	Major Major
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
 }
 
 func (*User) TableName() string {

@@ -1,0 +1,619 @@
+basePath: /
+definitions:
+  models.Level:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Major:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Subject:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Tag:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      value:
+        type: string
+    type: object
+  models.Token:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      level:
+        $ref: '#/definitions/models.Level'
+      level_id:
+        type: integer
+      major:
+        $ref: '#/definitions/models.Major'
+      major_id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      status:
+        type: integer
+      subject:
+        items:
+          $ref: '#/definitions/models.Subject'
+        type: array
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  request.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  response.ErrorResponse:
+    properties:
+      error: {}
+      message:
+        type: string
+    type: object
+  response.MessageOnlyResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  response.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  response.UserDetailsResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      level:
+        $ref: '#/definitions/models.Level'
+      major:
+        $ref: '#/definitions/models.Major'
+      name:
+        type: string
+      status:
+        type: integer
+      subject:
+        items:
+          $ref: '#/definitions/models.Subject'
+        type: array
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: server API for Question Board Application.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Question Board
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login and get Authorization Token
+      parameters:
+      - description: send request email, password
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserDetailsResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Login
+      tags:
+      - Authorization
+  /major:
+    get:
+      description: Route Path for Get List of Major, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Major
+      tags:
+      - Major
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Major, for Administrator only.
+      parameters:
+      - description: send request major code and major name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Major'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create New Major
+      tags:
+      - Major
+  /major/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Major, for Administrator only.
+      parameters:
+      - description: major id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnlyResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete Major
+      tags:
+      - Major
+  /major/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Major, for Administrator only.
+      parameters:
+      - description: send request major code and major name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Major'
+      - description: major id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update Major
+      tags:
+      - Major
+  /refresh_token:
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Get New Access Token
+      parameters:
+      - description: send request access_token, refresh_token
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Token'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Token'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Refresh Token
+      tags:
+      - Authorization
+  /subject:
+    get:
+      description: Route Path for Get List of Subject, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Subject
+      tags:
+      - Subject
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Subject, for Administrator only.
+      parameters:
+      - description: send request subject code and subject name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create New Subject
+      tags:
+      - Subject
+  /subject/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Subject, for Administrator only.
+      parameters:
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnlyResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete Subject
+      tags:
+      - Subject
+  /subject/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Subject, for Administrator only.
+      parameters:
+      - description: send request subject code and subject name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subject'
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update Subject
+      tags:
+      - Subject
+  /tag:
+    get:
+      description: Route Path for Get List of Tag, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Tag
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Tag, for Administrator only.
+      parameters:
+      - description: send request tag code and tag name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create New Tag
+      tags:
+      - Tag
+  /tag/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Tag, for Administrator only.
+      parameters:
+      - description: tag id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnlyResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete Tag
+      tags:
+      - Tag
+  /tag/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Tag, for Administrator only.
+      parameters:
+      - description: send request tag code and tag name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
+      - description: tag id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update Tag
+      tags:
+      - Tag
+  /user:
+    get:
+      description: Route Path for Get List of User, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All User
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New User, for Administrator only.
+      parameters:
+      - description: send request user code and user name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create New User
+      tags:
+      - User
+  /user/{id}:
+    get:
+      description: Route Path for Get List of User, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get User By ID
+      tags:
+      - User
+  /user/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete User, for Administrator only.
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnlyResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete User
+      tags:
+      - User
+  /user/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update User, for Administrator only.
+      parameters:
+      - description: send request user code and user name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update User
+      tags:
+      - User
+swagger: "2.0"

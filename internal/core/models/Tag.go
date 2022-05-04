@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Tag struct {
-	gorm.Model
+	ID uint `json:"id" gorm:"primarykey"`
 	Name string `json:"name"`
 	Value string `json:"value"`
 }
