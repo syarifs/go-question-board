@@ -57,7 +57,7 @@ func (ucon SubjectController) CreateSubject(c echo.Context) error {
 func (ucon SubjectController) ReadSubject(c echo.Context) error {
 	res, err := ucon.srv.ReadSubject()
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Subject Fetched",
 			Data: res,
 		})
@@ -86,7 +86,7 @@ func (ucon SubjectController) UpdateSubject(c echo.Context) error {
 	c.Bind(&subject)
 	res, err := ucon.srv.UpdateSubject(id, subject)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Subject Updated",
 			Data: res,
 		})
@@ -112,12 +112,12 @@ func (ucon SubjectController) DeleteSubject(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteSubject(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnlyResponse{
-			Message: "Subject Updated",
+		return c.JSON(http.StatusOK, response.MessageOnlyResponse{
+			Message: "Subject Deleted",
 		})
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
-			Message: "Failed to Update Subject",
+			Message: "Failed to Delete Subject",
 			Error: err,
 		})
 	}

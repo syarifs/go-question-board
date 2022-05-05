@@ -6,7 +6,7 @@ import (
 
 type TagRepository interface {
 	CreateTag(m.Tag) error
-	UpdateTag(int, m.Tag) error
+	UpdateTag(m.Tag) error
 	DeleteTag(int) error
 	ReadTag() (*[]m.Tag, error)
 }

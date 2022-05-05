@@ -57,7 +57,7 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 func (ucon UserController) ReadUser(c echo.Context) error {
 	res, err := ucon.srv.ReadUser()
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "User Fetched",
 			Data: res,
 		})
@@ -81,7 +81,7 @@ func (ucon UserController) ReadUserByID(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := ucon.srv.ReadUserByID(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "User Fetched",
 			Data: user,
 		})
@@ -110,7 +110,7 @@ func (ucon UserController) UpdateUser(c echo.Context) error {
 	c.Bind(&user)
 	res, err := ucon.srv.UpdateUser(id, user)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "User Updated",
 			Data: res,
 		})
@@ -136,12 +136,12 @@ func (ucon UserController) DeleteUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteUser(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnlyResponse{
-			Message: "User Updated",
+		return c.JSON(http.StatusOK, response.MessageOnlyResponse{
+			Message: "User Deleted",
 		})
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
-			Message: "Failed to Update User",
+			Message: "Failed to Delete User",
 			Error: err,
 		})
 	}

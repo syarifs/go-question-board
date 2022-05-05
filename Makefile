@@ -7,7 +7,7 @@ test:
 build:
 	go build -o bin/question-board main.go
 
-generate_doc:
+docs:
 	swag init
 
 tidy:

@@ -19,8 +19,8 @@ func (repo majorRepository) CreateMajor(major m.Major) (err error) {
 	return
 }
 
-func (repo majorRepository) UpdateMajor(id int, major m.Major) (err error) {
-	err = repo.db.Where("id = ?", id).Updates(&major).Error
+func (repo majorRepository) UpdateMajor(major m.Major) (err error) {
+	err = repo.db.Updates(&major).Error
 	return
 }
 

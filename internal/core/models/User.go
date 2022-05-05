@@ -11,8 +11,8 @@ type User struct {
 	LevelID int `json:"level_id"`
 	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
-	Tags []Tag `json:"tags" gorm:"many2many:user_tag"`
-	Subject []Subject `json:"subject" gorm:"many2many:user_subject"`
+	Tags []Tag `json:"tags" gorm:"many2many:user_tags"`
+	Subject []Subject `json:"subject" gorm:"many2many:user_subjects"`
 	Level Level
 	Major Major
 	CreatedAt time.Time

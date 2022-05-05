@@ -64,13 +64,13 @@ func (_m *TagRepository) ReadTag() (*[]models.Tag, error) {
 	return r0, r1
 }
 
-// UpdateTag provides a mock function with given fields: _a0, _a1
-func (_m *TagRepository) UpdateTag(_a0 int, _a1 models.Tag) error {
-	ret := _m.Called(_a0, _a1)
+// UpdateTag provides a mock function with given fields: _a0
+func (_m *TagRepository) UpdateTag(_a0 models.Tag) error {
+	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.Tag) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(models.Tag) error); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
 	}

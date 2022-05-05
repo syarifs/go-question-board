@@ -8,7 +8,7 @@ type QuestDahsboardResponse struct {
 	Description string `json:"description"`
 	Tags []m.Tag `json:"tags" gorm:"many2many:questionnaire_tags"`
 	CreatedBy int `json:"created_by"`
-	AnsweredUser int `json:"answered_user"`
+	CountAnswered int `json:"count_answered"`
 }
 
 type QuestResponse struct {

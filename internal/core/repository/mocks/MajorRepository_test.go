@@ -41,14 +41,14 @@ func TestUpdateMajor(t *testing.T) {
 			Code: "INF",
 			Name: "Informatics",
 		}
-		mockMajor.On("UpdateMajor", 1, data).Return(nil).Once()
+		mockMajor.On("UpdateMajor", data).Return(nil).Once()
 		major, err := majorService.UpdateMajor(1, data)
 		assert.NotEmpty(t, major)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
-		mockMajor.On("UpdateMajor", 1, mock.Anything).Return(errors.New("error")).Once()
+		mockMajor.On("UpdateMajor", mock.Anything).Return(errors.New("error")).Once()
 		major, err := majorService.UpdateMajor(1, models.Major{})
 		assert.Empty(t, major)
 		assert.Error(t, err)

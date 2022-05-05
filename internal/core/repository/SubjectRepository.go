@@ -6,7 +6,7 @@ import (
 
 type SubjectRepository interface {
 	CreateSubject(m.Subject) error
-	UpdateSubject(int, m.Subject) error
+	UpdateSubject(m.Subject) error
 	DeleteSubject(int) error
 	ReadSubject() (*[]m.Subject, error)
 }

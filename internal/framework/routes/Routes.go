@@ -13,4 +13,5 @@ func NewRoutes (e *echo.Echo, ctrl *controller.Controller) {
 	NewMajorRoutes(e, ctrl.Major, middleware.JWT(), middleware.AdminPermission)
 	NewTagRoutes(e, ctrl.Tag, middleware.JWT(), middleware.AdminPermission)
 	NewSubjectRoutes(e, ctrl.Subject, middleware.JWT(), middleware.AdminPermission)
+	NewQuestionnaireRoutes(e, ctrl.Questionnare)
 }

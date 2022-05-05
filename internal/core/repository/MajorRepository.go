@@ -6,7 +6,7 @@ import (
 
 type MajorRepository interface {
 	CreateMajor(m.Major) error
-	UpdateMajor(int, m.Major) error
+	UpdateMajor(m.Major) error
 	DeleteMajor(int) error
 	ReadMajor() (*[]m.Major, error)
 }

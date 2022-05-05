@@ -57,7 +57,7 @@ func (ucon MajorController) CreateMajor(c echo.Context) error {
 func (ucon MajorController) ReadMajor(c echo.Context) error {
 	res, err := ucon.srv.ReadMajor()
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Major Fetched",
 			Data: res,
 		})
@@ -86,7 +86,7 @@ func (ucon MajorController) UpdateMajor(c echo.Context) error {
 	c.Bind(&major)
 	res, err := ucon.srv.UpdateMajor(id, major)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Major Updated",
 			Data: res,
 		})
@@ -112,12 +112,12 @@ func (ucon MajorController) DeleteMajor(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteMajor(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnlyResponse{
-			Message: "Major Updated",
+		return c.JSON(http.StatusOK, response.MessageOnlyResponse{
+			Message: "Major Deleted",
 		})
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
-			Message: "Failed to Update Major",
+			Message: "Failed to Delete Major",
 			Error: err,
 		})
 	}

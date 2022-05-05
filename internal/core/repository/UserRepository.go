@@ -6,7 +6,7 @@ import (
 
 type UserRepository interface {
 	CreateUser(m.User) error
-	UpdateUser(int, m.User) error
+	UpdateUser(m.User) error
 	DeleteUser(int) error
 	ReadUser() (*[]m.User, error)
 	ReadUserByID(int) (*m.User, error)

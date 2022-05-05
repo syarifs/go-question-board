@@ -44,15 +44,15 @@ func TestUpdateUser(t *testing.T) {
 			Password: "test2",
 			LevelID: 1,
 		}
-		mockUser.On("UpdateUser", 1, data).Return(nil).Once()
+		mockUser.On("UpdateUser", data).Return(nil).Once()
 		user, err := userService.UpdateUser(1, data)
 		assert.NotEmpty(t, user)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
-		mockUser.On("UpdateUser", 1, models.User{}).Return(errors.New("fail")).Once()
-		user, err := userService.UpdateUser(1, models.User{})
+		mockUser.On("UpdateUser", models.User{}).Return(errors.New("fail")).Once()
+		user, err := userService.UpdateUser(0, models.User{})
 		assert.Empty(t, user)
 		assert.Error(t, err)
 	})
@@ -91,6 +91,29 @@ func TestReadUser(t *testing.T) {
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("ReadUser").Return(&[]models.User{}, errors.New("fail")).Once()
 		user, err := userService.ReadUser()
+		assert.Empty(t, user)
+		assert.Error(t, err)
+	})
+}
+
+func TestReadUserByID(t *testing.T) {
+	t.Run("Sucess", func(t *testing.T) {
+		data := models.User{
+			ID: 1,
+			Name: "Test",
+			Email: "test@testify.io",
+			Password: "test2",
+			LevelID: 1,
+		}
+		mockUser.On("ReadUserByID", 1).Return(&data, nil).Once()
+		user, err := userService.ReadUserByID(1)
+		assert.NotEmpty(t, user)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Fail", func(t *testing.T) {
+		mockUser.On("ReadUserByID", 1).Return(&models.User{}, errors.New("fail")).Once()
+		user, err := userService.ReadUserByID(1)
 		assert.Empty(t, user)
 		assert.Error(t, err)
 	})

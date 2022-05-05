@@ -31,7 +31,8 @@ func (srv TagService) ReadTag() (res []models.Tag, err error) {
 }
 
 func (srv TagService) UpdateTag(id int, tag models.Tag) (res models.Tag, err error) {
-	err  = srv.repo.UpdateTag(id, tag)
+	tag.ID = uint(id)
+	err  = srv.repo.UpdateTag(tag)
 	if err == nil {
 		res = tag
 	}

@@ -87,13 +87,13 @@ func (_m *UserRepository) ReadUserByID(_a0 int) (*models.User, error) {
 	return r0, r1
 }
 
-// UpdateUser provides a mock function with given fields: _a0, _a1
-func (_m *UserRepository) UpdateUser(_a0 int, _a1 models.User) error {
-	ret := _m.Called(_a0, _a1)
+// UpdateUser provides a mock function with given fields: _a0
+func (_m *UserRepository) UpdateUser(_a0 models.User) error {
+	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.User) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(models.User) error); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
 	}

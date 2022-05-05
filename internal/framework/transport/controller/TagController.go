@@ -57,7 +57,7 @@ func (ucon TagController) CreateTag(c echo.Context) error {
 func (ucon TagController) ReadTag(c echo.Context) error {
 	res, err := ucon.srv.ReadTag()
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Tag Fetched",
 			Data: res,
 		})
@@ -86,7 +86,7 @@ func (ucon TagController) UpdateTag(c echo.Context) error {
 	c.Bind(&tag)
 	res, err := ucon.srv.UpdateTag(id, tag)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.SuccessResponse{
+		return c.JSON(http.StatusOK, response.SuccessResponse{
 			Message: "Tag Updated",
 			Data: res,
 		})
@@ -112,12 +112,12 @@ func (ucon TagController) DeleteTag(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteTag(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnlyResponse{
-			Message: "Tag Updated",
+		return c.JSON(http.StatusOK, response.MessageOnlyResponse{
+			Message: "Tag Deleted",
 		})
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
-			Message: "Failed to Update Tag",
+			Message: "Failed to Delete Tag",
 			Error: err,
 		})
 	}

@@ -31,7 +31,8 @@ func (srv MajorService) ReadMajor() (res []models.Major, err error) {
 }
 
 func (srv MajorService) UpdateMajor(id int, major models.Major) (res models.Major, err error) {
-	err  = srv.repo.UpdateMajor(id, major)
+	major.ID = uint(id)
+	err  = srv.repo.UpdateMajor(major)
 	if err == nil {
 		res = major
 	}

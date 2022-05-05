@@ -63,7 +63,8 @@ func (srv UserService) ReadUserByID(id int) (res response.UserDetailsResponse, e
 }
 
 func (srv UserService) UpdateUser(id int, user models.User) (res response.UserDetailsResponse, err error) {
-	err  = srv.repo.UpdateUser(id, user)
+	user.ID = uint(id)
+	err  = srv.repo.UpdateUser(user)
 	if err == nil {
 		res = response.UserDetailsResponse{
 			ID: user.ID,

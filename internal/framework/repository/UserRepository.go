@@ -16,12 +16,16 @@ func NewUserRepository(db *gorm.DB) *userRepository {
 }
 
 func (repo userRepository) CreateUser(user m.User) (err error) {
-	err = repo.db.Omit("Major", "Level").Create(&user).Error
+	err = repo.db.Omit("Tags.*", "Subject.*").Create(&user).Error
 	return
 }
 
-func (repo userRepository) UpdateUser(id int, user m.User) (err error) {
-	err = repo.db.Where("id = ?", id).Updates(&user).Error
+func (repo userRepository) UpdateUser(user m.User) (err error) {
+	err = repo.db.Updates(&user).Error
+	if err == nil {
+		err = repo.db.Model(&user).Association("Tags").Replace(&user.Tags)
+		err = repo.db.Model(&user).Association("Subject").Replace(&user.Subject)
+	}
 	return
 }
 

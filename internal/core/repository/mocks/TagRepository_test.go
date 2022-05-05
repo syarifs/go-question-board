@@ -41,14 +41,14 @@ func TestUpdateTag(t *testing.T) {
 			Name: "Year",
 			Value: "2019",
 		}
-		mockTag.On("UpdateTag", 1, data).Return(nil).Once()
+		mockTag.On("UpdateTag", data).Return(nil).Once()
 		tag, err := tagService.UpdateTag(1, data)
 		assert.NotEmpty(t, tag)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
-		mockTag.On("UpdateTag", 1, mock.Anything).Return(errors.New("error")).Once()
+		mockTag.On("UpdateTag", mock.Anything).Return(errors.New("error")).Once()
 		tag, err := tagService.UpdateTag(1, models.Tag{})
 		assert.Empty(t, tag)
 		assert.Error(t, err)

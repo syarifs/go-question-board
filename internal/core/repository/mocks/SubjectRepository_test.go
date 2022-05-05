@@ -41,14 +41,14 @@ func TestUpdateSubject(t *testing.T) {
 			Code: "INF",
 			Name: "Informatics",
 		}
-		mockSubject.On("UpdateSubject", 1, data).Return(nil).Once()
+		mockSubject.On("UpdateSubject", data).Return(nil).Once()
 		subject, err := subjectService.UpdateSubject(1, data)
 		assert.NotEmpty(t, subject)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
-		mockSubject.On("UpdateSubject", 1, mock.Anything).Return(errors.New("error")).Once()
+		mockSubject.On("UpdateSubject", mock.Anything).Return(errors.New("error")).Once()
 		subject, err := subjectService.UpdateSubject(1, models.Subject{})
 		assert.Empty(t, subject)
 		assert.Error(t, err)

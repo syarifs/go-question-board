@@ -19,8 +19,8 @@ func (repo tagRepository) CreateTag(tag m.Tag) (err error) {
 	return
 }
 
-func (repo tagRepository) UpdateTag(id int, tag m.Tag) (err error) {
-	err = repo.db.Where("id = ?", id).Updates(&tag).Error
+func (repo tagRepository) UpdateTag(tag m.Tag) (err error) {
+	err = repo.db.Updates(&tag).Error
 	return
 }
 

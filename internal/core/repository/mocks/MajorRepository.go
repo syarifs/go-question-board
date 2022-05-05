@@ -64,13 +64,13 @@ func (_m *MajorRepository) ReadMajor() (*[]models.Major, error) {
 	return r0, r1
 }
 
-// UpdateMajor provides a mock function with given fields: _a0, _a1
-func (_m *MajorRepository) UpdateMajor(_a0 int, _a1 models.Major) error {
-	ret := _m.Called(_a0, _a1)
+// UpdateMajor provides a mock function with given fields: _a0
+func (_m *MajorRepository) UpdateMajor(_a0 models.Major) error {
+	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.Major) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(models.Major) error); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
 	}

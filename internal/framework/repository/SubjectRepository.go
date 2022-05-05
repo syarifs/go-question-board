@@ -19,10 +19,11 @@ func (repo subjectRepository) CreateSubject(subject m.Subject) (err error) {
 	return
 }
 
-func (repo subjectRepository) UpdateSubject(id int, subject m.Subject) (err error) {
-	err = repo.db.Where("id = ?", id).Updates(&subject).Error
+func (repo subjectRepository) UpdateSubject(subject m.Subject) (err error) {
+	err = repo.db.Updates(&subject).Error
 	return
 }
+
 
 func (repo subjectRepository) DeleteSubject(id int) (err error) {
 	err = repo.db.Delete(&m.Subject{}, id).Error

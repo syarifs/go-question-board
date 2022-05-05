@@ -31,7 +31,8 @@ func (srv SubjectService) ReadSubject() (res []models.Subject, err error) {
 }
 
 func (srv SubjectService) UpdateSubject(id int, subject models.Subject) (res models.Subject, err error) {
-	err  = srv.repo.UpdateSubject(id, subject)
+	subject.ID = uint(id)
+	err  = srv.repo.UpdateSubject(subject)
 	if err == nil {
 		res = subject
 	}
