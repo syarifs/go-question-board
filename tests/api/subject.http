@@ -1,0 +1,40 @@
+# fetch subject
+GET localhost:8080/subject
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############
+
+# fetch subject by id
+GET localhost:8080/subject/1
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+# create subject
+POST localhost:8080/subject
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+{
+	"code": "ALG1",
+	"name": "Programming Algorithm"
+}
+
+##############
+
+# update subject
+PUT localhost:8080/subject/1/update
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+{
+	"code": "ALG1",
+	"name": "Programming Algorithm"
+}
+
+##############
+
+# delete subject
+DELETE localhost:8080/subject/1/delete
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############

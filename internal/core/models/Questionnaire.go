@@ -1,11 +1,9 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
+import "time"
 
 type Questionnaire struct {
-	gorm.Model
+	ID uint `json:"id" gorm:"primaryKey"`
 	Title string `json:"title"`
 	Description string `json:"description"`
 	Tags []Tag `json:"tags" gorm:"many2many:questionnaire_tags"`
@@ -14,6 +12,9 @@ type Questionnaire struct {
 	CompletedBy *uint `json:"completed_by"`
 	Creator User `gorm:"foreignkey:CreatedBy;references:ID"`
 	Completor User `gorm:"foreignkey:CompletedBy;references:ID"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
 }
 
 func (*Questionnaire) TableName() string {

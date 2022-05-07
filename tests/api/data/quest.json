@@ -1,0 +1,44 @@
+{
+	"title": "Evaluasi Dosen",
+	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
+	"tags": [
+		{
+			"id": 1,
+			"name": "Year",
+			"value": "2019"
+		}
+	],
+	"crated_by": 1,
+	"question": [
+		{
+			"question": "Pertanyaan 1",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 2",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 3",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		}
+	]
+}

@@ -1,0 +1,11 @@
+# login
+POST localhost:8080/login
+Content-Type: application/json
+
+{
+	"email": "admin@web.io",
+	"password": "admin",
+}
+
+##############
+

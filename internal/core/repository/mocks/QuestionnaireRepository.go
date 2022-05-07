@@ -14,11 +14,11 @@ type QuestionnaireRepository struct {
 }
 
 // AvailableQuest provides a mock function with given fields: _a0
-func (_m *QuestionnaireRepository) AvailableQuest(_a0 []int) (*[]models.Questionnaire, error) {
+func (_m *QuestionnaireRepository) AvailableQuest(_a0 []models.Tag) (*[]models.Questionnaire, error) {
 	ret := _m.Called(_a0)
 
 	var r0 *[]models.Questionnaire
-	if rf, ok := ret.Get(0).(func([]int) *[]models.Questionnaire); ok {
+	if rf, ok := ret.Get(0).(func([]models.Tag) *[]models.Questionnaire); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
@@ -27,7 +27,7 @@ func (_m *QuestionnaireRepository) AvailableQuest(_a0 []int) (*[]models.Question
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func([]int) error); ok {
+	if rf, ok := ret.Get(1).(func([]models.Tag) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -87,13 +87,13 @@ func (_m *QuestionnaireRepository) ListMyQuest(_a0 int) (*[]models.Questionnaire
 	return r0, r1
 }
 
-// UpdateQuest provides a mock function with given fields: _a0, _a1
-func (_m *QuestionnaireRepository) UpdateQuest(_a0 int, _a1 models.Questionnaire) error {
-	ret := _m.Called(_a0, _a1)
+// UpdateQuest provides a mock function with given fields: _a0
+func (_m *QuestionnaireRepository) UpdateQuest(_a0 models.Questionnaire) error {
+	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int, models.Questionnaire) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(models.Questionnaire) error); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
 	}

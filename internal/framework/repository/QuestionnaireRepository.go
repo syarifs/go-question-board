@@ -24,19 +24,22 @@ func (repo questionnaireRepository) ListMyQuest(user_id int) (quests *[]m.Questi
 	return
 }
 
-func (repo questionnaireRepository) AvailableQuest(tag_id []int) (quests *[]m.Questionnaire, err error) {
+func (repo questionnaireRepository) AvailableQuest(tag []m.Tag) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Find(&quests).Error
 	return
 }
 
-func (repo questionnaireRepository) UpdateQuest(id int, quest m.Questionnaire) (err error) {
+func (repo questionnaireRepository) UpdateQuest(quest m.Questionnaire) (err error) {
+	err = repo.db.Updates(&quest).Error
 	return
 }
 
 func (repo questionnaireRepository) DeleteQuest(id int) (err error) {
+	err = repo.db.Delete(&m.Questionnaire{}, id).Error
 	return
 }
 
 func (repo questionnaireRepository) ViewQuestByID(id int) (quest *m.Questionnaire, err error) {
+	err = repo.db.Find(&quest, id).Error
 	return
 }

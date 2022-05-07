@@ -10,6 +10,6 @@ func NewQuestionnaireRoutes(e *echo.Echo, ucon *controller.QuestionnaireControll
 	group := e.Group("/questionnaire", middleware...)
 	group.GET("", ucon.ListMyQuestionnaire)
 	group.POST("", ucon.CreateQuestionnaire)
-	// group.PUT("/:id/update", ucon.UpdateQuestionnaire)
-	// group.DELETE("/:id/delete", ucon.DeleteQuestionnaire)
+	group.PUT("/:id/update", ucon.UpdateQuestionnaire)
+	group.DELETE("/:id/delete", ucon.DeleteQuestionnaire)
 }

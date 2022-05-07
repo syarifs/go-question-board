@@ -1,0 +1,120 @@
+# fetch questionnaire
+GET localhost:8080/questionnaire
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############
+
+# fetch questionnaire by id
+GET localhost:8080/questionnaire/1
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+# create questionnaire
+POST http://localhost:8080/questionnaire
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+{
+	"title": "Evaluasi Dosen",
+	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
+	"tags": [
+		{
+			"id": 1,
+			"name": "Year",
+			"value": "2019"
+		}
+	],
+	"crated_by": 1,
+	"question": [
+		{
+			"question": "Pertanyaan 1",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 2",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 3",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		}
+	]
+}
+##############
+
+# update questionnaire
+PUT localhost:8080/questionnaire/1/update
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+{
+	"title": "Evaluasi Dosen",
+	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
+	"tags": [
+		{
+			"id": 1,
+			"name": "Year",
+			"value": "2019"
+		}
+	],
+	"crated_by": 1,
+	"question": [
+		{
+			"question": "Pertanyaan 1",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 2",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		},
+		{
+			"question": "Pertanyaan 3",
+			"with_option": 1,
+			"option": [
+				{ "answer": "A" },
+				{ "answer": "B" },
+				{ "answer": "C" },
+				{ "answer": "D" }
+			]
+		}
+	]
+}
+##############
+
+# delete questionnaire
+DELETE localhost:8080/questionnaire/1/delete
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############
