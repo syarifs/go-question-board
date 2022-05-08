@@ -9,9 +9,8 @@ type Questionnaire struct {
 	Tags []Tag `json:"tags" gorm:"many2many:questionnaire_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Question []Question `json:"questions"`
 	CreatedBy uint `json:"created_by"`
-	CompletedBy *uint `json:"completed_by"`
-	Creator User `gorm:"foreignkey:CreatedBy;references:ID"`
-	Completor []User `gorm:"many2many:quest_user_complete;foreignkey:CompletedBy;references:ID"`
+	Creator User `gorm:"foreignkey:CreatedBy;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Completor []User `gorm:"many2many:quest_user_complete;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`

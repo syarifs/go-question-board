@@ -18,7 +18,7 @@ func NewAuthRepository(db *gorm.DB) *authRepository {
 }
 
 func (repo authRepository) Login(user request.LoginRequest) (users m.User, err error) {
-	err = repo.db.Preload(clause.Associations).Where("email = ? AND password = ?", user.Email, user.Password).First(&users).Error
+	err = repo.db.Preload(clause.Associations).Where("email = ?", user.Email).First(&users).Error
 	return
 }
 
