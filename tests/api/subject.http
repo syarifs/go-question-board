@@ -5,31 +5,20 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch subject by id
-GET localhost:8080/subject/1
-Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
-
 # create subject
 POST localhost:8080/subject
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"code": "ALG1",
-	"name": "Programming Algorithm"
-}
 
+< ./data/subject/insert.json
 ##############
 
 # update subject
 PUT localhost:8080/subject/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"code": "ALG1",
-	"name": "Programming Algorithm"
-}
 
+< ./data/subject/update.json
 ##############
 
 # delete subject

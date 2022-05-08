@@ -14,11 +14,11 @@ type QuestionnaireRepository struct {
 }
 
 // AvailableQuest provides a mock function with given fields: _a0
-func (_m *QuestionnaireRepository) AvailableQuest(_a0 []models.Tag) (*[]models.Questionnaire, error) {
+func (_m *QuestionnaireRepository) AvailableQuest(_a0 []uint) (*[]models.Questionnaire, error) {
 	ret := _m.Called(_a0)
 
 	var r0 *[]models.Questionnaire
-	if rf, ok := ret.Get(0).(func([]models.Tag) *[]models.Questionnaire); ok {
+	if rf, ok := ret.Get(0).(func([]uint) *[]models.Questionnaire); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
@@ -27,7 +27,7 @@ func (_m *QuestionnaireRepository) AvailableQuest(_a0 []models.Tag) (*[]models.Q
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func([]models.Tag) error); ok {
+	if rf, ok := ret.Get(1).(func([]uint) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)

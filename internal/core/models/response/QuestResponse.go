@@ -2,7 +2,7 @@ package response
 
 import m "go-question-board/internal/core/models"
 
-type QuestDahsboardResponse struct {
+type MyQuestDahsboardResponse struct {
 	ID uint `json:"id"`
 	Title string `json:"title"`
 	Description string `json:"description"`
@@ -11,10 +11,19 @@ type QuestDahsboardResponse struct {
 	CountAnswered int `json:"count_answered"`
 }
 
-type QuestResponse struct {
+type AvailableQuestionnareResponse struct {
+	ID uint `json:"id"`
 	QuestionnaireID uint `json:"questionnaire_id"`
 	Title string `json:"title"`
 	Description string `json:"description"`
+	Tags []m.Tag `json:"tags"`
+	CreatedBy m.User `json:"created_by"`
+}
+
+type QuestResponse struct {
+	ID uint `json:"id"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+	Tag []m.Tag `json:"tags"`
 	Question []m.Question `json:"questions"`
-	AnsweredUser int `json:"answered_user"`
 }

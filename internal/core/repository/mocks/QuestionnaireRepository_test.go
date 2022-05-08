@@ -130,7 +130,7 @@ func TestAvalaibleQuestionnaire(t *testing.T) {
 		tag := []models.Tag{
 			{ID: 1, Name: "Year", Value: "2019"},
 		}
-		mockQuestionnaire.On("AvailableQuest", tag).Return(&data, nil).Once()
+		mockQuestionnaire.On("AvailableQuest",  []uint{1}).Return(&data, nil).Once()
 		quest, err := questionnaireService.AvailableQuest(tag)
 		assert.NotEmpty(t, quest)
 		assert.NoError(t, err)
@@ -140,7 +140,7 @@ func TestAvalaibleQuestionnaire(t *testing.T) {
 		tag := []models.Tag{
 			{ID: 1, Name: "Year", Value: "2019"},
 		}
-		mockQuestionnaire.On("AvailableQuest", tag).Return(nil, errors.New("fail")).Once()
+		mockQuestionnaire.On("AvailableQuest", []uint{1}).Return(nil, errors.New("fail")).Once()
 		quest, err := questionnaireService.AvailableQuest(tag)
 		assert.Empty(t, quest)
 		assert.Error(t, err)

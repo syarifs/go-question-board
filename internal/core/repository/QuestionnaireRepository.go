@@ -7,7 +7,7 @@ import (
 type QuestionnaireRepository interface {
 	CreateQuest(m.Questionnaire) error
 	ListMyQuest(int) (*[]m.Questionnaire, error)
-	AvailableQuest([]m.Tag) (*[]m.Questionnaire, error)
+	AvailableQuest([]uint) (*[]m.Questionnaire, error)
 	UpdateQuest(m.Questionnaire) error
 	DeleteQuest(int) error
 	ViewQuestByID(int) (*m.Questionnaire, error)

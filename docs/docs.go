@@ -25,6 +25,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/dashboard": {
+            "get": {
+                "description": "Route Path for Get List of Questionnaire.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Questionnaire",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Login and get Authorization Token",
@@ -202,6 +231,187 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "major id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionnaire": {
+            "get": {
+                "description": "Route Path for Get List of Questionnaire.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Questionnaire",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Route Path for Insert New Questionnaire.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Create New Questionnaire",
+                "parameters": [
+                    {
+                        "description": "send request questionnaire code and questionnaire name",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Questionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionnaire/{id}": {
+            "get": {
+                "description": "Route Path for Get List of Questionnaire.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Questionnaire",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionnaire/{id}/delete": {
+            "delete": {
+                "description": "Route Path for Delete Questionnaire.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Delete Questionnaire",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "questionnaire id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionnaire/{id}/update": {
+            "put": {
+                "description": "Route Path for Update Questionnaire.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Update Questionnaire",
+                "parameters": [
+                    {
+                        "description": "send request questionnaire code and questionnaire name",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Questionnaire"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "questionnaire id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -756,6 +966,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AnswerOption": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "question_id": {
+                    "type": "integer"
+                },
+                "string_answer": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Level": {
             "type": "object",
             "properties": {
@@ -777,6 +1001,79 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Question": {
+            "type": "object",
+            "properties": {
+                "answer_option": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AnswerOption"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "questionnaire_id": {
+                    "type": "integer"
+                },
+                "with_option": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Questionnaire": {
+            "type": "object",
+            "properties": {
+                "completed_by": {
+                    "type": "integer"
+                },
+                "completor": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.User"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "integer"
+                },
+                "creator": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Question"
+                    }
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }

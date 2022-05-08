@@ -23,7 +23,7 @@ func NewQuestionnaireController(srv *service.QuestionnaireService) *Questionnair
 
 // CreateResource godoc
 // @Summary Create New Questionnaire
-// @Description Route Path for Insert New Questionnaire, for Administrator only.
+// @Description Route Path for Insert New Questionnaire.
 // @Tags Questionnaire
 // @Accept json
 // @Produce json
@@ -51,7 +51,31 @@ func (ucon QuestionnaireController) CreateQuestionnaire(c echo.Context) error {
 
 // CreateResource godoc
 // @Summary Get All Questionnaire
-// @Description Route Path for Get List of Questionnaire, for Administrator only.
+// @Description Route Path for Get List of Questionnaire.
+// @Tags Questionnaire
+// @Success 200 {object} response.SuccessResponse{} success
+// @Failure 417 {object} response.ErrorResponse{} error
+// @Failure 400 {object} string error
+// @Router /questionnaire/{id} [get]
+func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	res, err := ucon.srv.ViewQuestByID(id)
+	if err == nil {
+		return c.JSON(http.StatusOK, response.SuccessResponse{
+			Message: "Questionnaire Fetched",
+			Data: res,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
+			Message: "Failed to Fetch Questionnaire",
+			Error: err,
+		})
+	}
+}
+
+// CreateResource godoc
+// @Summary Get All Questionnaire
+// @Description Route Path for Get List of Questionnaire.
 // @Tags Questionnaire
 // @Success 200 {object} response.SuccessResponse{} success
 // @Failure 417 {object} response.ErrorResponse{} error
@@ -76,7 +100,7 @@ func (ucon QuestionnaireController) ListMyQuestionnaire(c echo.Context) error {
 
 // CreateResource godoc
 // @Summary Update Questionnaire
-// @Description Route Path for Update Questionnaire, for Administrator only.
+// @Description Route Path for Update Questionnaire.
 // @Tags Questionnaire
 // @Accept json
 // @Produce json
@@ -105,7 +129,7 @@ func (ucon QuestionnaireController) UpdateQuestionnaire(c echo.Context) error {
 
 // CreateResource godoc
 // @Summary Delete Questionnaire
-// @Description Route Path for Delete Questionnaire, for Administrator only.
+// @Description Route Path for Delete Questionnaire.
 // @Tags Questionnaire
 // @Accept json
 // @Produce json
@@ -118,11 +142,11 @@ func (ucon QuestionnaireController) DeleteQuestionnaire(c echo.Context) error {
 	err := ucon.srv.DeleteQuest(id)
 	if err == nil {
 		return c.JSON(http.StatusCreated, response.MessageOnlyResponse{
-			Message: "Questionnaire Updated",
+			Message: "Questionnaire Deleted",
 		})
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.ErrorResponse{
-			Message: "Failed to Update Questionnaire",
+			Message: "Failed to Delete Questionnaire",
 			Error: err,
 		})
 	}
@@ -130,15 +154,16 @@ func (ucon QuestionnaireController) DeleteQuestionnaire(c echo.Context) error {
 
 // CreateResource godoc
 // @Summary Get All Questionnaire
-// @Description Route Path for Get List of Questionnaire, for Administrator only.
+// @Description Route Path for Get List of Questionnaire.
 // @Tags Questionnaire
 // @Success 200 {object} response.SuccessResponse{} success
 // @Failure 417 {object} response.ErrorResponse{} error
 // @Failure 400 {object} string error
-// @Router /questionnaire [get]
+// @Router /dashboard [get]
 func (ucon QuestionnaireController) AvailableQuest(c echo.Context) error {
 	var user models.User
 	c.Bind(&user)
+	fmt.Println(user)
 	res, err := ucon.srv.AvailableQuest(user.Tags)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.SuccessResponse{

@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Question struct {
-	gorm.Model
+	ID uint `json:"id" gorm:"primaryKey"`
 	QuestionnaireID uint `json:"questionnaire_id"`
 	Question string `json:"question"`
 	WithOption int `json:"with_option"`

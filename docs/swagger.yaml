@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  models.AnswerOption:
+    properties:
+      id:
+        type: integer
+      question_id:
+        type: integer
+      string_answer:
+        type: string
+    type: object
   models.Level:
     properties:
       id:
@@ -14,6 +23,54 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+    type: object
+  models.Question:
+    properties:
+      answer_option:
+        items:
+          $ref: '#/definitions/models.AnswerOption'
+        type: array
+      id:
+        type: integer
+      question:
+        type: string
+      questionnaire_id:
+        type: integer
+      with_option:
+        type: integer
+    type: object
+  models.Questionnaire:
+    properties:
+      completed_by:
+        type: integer
+      completor:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      created_by:
+        type: integer
+      createdAt:
+        type: string
+      creator:
+        $ref: '#/definitions/models.User'
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      questions:
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      title:
+        type: string
+      updatedAt:
         type: string
     type: object
   models.Subject:
@@ -137,6 +194,25 @@ info:
   title: Question Board
   version: "1.0"
 paths:
+  /dashboard:
+    get:
+      description: Route Path for Get List of Questionnaire.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Questionnaire
+      tags:
+      - Questionnaire
   /login:
     post:
       consumes:
@@ -267,6 +343,125 @@ paths:
       summary: Update Major
       tags:
       - Major
+  /questionnaire:
+    get:
+      description: Route Path for Get List of Questionnaire.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Questionnaire
+      tags:
+      - Questionnaire
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Questionnaire.
+      parameters:
+      - description: send request questionnaire code and questionnaire name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Questionnaire'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create New Questionnaire
+      tags:
+      - Questionnaire
+  /questionnaire/{id}:
+    get:
+      description: Route Path for Get List of Questionnaire.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get All Questionnaire
+      tags:
+      - Questionnaire
+  /questionnaire/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Questionnaire.
+      parameters:
+      - description: questionnaire id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnlyResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete Questionnaire
+      tags:
+      - Questionnaire
+  /questionnaire/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Questionnaire.
+      parameters:
+      - description: send request questionnaire code and questionnaire name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Questionnaire'
+      - description: questionnaire id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update Questionnaire
+      tags:
+      - Questionnaire
   /refresh_token:
     post:
       consumes:

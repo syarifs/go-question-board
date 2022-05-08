@@ -5,31 +5,20 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch tag by id
-GET localhost:8080/tag/1
-Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
-
 # create tag
 POST localhost:8080/tag
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"name": "Year",
-	"value": "2019"
-}
 
+< ./data/tag/insert.json
 ##############
 
 # update tag
 PUT localhost:8080/tag/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"name": "Year",
-	"value": "2019"
-}
 
+< ./data/tag/update.json
 ##############
 
 # delete tag

@@ -8,12 +8,12 @@
 			"value": "2019"
 		}
 	],
-	"crated_by": 1,
-	"question": [
+	"created_by": 1,
+	"questions": [
 		{
 			"question": "Pertanyaan 1",
 			"with_option": 1,
-			"option": [
+			"answer_option": [
 				{ "answer": "A" },
 				{ "answer": "B" },
 				{ "answer": "C" },
@@ -23,7 +23,7 @@
 		{
 			"question": "Pertanyaan 2",
 			"with_option": 1,
-			"option": [
+			"answer_option": [
 				{ "answer": "A" },
 				{ "answer": "B" },
 				{ "answer": "C" },
@@ -33,7 +33,7 @@
 		{
 			"question": "Pertanyaan 3",
 			"with_option": 1,
-			"option": [
+			"answer_option": [
 				{ "answer": "A" },
 				{ "answer": "B" },
 				{ "answer": "C" },

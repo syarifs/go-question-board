@@ -5,31 +5,20 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch major by id
-GET localhost:8080/major/1
-Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
-
 # create major
 POST localhost:8080/major
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"code": "INF",
-	"name": "Informatics"
-}
 
+< ./data/major/insert.json
 ##############
 
 # update major
 PUT localhost:8080/major/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
-{
-	"code": "INF",
-	"name": "Informatics"
-}
 
+< ./data/major/update.json
 ##############
 
 # delete major
