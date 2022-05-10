@@ -67,15 +67,43 @@ func (repo QuestionnaireService) DeleteQuest(id int) (err error) {
 	return
 }
 
+func (repo QuestionnaireService) ViewQuestResponse(id int) (res response.QuestResponses, err error) {
+	var quest *models.Questionnaire
+	quest, err = repo.repo.ViewQuestResponse(id)
+	if err == nil {
+		for _, v := range quest.Question {
+			respondent := response.Respondent{
+				QuestionID: v.ID,
+				Question: v.Question,
+				Response: v.UserResponse,
+			}
+			respondent.NumberRespondent = uint(len(v.UserResponse))
+			res.Questions = append(res.Questions, respondent)
+		}
+		res.ID = quest.ID
+		res.Title = quest.Title
+	}
+	return
+}
+
 func (repo QuestionnaireService) ViewQuestByID(id int) (res response.AvailabelQuestDetails, err error) {
 	var quest *models.Questionnaire
 	quest, err = repo.repo.ViewQuestByID(id)
 	if err == nil {
+		question := quest.Question
+		for _, v := range question {
+			res.Question = append(res.Question, response.Question{
+				ID: v.ID,
+				QuestionnaireID: v.QuestionnaireID,
+				WithOption: v.WithOption,
+				Question: v.Question,
+				AnswerOption: v.AnswerOption,
+			})
+		}
 		res.ID = quest.ID
 		res.Title = quest.Title
 		res.Description = quest.Description
 		res.Tag = quest.Tags
-		res.Question = quest.Question
 	}
 	return
 }

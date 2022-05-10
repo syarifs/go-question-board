@@ -1,41 +1,53 @@
-# fetch questionnaire
-GET localhost:8080/questionnaire
+# fetch quest
+GET localhost:8080/quest
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch my questionnaire
-GET localhost:8080/dashboard
+# fetch my quest
+GET localhost:8080/quest/available
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 < ./data/quest/fetch_by_tag.json
+
 ##############
 
-# fetch questionnaire by id
-GET localhost:8080/questionnaire/1
+# fetch quest by id
+GET localhost:8080/quest/1
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
-# create questionnaire
-POST http://localhost:8080/questionnaire
+##############
+
+# fetch quest by id
+GET localhost:8080/quest/1/response
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############
+
+# create quest
+POST http://localhost:8080/quest
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 < ./data/quest/insert.json
+
 ##############
 
-# update questionnaire
-PUT localhost:8080/questionnaire/1/update
+# update quest
+PUT localhost:8080/quest/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 < ./data/quest/update.json
+
 ##############
 
-# delete questionnaire
-DELETE localhost:8080/questionnaire/1/delete
+# delete quest
+DELETE localhost:8080/quest/1/delete
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 

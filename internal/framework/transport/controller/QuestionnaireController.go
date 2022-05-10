@@ -81,6 +81,32 @@ func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
 // @Description Route Path for Get List of Questionnaire.
 // @Tags Questionnaire
 // @Security ApiKey
+// @Success 200 {object} response.MessageOnly{} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 400 {object} response.MessageOnly{} error
+// @Failure 401 {object} response.MessageOnly{} error
+// @Router /questionnaire/{id}/response [get]
+func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	res, err := ucon.srv.ViewQuestResponse(id)
+	if err == nil {
+		return c.JSON(http.StatusOK, response.MessageData{
+			Message: "Questionnaire Response Fetched",
+			Data: res,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Fetch Questionnaire Response",
+			Error: err,
+		})
+	}
+}
+
+// CreateResource godoc
+// @Summary Get All Questionnaire
+// @Description Route Path for Get List of Questionnaire.
+// @Tags Questionnaire
+// @Security ApiKey
 // @Success 200 {object} response.MessageData{} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error

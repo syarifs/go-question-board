@@ -3,12 +3,14 @@
 	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
 	"tags": [
 		{
+			"id": 1,
 			"name": "Year",
 			"value": "2019"
 		},
 		{
-			"name": "Year",
-			"value": "2019"
+			"id": 5,
+			"name": "Class",
+			"value": "B"
 		}
 	],
 	"created_by": 1,
