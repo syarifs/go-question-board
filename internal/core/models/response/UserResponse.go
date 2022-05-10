@@ -2,7 +2,7 @@ package response
 
 import m "go-question-board/internal/core/models"
 
-type UserListResponse struct {
+type UserList struct {
 	ID uint `json:"id"`
 	Email string `json:"email"`
 	Name string `json:"name"`
@@ -10,7 +10,7 @@ type UserListResponse struct {
 	Status int `json:"status"`
 }
 
-type UserDetailsResponse struct {
+type UserDetails struct {
 	ID uint `json:"id"`
 	Email string `json:"email"`
 	Name string `json:"name"`

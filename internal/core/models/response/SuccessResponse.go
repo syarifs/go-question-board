@@ -1,10 +1,10 @@
 package response
 
-type SuccessResponse struct {
+type MessageData struct {
 	Message string `json:"message"`
 	Data interface{} `json:"data"`
 }
 
-type MessageOnlyResponse struct {
+type MessageOnly struct {
 	Message string `json:"message"`
 }

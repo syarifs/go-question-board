@@ -42,8 +42,6 @@ definitions:
     type: object
   models.Questionnaire:
     properties:
-      completed_by:
-        type: integer
       completor:
         items:
           $ref: '#/definitions/models.User'
@@ -140,24 +138,24 @@ definitions:
       password:
         type: string
     type: object
-  response.ErrorResponse:
+  response.Error:
     properties:
       error: {}
       message:
         type: string
     type: object
-  response.MessageOnlyResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  response.SuccessResponse:
+  response.MessageData:
     properties:
       data: {}
       message:
         type: string
     type: object
-  response.UserDetailsResponse:
+  response.MessageOnly:
+    properties:
+      message:
+        type: string
+    type: object
+  response.UserDetails:
     properties:
       email:
         type: string
@@ -182,15 +180,11 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
+  contact: {}
   description: server API for Question Board Application.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
   title: Question Board
   version: "1.0"
 paths:
@@ -201,15 +195,17 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Questionnaire
       tags:
       - Questionnaire
@@ -221,7 +217,7 @@ paths:
       parameters:
       - description: send request email, password
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/request.LoginRequest'
@@ -231,15 +227,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.UserDetailsResponse'
+            $ref: '#/definitions/response.UserDetails'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
       summary: Login
       tags:
       - Authorization
@@ -250,15 +246,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Major
       tags:
       - Major
@@ -269,7 +271,7 @@ paths:
       parameters:
       - description: send request major code and major name
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.Major'
@@ -279,11 +281,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Create New Major
       tags:
       - Major
@@ -304,11 +316,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnlyResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Delete Major
       tags:
       - Major
@@ -318,28 +340,38 @@ paths:
       - application/json
       description: Route Path for Update Major, for Administrator only.
       parameters:
-      - description: send request major code and major name
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.Major'
       - description: major id
         in: path
         name: id
         required: true
         type: integer
+      - description: send request major code and major name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Major'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Update Major
       tags:
       - Major
@@ -350,15 +382,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Questionnaire
       tags:
       - Questionnaire
@@ -369,7 +407,7 @@ paths:
       parameters:
       - description: send request questionnaire code and questionnaire name
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.Questionnaire'
@@ -379,11 +417,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Create New Questionnaire
       tags:
       - Questionnaire
@@ -394,15 +442,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Questionnaire
       tags:
       - Questionnaire
@@ -423,11 +477,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnlyResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Delete Questionnaire
       tags:
       - Questionnaire
@@ -437,28 +501,38 @@ paths:
       - application/json
       description: Route Path for Update Questionnaire.
       parameters:
-      - description: send request questionnaire code and questionnaire name
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.Questionnaire'
       - description: questionnaire id
         in: path
         name: id
         required: true
         type: integer
+      - description: send request questionnaire code and questionnaire name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Questionnaire'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Update Questionnaire
       tags:
       - Questionnaire
@@ -470,7 +544,7 @@ paths:
       parameters:
       - description: send request access_token, refresh_token
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.Token'
@@ -484,11 +558,11 @@ paths:
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
       summary: Refresh Token
       tags:
       - Authorization
@@ -499,15 +573,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Subject
       tags:
       - Subject
@@ -518,7 +598,7 @@ paths:
       parameters:
       - description: send request subject code and subject name
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.Subject'
@@ -528,11 +608,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Create New Subject
       tags:
       - Subject
@@ -553,11 +643,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnlyResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Delete Subject
       tags:
       - Subject
@@ -567,28 +667,38 @@ paths:
       - application/json
       description: Route Path for Update Subject, for Administrator only.
       parameters:
-      - description: send request subject code and subject name
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.Subject'
       - description: subject id
         in: path
         name: id
         required: true
         type: integer
+      - description: send request subject code and subject name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subject'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Update Subject
       tags:
       - Subject
@@ -599,15 +709,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All Tag
       tags:
       - Tag
@@ -618,7 +734,7 @@ paths:
       parameters:
       - description: send request tag code and tag name
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.Tag'
@@ -628,11 +744,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Create New Tag
       tags:
       - Tag
@@ -653,11 +779,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnlyResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Delete Tag
       tags:
       - Tag
@@ -667,28 +803,38 @@ paths:
       - application/json
       description: Route Path for Update Tag, for Administrator only.
       parameters:
-      - description: send request tag code and tag name
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.Tag'
       - description: tag id
         in: path
         name: id
         required: true
         type: integer
+      - description: send request tag code and tag name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Update Tag
       tags:
       - Tag
@@ -699,15 +845,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get All User
       tags:
       - User
@@ -718,7 +870,7 @@ paths:
       parameters:
       - description: send request user code and user name
         in: body
-        name: data
+        name: body
         required: true
         schema:
           $ref: '#/definitions/models.User'
@@ -728,11 +880,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Create New User
       tags:
       - User
@@ -743,15 +905,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageData'
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Get User By ID
       tags:
       - User
@@ -772,11 +940,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnlyResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Delete User
       tags:
       - User
@@ -786,29 +964,44 @@ paths:
       - application/json
       description: Route Path for Update User, for Administrator only.
       parameters:
-      - description: send request user code and user name
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
       - description: user id
         in: path
         name: id
         required: true
         type: integer
+      - description: send request user code and user name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
         "417":
           description: Expectation Failed
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
       summary: Update User
       tags:
       - User
+securityDefinitions:
+  ApiKey:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

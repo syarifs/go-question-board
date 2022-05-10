@@ -5,6 +5,7 @@ import (
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +23,7 @@ func TestLogin(t *testing.T) {
 		}
 		ret := models.User{
 			Email: data.Email,
-			Password: data.Password,
+			Password: utils.HashPassword(data.Password),
 		}
 		mockAuth.On("Login", data).Return(ret, nil).Once()
 		auth, err := authService.Login(data)

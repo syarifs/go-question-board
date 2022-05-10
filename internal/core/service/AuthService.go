@@ -17,7 +17,7 @@ func NewAuthService(repo repository.AuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetailsResponse, err error) {
+func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetails, err error) {
 	var user models.User
 	var checkPassword bool
 	user, err  = srv.repo.Login(login)

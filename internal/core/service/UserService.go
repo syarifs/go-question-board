@@ -15,26 +15,18 @@ func NewUserService(repo repository.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (srv UserService) CreateUser(user models.User) (res response.UserListResponse, err error) {
+func (srv UserService) CreateUser(user models.User) (err error) {
 	user.Password = utils.HashPassword(user.Password)
 	err  = srv.repo.CreateUser(user)
-	if err == nil {
-		res = response.UserListResponse{
-			Name: user.Name,
-			Email: user.Email,
-			Status: user.Status,
-			Level: user.Level,
-		}
-	}
 	return
 }
 
-func (srv UserService) ReadUser() (res []response.UserListResponse, err error) {
+func (srv UserService) ReadUser() (res []response.UserList, err error) {
 	var user *[]models.User
 	user, err  = srv.repo.ReadUser()
 	if err == nil {
 		for _, um := range *user {
-			res = append(res, response.UserListResponse{
+			res = append(res, response.UserList{
 				ID: um.ID,
 				Name: um.Name,
 				Email: um.Email,
@@ -46,11 +38,11 @@ func (srv UserService) ReadUser() (res []response.UserListResponse, err error) {
 	return
 }
 
-func (srv UserService) ReadUserByID(id int) (res response.UserDetailsResponse, err error) {
+func (srv UserService) ReadUserByID(id int) (res response.UserDetails, err error) {
 	var user *models.User
 	user, err  = srv.repo.ReadUserByID(id)
 	if err == nil {
-		res = response.UserDetailsResponse{
+		res = response.UserDetails{
 			ID:      user.ID,
 			Email:   user.Email,
 			Name:    user.Name,
@@ -64,21 +56,9 @@ func (srv UserService) ReadUserByID(id int) (res response.UserDetailsResponse, e
 	return
 }
 
-func (srv UserService) UpdateUser(id int, user models.User) (res response.UserDetailsResponse, err error) {
+func (srv UserService) UpdateUser(id int, user models.User) (err error) {
 	user.ID = uint(id)
 	err  = srv.repo.UpdateUser(user)
-	if err == nil {
-		res = response.UserDetailsResponse{
-			ID: user.ID,
-			Name: user.Name,
-			Email: user.Email,
-			Level: user.Level,
-			Major: user.Major,
-			Tags: user.Tags,
-			Subject: user.Subject,
-			Status: user.Status,
-		}
-	}
 	return
 }
 

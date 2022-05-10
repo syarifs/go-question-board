@@ -3,7 +3,10 @@
 	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
 	"tags": [
 		{
-			"id": 1,
+			"name": "Year",
+			"value": "2019"
+		},
+		{
 			"name": "Year",
 			"value": "2019"
 		}
@@ -14,30 +17,64 @@
 			"question": "Pertanyaan 1",
 			"with_option": 1,
 			"answer_option": [
-				{ "answer": "A" },
-				{ "answer": "B" },
-				{ "answer": "C" },
-				{ "answer": "D" }
+				{ 
+					"string_answer": "A" 
+				},
+				{ 
+					"string_answer": "B" 
+				},
+				{ 
+					"string_answer": "C" 
+				},
+				{ 
+					"string_answer": "D" 
+				},
+				{ 
+					"string_answer": "E" 
+				}
 			]
 		},
 		{
 			"question": "Pertanyaan 2",
 			"with_option": 1,
 			"answer_option": [
-				{ "answer": "A" },
-				{ "answer": "B" },
-				{ "answer": "C" },
-				{ "answer": "D" }
+				{ 
+					"string_answer": "A" 
+				},
+				{ 
+					"string_answer": "B" 
+				},
+				{ 
+					"string_answer": "C" 
+				},
+				{ 
+					"string_answer": "D" 
+				},
+				{ 
+					"string_answer": "E" 
+				}
 			]
 		},
 		{
+			"id": 3,
 			"question": "Pertanyaan 3",
 			"with_option": 1,
 			"answer_option": [
-				{ "answer": "A" },
-				{ "answer": "B" },
-				{ "answer": "C" },
-				{ "answer": "D" }
+				{ 
+					"string_answer": "A" 
+				},
+				{ 
+					"string_answer": "B" 
+				},
+				{ 
+					"string_answer": "C" 
+				},
+				{ 
+					"string_answer": "D" 
+				},
+				{ 
+					"string_answer": "E" 
+				}
 			]
 		}
 	]

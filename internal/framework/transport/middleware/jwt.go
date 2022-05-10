@@ -26,8 +26,8 @@ func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 		header = strings.Split(header, " ")[1]
 		extract, _ := extractToken(header)
 		if extract.(jwt.MapClaims)["role"] != "Administrator" {
-			return c.JSON(http.StatusForbidden, map[string]string{
-				"message": "access blocked. for administartor only",
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"message": "access only for administrator",
 			})
 		}
 		return next(c)

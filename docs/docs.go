@@ -10,12 +10,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -27,6 +22,11 @@ const docTemplate = `{
     "paths": {
         "/dashboard": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Questionnaire.",
                 "tags": [
                     "Questionnaire"
@@ -36,19 +36,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -70,7 +70,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request email, password",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -82,19 +82,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.UserDetailsResponse"
+                            "$ref": "#/definitions/response.UserDetails"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -102,6 +102,11 @@ const docTemplate = `{
         },
         "/major": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Major, for Administrator only.",
                 "tags": [
                     "Major"
@@ -111,24 +116,35 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Insert New Major, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -143,7 +159,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request major code and major name",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -155,13 +171,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -169,6 +197,11 @@ const docTemplate = `{
         },
         "/major/{id}/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Delete Major, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -193,13 +226,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -207,6 +252,11 @@ const docTemplate = `{
         },
         "/major/{id}/update": {
             "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Update Major, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -220,33 +270,45 @@ const docTemplate = `{
                 "summary": "Update Major",
                 "parameters": [
                     {
-                        "description": "send request major code and major name",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Major"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "major id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "send request major code and major name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Major"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -254,6 +316,11 @@ const docTemplate = `{
         },
         "/questionnaire": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Questionnaire.",
                 "tags": [
                     "Questionnaire"
@@ -263,24 +330,35 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Insert New Questionnaire.",
                 "consumes": [
                     "application/json"
@@ -295,7 +373,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request questionnaire code and questionnaire name",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -307,13 +385,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -321,6 +411,11 @@ const docTemplate = `{
         },
         "/questionnaire/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Questionnaire.",
                 "tags": [
                     "Questionnaire"
@@ -330,19 +425,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -350,6 +451,11 @@ const docTemplate = `{
         },
         "/questionnaire/{id}/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Delete Questionnaire.",
                 "consumes": [
                     "application/json"
@@ -374,13 +480,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -388,6 +506,11 @@ const docTemplate = `{
         },
         "/questionnaire/{id}/update": {
             "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Update Questionnaire.",
                 "consumes": [
                     "application/json"
@@ -401,33 +524,45 @@ const docTemplate = `{
                 "summary": "Update Questionnaire",
                 "parameters": [
                     {
-                        "description": "send request questionnaire code and questionnaire name",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Questionnaire"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "questionnaire id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "send request questionnaire code and questionnaire name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Questionnaire"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -449,7 +584,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request access_token, refresh_token",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -467,13 +602,13 @@ const docTemplate = `{
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -481,6 +616,11 @@ const docTemplate = `{
         },
         "/subject": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Subject, for Administrator only.",
                 "tags": [
                     "Subject"
@@ -490,24 +630,35 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Insert New Subject, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -522,7 +673,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request subject code and subject name",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -534,13 +685,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -548,6 +711,11 @@ const docTemplate = `{
         },
         "/subject/{id}/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Delete Subject, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -572,13 +740,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -586,6 +766,11 @@ const docTemplate = `{
         },
         "/subject/{id}/update": {
             "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Update Subject, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -599,33 +784,45 @@ const docTemplate = `{
                 "summary": "Update Subject",
                 "parameters": [
                     {
-                        "description": "send request subject code and subject name",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Subject"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "subject id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "send request subject code and subject name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Subject"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -633,6 +830,11 @@ const docTemplate = `{
         },
         "/tag": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of Tag, for Administrator only.",
                 "tags": [
                     "Tag"
@@ -642,24 +844,35 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Insert New Tag, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -674,7 +887,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request tag code and tag name",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -686,13 +899,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -700,6 +925,11 @@ const docTemplate = `{
         },
         "/tag/{id}/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Delete Tag, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -724,13 +954,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -738,6 +980,11 @@ const docTemplate = `{
         },
         "/tag/{id}/update": {
             "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Update Tag, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -751,33 +998,45 @@ const docTemplate = `{
                 "summary": "Update Tag",
                 "parameters": [
                     {
-                        "description": "send request tag code and tag name",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Tag"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "tag id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "send request tag code and tag name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Tag"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -785,6 +1044,11 @@ const docTemplate = `{
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of User, for Administrator only.",
                 "tags": [
                     "User"
@@ -794,24 +1058,35 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Insert New User, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -826,7 +1101,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "send request user code and user name",
-                        "name": "data",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -838,13 +1113,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -852,6 +1139,11 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Get List of User, for Administrator only.",
                 "tags": [
                     "User"
@@ -861,19 +1153,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -881,6 +1179,11 @@ const docTemplate = `{
         },
         "/user/{id}/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Delete User, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -905,13 +1208,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnlyResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -919,6 +1234,11 @@ const docTemplate = `{
         },
         "/user/{id}/update": {
             "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
                 "description": "Route Path for Update User, for Administrator only.",
                 "consumes": [
                     "application/json"
@@ -932,33 +1252,45 @@ const docTemplate = `{
                 "summary": "Update User",
                 "parameters": [
                     {
-                        "description": "send request user code and user name",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "user id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "send request user code and user name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.SuccessResponse"
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
                         }
                     },
                     "417": {
                         "description": "Expectation Failed",
                         "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
                 }
@@ -1031,9 +1363,6 @@ const docTemplate = `{
         "models.Questionnaire": {
             "type": "object",
             "properties": {
-                "completed_by": {
-                    "type": "integer"
-                },
                 "completor": {
                     "type": "array",
                     "items": {
@@ -1181,7 +1510,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ErrorResponse": {
+        "response.Error": {
             "type": "object",
             "properties": {
                 "error": {},
@@ -1190,15 +1519,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.MessageOnlyResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.SuccessResponse": {
+        "response.MessageData": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -1207,7 +1528,15 @@ const docTemplate = `{
                 }
             }
         },
-        "response.UserDetailsResponse": {
+        "response.MessageOnly": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.UserDetails": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1241,6 +1570,13 @@ const docTemplate = `{
                     }
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKey": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

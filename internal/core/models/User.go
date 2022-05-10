@@ -9,10 +9,10 @@ type User struct {
 	Password string `json:"password"`
 	Status int `json:"status"`
 	LevelID int `json:"level_id"`
-	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
-	Tags []Tag `json:"tags" gorm:"many2many:user_tags"`
-	Subject []Subject `json:"subject" gorm:"many2many:user_subjects"`
+	Tags []Tag `json:"tags" gorm:"many2many:user_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Subject []Subject `json:"subject" gorm:"many2many:user_subjects;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Level Level
 	Major Major
 	CreatedAt time.Time

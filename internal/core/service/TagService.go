@@ -13,9 +13,8 @@ func NewTagService(repo repository.TagRepository) *TagService {
 	return &TagService{repo: repo}
 }
 
-func (srv TagService) CreateTag(tag models.Tag) (res models.Tag, err error) {
+func (srv TagService) CreateTag(tag models.Tag) (err error) {
 	err  = srv.repo.CreateTag(tag)
-	res = tag
 	return
 }
 
@@ -30,12 +29,9 @@ func (srv TagService) ReadTag() (res []models.Tag, err error) {
 	return
 }
 
-func (srv TagService) UpdateTag(id int, tag models.Tag) (res models.Tag, err error) {
+func (srv TagService) UpdateTag(id int, tag models.Tag) (err error) {
 	tag.ID = uint(id)
 	err  = srv.repo.UpdateTag(tag)
-	if err == nil {
-		res = tag
-	}
 	return
 }
 

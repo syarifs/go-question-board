@@ -25,10 +25,10 @@ func NewAuthController(srv *service.AuthService) *AuthController {
 // @Tags Authorization
 // @Accept json
 // @Produce json
-// @Param data  body  request.LoginRequest{}  true "send request email, password"
-// @Success 200 {object} response.UserDetailsResponse{} success
-// @Failure 417 {object} response.ErrorResponse{} error
-// @Failure 500 {object} response.ErrorResponse{} error
+// @Param body  body  request.LoginRequest{}  true "send request email, password"
+// @Success 200 {object} response.UserDetails{} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 500 {object} response.Error{} error
 // @Router /login [post]
 func (acon AuthController) Login(c echo.Context) error {
 	var login request.LoginRequest
@@ -61,10 +61,10 @@ func (acon AuthController) Login(c echo.Context) error {
 // @Tags Authorization
 // @Accept json
 // @Produce json
-// @Param data  body  models.Token{}  true "send request access_token, refresh_token"
+// @Param body  body  models.Token{}  true "send request access_token, refresh_token"
 // @Success 200 {object} models.Token{} success
-// @Failure 417 {object} response.ErrorResponse{} error
-// @Failure 500 {object} response.ErrorResponse{} error
+// @Failure 417 {object} response.Error{} error
+// @Failure 500 {object} response.Error{} error
 // @Router /refresh_token [post]
 func (acon AuthController) RefreshToken(c echo.Context) error {
 	rtoken := models.Token{}

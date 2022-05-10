@@ -14,50 +14,40 @@ func NewQuestionnaireService(repo repository.QuestionnaireRepository) *Questionn
 	return &QuestionnaireService{repo: repo}
 }
 
-func (repo *QuestionnaireService) CreateQuestionnaire(quest models.Questionnaire) (res response.QuestResponse, err error) {
+func (repo QuestionnaireService) CreateQuest(quest models.Questionnaire) (err error) {
 	err = repo.repo.CreateQuest(quest)
-	if err == nil {
-		res.ID = quest.ID
-		res.Title = quest.Title
-		res.Description = quest.Description
-		res.Tag = quest.Tags
-		res.Question = quest.Question
-	}
 	return
 }
 
-func (repo *QuestionnaireService) MyQuestionnaire(user_id int) (res []response.MyQuestDahsboardResponse, err error) {
+func (repo QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, err error) {
 	var quest *[]models.Questionnaire
-	quest, err = repo.repo.ListMyQuest(user_id)
+	quest, err = repo.repo.MyQuest(user_id)
 	if err == nil {
 		for _, v := range *quest {
-			res = append(res, response.MyQuestDahsboardResponse{
+			res = append(res, response.QuestList{
 				ID: v.ID,
 				Title: v.Title,
 				Description: v.Description,
 				Tags: v.Tags,
-				CreatedBy: int(v.CreatedBy),
-				CountAnswered: len(v.Completor),
 			})
 		}
 	}
 	return
 }
 
-func (repo *QuestionnaireService) AvailableQuest(tags_id []models.Tag) (res []response.AvailableQuestionnareResponse, err error) {
+func (repo QuestionnaireService) QuestForMe(tags_id []models.Tag) (res []response.AvailableQuestList, err error) {
 	var tag_id []uint
 	for _, t := range tags_id {
 		tag_id = append(tag_id, t.ID)
 	}
 	var quest *[]models.Questionnaire
-	quest, err = repo.repo.AvailableQuest(tag_id)
+	quest, err = repo.repo.QuestForMe(tag_id)
 	if err == nil {
 		for _, v := range *quest {
-			res = append(res, response.AvailableQuestionnareResponse{
+			res = append(res, response.AvailableQuestList{
 				ID: v.ID,
 				Title: v.Title,
 				Description: v.Description,
-				Tags: v.Tags,
 				CreatedBy: v.Creator,
 			})
 		}
@@ -66,25 +56,18 @@ func (repo *QuestionnaireService) AvailableQuest(tags_id []models.Tag) (res []re
 	return
 }
 
-func (repo *QuestionnaireService) UpdateQuest(id int, quest models.Questionnaire) (res response.QuestResponse, err error) {
+func (repo QuestionnaireService) UpdateQuest(id int, quest models.Questionnaire) (err error) {
 	quest.ID = uint(id)
 	err = repo.repo.UpdateQuest(quest)
-	if err == nil {
-		res.ID = quest.ID
-		res.Title = quest.Title
-		res.Description = quest.Description
-		res.Tag = quest.Tags
-		res.Question = quest.Question
-	}
 	return
 }
 
-func (repo *QuestionnaireService) DeleteQuest(id int) (err error) {
+func (repo QuestionnaireService) DeleteQuest(id int) (err error) {
 	err = repo.repo.DeleteQuest(id)
 	return
 }
 
-func (repo *QuestionnaireService) ViewQuestByID(id int) (res response.QuestResponse, err error) {
+func (repo QuestionnaireService) ViewQuestByID(id int) (res response.AvailabelQuestDetails, err error) {
 	var quest *models.Questionnaire
 	quest, err = repo.repo.ViewQuestByID(id)
 	if err == nil {

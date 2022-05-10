@@ -21,12 +21,12 @@ func (repo questionnaireRepository)CreateQuest(quest m.Questionnaire) (err error
 	return
 }
 
-func (repo questionnaireRepository) ListMyQuest(user_id int) (quests *[]m.Questionnaire, err error) {
+func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Preload(clause.Associations).Find(&quests).Error
 	return
 }
 
-func (repo questionnaireRepository) AvailableQuest(tag []uint) (quests *[]m.Questionnaire, err error) {
+func (repo questionnaireRepository) QuestForMe(tag []uint) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Debug().Preload("Tags").Where("id IN (?)",
 		repo.db.Table("questionnaire_tags").Select("questionnaire_id").Where("tag_id in ?", tag)).Find(&quests).Error
 	return
@@ -48,7 +48,15 @@ func (repo questionnaireRepository) DeleteQuest(id int) (err error) {
 	return
 }
 
+func (repo questionnaireRepository) Answer(m.Questionnaire, []m.UserAnswer) (err error) {
+	return
+}
+
+func (repo questionnaireRepository) ViewQuestResponse(id int) (quests *m.Questionnaire, err error) {
+	return
+}
+
 func (repo questionnaireRepository) ViewQuestByID(id int) (quest *m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Find(&quest, id).Error
+	err = repo.db.Preload(clause.Associations).Preload("Question.AnswerOption").Find(&quest, id).Error
 	return
 }

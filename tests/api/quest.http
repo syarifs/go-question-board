@@ -14,7 +14,7 @@ Authorization: Bearer <token_string_from_login>
 ##############
 
 # fetch questionnaire by id
-GET localhost:8080/questionnaire/23
+GET localhost:8080/questionnaire/1
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 

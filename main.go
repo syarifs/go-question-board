@@ -18,11 +18,10 @@ import (
 // @title           Question Board
 // @version         1.0
 // @description     server API for Question Board Application.
-// @termsOfService  http://swagger.io/terms/
 
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
+// @securityDefinitions.apikey ApiKey
+// @in header
+// @name Authorization
 
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
