@@ -25,7 +25,7 @@ func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionna
 	return
 }
 
-func (repo questionnaireRepository) QuestForMe(tag []uint) (quests *[]m.Questionnaire, err error) {
+func (repo questionnaireRepository) QuestForMe(tag []int) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Preload("Tags").
 		Where("id IN (?)", repo.db.Table("questionnaire_tags").
 			Select("questionnaire_id").Where("tag_id IN ?", tag)).

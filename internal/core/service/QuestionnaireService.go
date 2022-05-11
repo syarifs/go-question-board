@@ -4,6 +4,7 @@ import (
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
+	"reflect"
 )
 
 type QuestionnaireService struct {
@@ -35,21 +36,25 @@ func (repo QuestionnaireService) MyQuest(user_id int) (res []response.QuestList,
 	return
 }
 
-func (repo QuestionnaireService) QuestForMe(tags_id []models.Tag) (res []response.AvailableQuestList, err error) {
-	var tag_id []uint
-	for _, t := range tags_id {
-		tag_id = append(tag_id, t.ID)
-	}
+func (repo QuestionnaireService) QuestForMe(tags []models.Tag) (res []response.AvailableQuestList, err error) {
+	var tag_id []int
 	var quest *[]models.Questionnaire
+
+	for _, v := range tags {
+		tag_id = append(tag_id, int(v.ID))
+	}
+
 	quest, err = repo.repo.QuestForMe(tag_id)
 	if err == nil {
 		for _, v := range *quest {
-			res = append(res, response.AvailableQuestList{
-				ID: v.ID,
-				Title: v.Title,
-				Description: v.Description,
-				CreatedBy: v.Creator,
-			})
+			if reflect.DeepEqual(v.Tags, tags) {
+				res = append(res, response.AvailableQuestList{
+					ID: v.ID,
+					Title: v.Title,
+					Description: v.Description,
+					CreatedBy: v.Creator,
+				})
+			}
 		}
 	}
 

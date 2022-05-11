@@ -30,7 +30,7 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Membuat dokumentasi untuk setiap *route* yang dibuat.
 - [x] Membuat **Unit Test** untuk modul *interface*.
 - [x] Menambahkan CRUD untuk manajemen **Questionnaire**.
-- [x] Menambahkan fitur **Filter by Tag** untuk **Questionnaire** (Complete Partial).
+- [x] Menambahkan fitur **Filter by Tag** untuk **Questionnaire**.
 - [x] Implementasi **Password Hashing** agar password lebih aman.
 - [ ] Membuat **Unit Test** untuk modul *controller*.
 - [ ] Menambahkan fitur **Answer Questionnaire**.

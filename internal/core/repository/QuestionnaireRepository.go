@@ -11,6 +11,6 @@ type QuestionnaireRepository interface {
 	DeleteQuest(int) error
 	ViewQuestByID(int) (*m.Questionnaire, error)
 	ViewQuestResponse(int) (*m.Questionnaire, error)
-	QuestForMe([]uint) (*[]m.Questionnaire, error)
+	QuestForMe([]int) (*[]m.Questionnaire, error)
 	Answer(m.Questionnaire, []m.UserAnswer) error
 }
