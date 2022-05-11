@@ -4,7 +4,6 @@ import (
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
-	"go-question-board/internal/utils"
 )
 
 type UserService struct {
@@ -16,7 +15,6 @@ func NewUserService(repo repository.UserRepository) *UserService {
 }
 
 func (srv UserService) CreateUser(user models.User) (err error) {
-	user.Password = utils.HashPassword(user.Password)
 	err  = srv.repo.CreateUser(user)
 	return
 }

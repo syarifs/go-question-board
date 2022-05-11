@@ -1,17 +1,17 @@
 {
-	"id": 1,
+	"id": 2,
 	"title": "Evaluasi Dosen",
 	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
 	"tags": [
 		{
-			"id": 1,
+			"id": 2,
 			"name": "Year",
-			"value": "2019"
+			"value": "2020"
 		},
 		{
-			"id": 4,
+			"id": 5,
 			"name": "Class",
-			"value": "A"
+			"value": "B"
 		}
 	],
 	"created_by": 1,
@@ -49,50 +49,23 @@
 			"with_option": 1,
 			"answer_option": [
 				{ 
-					"id": 1,
+					"id": 6,
 					"string_answer": "A" 
 				},
 				{ 
-					"id": 2,
+					"id": 7,
 					"string_answer": "B" 
 				},
 				{ 
-					"id": 3,
+					"id": 8,
 					"string_answer": "C" 
 				},
 				{ 
-					"id": 4,
+					"id": 9,
 					"string_answer": "D" 
 				},
 				{ 
-					"id": 5,
-					"string_answer": "E" 
-				}
-			]
-		},
-		{
-			"id": 3,
-			"question": "Pertanyaan 3",
-			"with_option": 1,
-			"answer_option": [
-				{ 
-					"id": 1,
-					"string_answer": "A" 
-				},
-				{ 
-					"id": 2,
-					"string_answer": "B" 
-				},
-				{ 
-					"id": 3,
-					"string_answer": "C" 
-				},
-				{ 
-					"id": 4,
-					"string_answer": "D" 
-				},
-				{ 
-					"id": 5,
+					"id": 10,
 					"string_answer": "E" 
 				}
 			]

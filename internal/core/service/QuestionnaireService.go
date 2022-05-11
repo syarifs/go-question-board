@@ -1,7 +1,9 @@
 package service
 
 import (
+	"errors"
 	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
 	"reflect"
@@ -11,18 +13,24 @@ type QuestionnaireService struct {
 	repo repository.QuestionnaireRepository
 }
 
-func NewQuestionnaireService(repo repository.QuestionnaireRepository) *QuestionnaireService {
-	return &QuestionnaireService{repo: repo}
+func NewQuestionnaireService(srv repository.QuestionnaireRepository) *QuestionnaireService {
+	return &QuestionnaireService{repo: srv}
 }
 
-func (repo QuestionnaireService) CreateQuest(quest models.Questionnaire) (err error) {
-	err = repo.repo.CreateQuest(quest)
+func (srv QuestionnaireService) CreateQuest(quest models.Questionnaire) (err error) {
+	err = srv.repo.CreateQuest(quest)
 	return
 }
 
-func (repo QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, err error) {
+func (srv QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, err error) {
 	var quest *[]models.Questionnaire
-	quest, err = repo.repo.MyQuest(user_id)
+
+	if user_id == 0 {
+		err = errors.New("User ID not provided")
+		return
+	}
+
+	quest, err = srv.repo.MyQuest(user_id)
 	if err == nil {
 		for _, v := range *quest {
 			res = append(res, response.QuestList{
@@ -36,7 +44,7 @@ func (repo QuestionnaireService) MyQuest(user_id int) (res []response.QuestList,
 	return
 }
 
-func (repo QuestionnaireService) QuestForMe(tags []models.Tag) (res []response.AvailableQuestList, err error) {
+func (srv QuestionnaireService) QuestForMe(tags []models.Tag) (res []response.AvailableQuestList, err error) {
 	var tag_id []int
 	var quest *[]models.Questionnaire
 
@@ -44,7 +52,7 @@ func (repo QuestionnaireService) QuestForMe(tags []models.Tag) (res []response.A
 		tag_id = append(tag_id, int(v.ID))
 	}
 
-	quest, err = repo.repo.QuestForMe(tag_id)
+	quest, err = srv.repo.QuestForMe(tag_id)
 	if err == nil {
 		for _, v := range *quest {
 			if reflect.DeepEqual(v.Tags, tags) {
@@ -61,20 +69,20 @@ func (repo QuestionnaireService) QuestForMe(tags []models.Tag) (res []response.A
 	return
 }
 
-func (repo QuestionnaireService) UpdateQuest(id int, quest models.Questionnaire) (err error) {
+func (srv QuestionnaireService) UpdateQuest(id int, quest models.Questionnaire) (err error) {
 	quest.ID = uint(id)
-	err = repo.repo.UpdateQuest(quest)
+	err = srv.repo.UpdateQuest(quest)
 	return
 }
 
-func (repo QuestionnaireService) DeleteQuest(id int) (err error) {
-	err = repo.repo.DeleteQuest(id)
+func (srv QuestionnaireService) DeleteQuest(id int) (err error) {
+	err = srv.repo.DeleteQuest(id)
 	return
 }
 
-func (repo QuestionnaireService) ViewQuestResponse(id int) (res response.QuestResponses, err error) {
+func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestResponses, err error) {
 	var quest *models.Questionnaire
-	quest, err = repo.repo.ViewQuestResponse(id)
+	quest, err = srv.repo.ViewQuestResponse(id)
 	if err == nil {
 		for _, v := range quest.Question {
 			respondent := response.Respondent{
@@ -91,9 +99,9 @@ func (repo QuestionnaireService) ViewQuestResponse(id int) (res response.QuestRe
 	return
 }
 
-func (repo QuestionnaireService) ViewQuestByID(id int) (res response.AvailabelQuestDetails, err error) {
+func (srv QuestionnaireService) ViewQuestByID(id int) (res response.AvailabelQuestDetails, err error) {
 	var quest *models.Questionnaire
-	quest, err = repo.repo.ViewQuestByID(id)
+	quest, err = srv.repo.ViewQuestByID(id)
 	if err == nil {
 		question := quest.Question
 		for _, v := range question {
@@ -110,5 +118,21 @@ func (repo QuestionnaireService) ViewQuestByID(id int) (res response.AvailabelQu
 		res.Description = quest.Description
 		res.Tag = quest.Tags
 	}
+	return
+}
+
+func (srv QuestionnaireService) AnswerQuest(req request.Answer) (err error) {
+	var answer []models.UserAnswer
+	for _, v := range req.Answer {
+		ans := models.UserAnswer{
+			ID: v.ID,
+			QuestionID: v.QuestionID,
+			Answer: v.Answer,
+			UserID: req.User.ID,
+		}
+		answer = append(answer, ans)
+	}
+	req.Questionnaire.Completor = []models.User{req.User}
+	err = srv.repo.Answer(req.Questionnaire, answer)
 	return
 }

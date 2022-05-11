@@ -12,6 +12,20 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - Create Survey or Polling.
 - View Survey or Polling Status.
 
+## Feature In Development
+- [x] Basic CRUD
+	- [x] Tags
+	- [x] Subject
+	- [x] Major
+	- [x] User
+	- [x] Questionnaire
+- [ ] Questionnaire
+	- [x] Create Survey
+	- [x] View Survey Response
+	- [x] Filter By Tags
+	- [ ] Evaluate Teacher
+- [ ] Email Notification
+
 ## Todo
 - [x] ERD.
 - [x] Base Project.
@@ -32,8 +46,9 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Menambahkan CRUD untuk manajemen **Questionnaire**.
 - [x] Menambahkan fitur **Filter by Tag** untuk **Questionnaire**.
 - [x] Implementasi **Password Hashing** agar password lebih aman.
-- [ ] Membuat **Unit Test** untuk modul *controller*.
-- [ ] Menambahkan fitur **Answer Questionnaire**.
-- [ ] Menambahkan fitur **Email Notification** untuk pemberitahuan **Questionnaire** yang dapat dikerjakan.
+- [x] Menambahkan fitur **Answer Questionnaire**.
 - [ ] Implementasi fitur **Evaluate Teacher**.
+- [ ] Membuat **Unit Test** untuk modul *controller*.
+- [ ] Menambahkan fitur **Email Notification** untuk pemberitahuan **Questionnaire** yang dapat dikerjakan.
 - [ ] Deploy to Docker.
+- [ ] Deploy to Amazon Web Service.

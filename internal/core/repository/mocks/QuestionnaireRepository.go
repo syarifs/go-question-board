@@ -27,29 +27,6 @@ func (_m *QuestionnaireRepository) Answer(_a0 models.Questionnaire, _a1 []models
 	return r0
 }
 
-// AvailableQuest provides a mock function with given fields: _a0
-func (_m *QuestionnaireRepository) AvailableQuest(_a0 []uint) (*[]models.Questionnaire, error) {
-	ret := _m.Called(_a0)
-
-	var r0 *[]models.Questionnaire
-	if rf, ok := ret.Get(0).(func([]uint) *[]models.Questionnaire); ok {
-		r0 = rf(_a0)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.Questionnaire)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func([]uint) error); ok {
-		r1 = rf(_a0)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // CreateQuest provides a mock function with given fields: _a0
 func (_m *QuestionnaireRepository) CreateQuest(_a0 models.Questionnaire) error {
 	ret := _m.Called(_a0)
@@ -78,8 +55,8 @@ func (_m *QuestionnaireRepository) DeleteQuest(_a0 int) error {
 	return r0
 }
 
-// ListMyQuest provides a mock function with given fields: _a0
-func (_m *QuestionnaireRepository) ListMyQuest(_a0 int) (*[]models.Questionnaire, error) {
+// MyQuest provides a mock function with given fields: _a0
+func (_m *QuestionnaireRepository) MyQuest(_a0 int) (*[]models.Questionnaire, error) {
 	ret := _m.Called(_a0)
 
 	var r0 *[]models.Questionnaire
@@ -93,6 +70,29 @@ func (_m *QuestionnaireRepository) ListMyQuest(_a0 int) (*[]models.Questionnaire
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// QuestForMe provides a mock function with given fields: _a0
+func (_m *QuestionnaireRepository) QuestForMe(_a0 []int) (*[]models.Questionnaire, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *[]models.Questionnaire
+	if rf, ok := ret.Get(0).(func([]int) *[]models.Questionnaire); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]models.Questionnaire)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func([]int) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -117,6 +117,29 @@ func (_m *QuestionnaireRepository) UpdateQuest(_a0 models.Questionnaire) error {
 
 // ViewQuestByID provides a mock function with given fields: _a0
 func (_m *QuestionnaireRepository) ViewQuestByID(_a0 int) (*models.Questionnaire, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *models.Questionnaire
+	if rf, ok := ret.Get(0).(func(int) *models.Questionnaire); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*models.Questionnaire)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ViewQuestResponse provides a mock function with given fields: _a0
+func (_m *QuestionnaireRepository) ViewQuestResponse(_a0 int) (*models.Questionnaire, error) {
 	ret := _m.Called(_a0)
 
 	var r0 *models.Questionnaire

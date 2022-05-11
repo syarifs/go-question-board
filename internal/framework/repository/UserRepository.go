@@ -2,6 +2,7 @@ package repository
 
 import (
 	m "go-question-board/internal/core/models"
+	"go-question-board/internal/utils"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -16,6 +17,7 @@ func NewUserRepository(db *gorm.DB) *userRepository {
 }
 
 func (repo userRepository) CreateUser(user m.User) (err error) {
+	user.Password = utils.HashPassword(user.Password)
 	err = repo.db.Omit("Tags.*", "Subject.*").Create(&user).Error
 	return
 }

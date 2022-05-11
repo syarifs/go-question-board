@@ -37,6 +37,10 @@ definitions:
         type: string
       questionnaire_id:
         type: integer
+      user_response:
+        items:
+          $ref: '#/definitions/models.UserAnswer'
+        type: array
       with_option:
         type: integer
     type: object
@@ -131,12 +135,43 @@ definitions:
       updatedAt:
         type: string
     type: object
+  models.UserAnswer:
+    properties:
+      answer:
+        type: string
+      id:
+        type: integer
+      question_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  request.Answer:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/request.UserAnswer'
+        type: array
+      quest:
+        $ref: '#/definitions/models.Questionnaire'
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
   request.LoginRequest:
     properties:
       email:
         type: string
       password:
         type: string
+    type: object
+  request.UserAnswer:
+    properties:
+      answer:
+        type: string
+      id:
+        type: integer
+      question_id:
+        type: integer
     type: object
   response.Error:
     properties:
@@ -188,27 +223,6 @@ info:
   title: Question Board
   version: "1.0"
 paths:
-  /dashboard:
-    get:
-      description: Route Path for Get List of Questionnaire.
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Get All Questionnaire
-      tags:
-      - Questionnaire
   /login:
     post:
       consumes:
@@ -375,9 +389,9 @@ paths:
       summary: Update Major
       tags:
       - Major
-  /questionnaire:
+  /quest:
     get:
-      description: Route Path for Get List of Questionnaire.
+      description: Route Path for Get List of Quest By User ID.
       responses:
         "200":
           description: OK
@@ -397,15 +411,15 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All Questionnaire
+      summary: Get All Quest
       tags:
       - Questionnaire
     post:
       consumes:
       - application/json
-      description: Route Path for Insert New Questionnaire.
+      description: Route Path for Insert New Quest.
       parameters:
-      - description: send request questionnaire code and questionnaire name
+      - description: send quest data
         in: body
         name: body
         required: true
@@ -432,12 +446,12 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Create New Questionnaire
+      summary: Create New Quest
       tags:
       - Questionnaire
-  /questionnaire/{id}:
+  /quest/{id}:
     get:
-      description: Route Path for Get List of Questionnaire.
+      description: Route Path for Get List of Quest.
       responses:
         "200":
           description: OK
@@ -457,16 +471,16 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All Questionnaire
+      summary: Get All Quest
       tags:
       - Questionnaire
-  /questionnaire/{id}/delete:
+  /quest/{id}/delete:
     delete:
       consumes:
       - application/json
-      description: Route Path for Delete Questionnaire.
+      description: Route Path for Delete Quest.
       parameters:
-      - description: questionnaire id
+      - description: quest id
         in: path
         name: id
         required: true
@@ -492,21 +506,46 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Delete Questionnaire
+      summary: Delete Quest
       tags:
       - Questionnaire
-  /questionnaire/{id}/update:
+  /quest/{id}/response:
+    get:
+      description: Route Path for Get List of Quest.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get All Quest
+      tags:
+      - Questionnaire
+  /quest/{id}/update:
     put:
       consumes:
       - application/json
       description: Route Path for Update Questionnaire.
       parameters:
-      - description: questionnaire id
+      - description: quest id
         in: path
         name: id
         required: true
         type: integer
-      - description: send request questionnaire code and questionnaire name
+      - description: send quest data
         in: body
         name: body
         required: true
@@ -534,6 +573,70 @@ paths:
       security:
       - ApiKey: []
       summary: Update Questionnaire
+      tags:
+      - Questionnaire
+  /quest/answer:
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Answer Quest.
+      parameters:
+      - description: send answer, quest, and user data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/request.Answer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Answer Quest
+      tags:
+      - Questionnaire
+  /quest/available:
+    get:
+      description: Route Path for Get List of Quest with User Tag Filter.
+      parameters:
+      - description: send logged in user data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get All Quest with Tag Filter
       tags:
       - Questionnaire
   /refresh_token:

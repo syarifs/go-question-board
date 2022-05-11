@@ -20,15 +20,13 @@ func TestCreateTag(t *testing.T) {
 			Value: "2019",
 		}
 		mockTag.On("CreateTag", data).Return(nil).Once()
-		tag, err := tagService.CreateTag(data)
-		assert.NotEmpty(t, tag)
+		err := tagService.CreateTag(data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockTag.On("CreateTag", mock.Anything).Return(errors.New("error")).Once()
-		tag, err := tagService.CreateTag(models.Tag{})
-		assert.Empty(t, tag)
+		err := tagService.CreateTag(models.Tag{})
 		assert.Error(t, err)
 	})
 
@@ -42,15 +40,13 @@ func TestUpdateTag(t *testing.T) {
 			Value: "2019",
 		}
 		mockTag.On("UpdateTag", data).Return(nil).Once()
-		tag, err := tagService.UpdateTag(1, data)
-		assert.NotEmpty(t, tag)
+		err := tagService.UpdateTag(1, data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockTag.On("UpdateTag", mock.Anything).Return(errors.New("error")).Once()
-		tag, err := tagService.UpdateTag(1, models.Tag{})
-		assert.Empty(t, tag)
+		err := tagService.UpdateTag(1, models.Tag{})
 		assert.Error(t, err)
 	})
 }

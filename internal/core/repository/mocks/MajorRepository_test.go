@@ -20,15 +20,13 @@ func TestCreateMajor(t *testing.T) {
 			Name: "Informatics",
 		}
 		mockMajor.On("CreateMajor", data).Return(nil).Once()
-		major, err := majorService.CreateMajor(data)
-		assert.NotEmpty(t, major)
+		err := majorService.CreateMajor(data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockMajor.On("CreateMajor", mock.Anything).Return(errors.New("error")).Once()
-		major, err := majorService.CreateMajor(models.Major{})
-		assert.Empty(t, major)
+		err := majorService.CreateMajor(models.Major{})
 		assert.Error(t, err)
 	})
 
@@ -42,15 +40,13 @@ func TestUpdateMajor(t *testing.T) {
 			Name: "Informatics",
 		}
 		mockMajor.On("UpdateMajor", data).Return(nil).Once()
-		major, err := majorService.UpdateMajor(1, data)
-		assert.NotEmpty(t, major)
+		err := majorService.UpdateMajor(1, data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockMajor.On("UpdateMajor", mock.Anything).Return(errors.New("error")).Once()
-		major, err := majorService.UpdateMajor(1, models.Major{})
-		assert.Empty(t, major)
+		err := majorService.UpdateMajor(1, models.Major{})
 		assert.Error(t, err)
 	})
 }

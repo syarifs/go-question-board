@@ -16,17 +16,17 @@ func NewQuestionnaireRepository(db *gorm.DB) *questionnaireRepository {
 }
 
 func (repo questionnaireRepository)CreateQuest(quest m.Questionnaire) (err error) {
-	err = repo.db.Create(&quest).Error
+	err = repo.db.Omit("Tags.*").Create(&quest).Error
 	return
 }
 
 func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Find(&quests).Error
+	err = repo.db.Preload(clause.Associations).Where("created_by = ?", user_id).Find(&quests).Error
 	return
 }
 
 func (repo questionnaireRepository) QuestForMe(tag []int) (quests *[]m.Questionnaire, err error) {
-	err = repo.db.Preload("Tags").
+	err = repo.db.Preload(clause.Associations).
 		Where("id IN (?)", repo.db.Table("questionnaire_tags").
 			Select("questionnaire_id").Where("tag_id IN ?", tag)).
 		Find(&quests).Error
@@ -47,7 +47,11 @@ func (repo questionnaireRepository) DeleteQuest(id int) (err error) {
 	return
 }
 
-func (repo questionnaireRepository) Answer(m.Questionnaire, []m.UserAnswer) (err error) {
+func (repo questionnaireRepository) Answer(quest m.Questionnaire, ans []m.UserAnswer) (err error) {
+	err = repo.db.Create(&ans).Error
+	if err == nil {
+		err = repo.db.Model(&quest).Association("Completor").Append(&quest.Completor)
+	}
 	return
 }
 

@@ -22,15 +22,13 @@ func TestCreateUser(t *testing.T) {
 			LevelID: 1,
 		}
 		mockUser.On("CreateUser", data).Return(nil).Once()
-		user, err := userService.CreateUser(data)
-		assert.NotEmpty(t, user)
+		err := userService.CreateUser(data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("CreateUser", models.User{}).Return(errors.New("fail")).Once()
-		user, err := userService.CreateUser(models.User{})
-		assert.Empty(t, user)
+		err := userService.CreateUser(models.User{})
 		assert.Error(t, err)
 	})
 }
@@ -45,15 +43,13 @@ func TestUpdateUser(t *testing.T) {
 			LevelID: 1,
 		}
 		mockUser.On("UpdateUser", data).Return(nil).Once()
-		user, err := userService.UpdateUser(1, data)
-		assert.NotEmpty(t, user)
+		err := userService.UpdateUser(1, data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("UpdateUser", models.User{}).Return(errors.New("fail")).Once()
-		user, err := userService.UpdateUser(0, models.User{})
-		assert.Empty(t, user)
+		err := userService.UpdateUser(0, models.User{})
 		assert.Error(t, err)
 	})
 }

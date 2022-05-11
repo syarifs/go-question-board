@@ -3,6 +3,7 @@ GET localhost:8080/quest
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
+< ./data/quest/filter_by_user_id.json
 ##############
 
 # fetch my quest
@@ -14,6 +15,15 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
+# answer quest
+POST localhost:8080/quest/answer
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+< ./data/quest/answer.json
+
+##############
+
 # fetch quest by id
 GET localhost:8080/quest/1
 Content-Type: application/json
@@ -21,7 +31,7 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch quest by id
+# fetch response by quest id
 GET localhost:8080/quest/1/response
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>

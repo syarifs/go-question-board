@@ -20,15 +20,13 @@ func TestCreateSubject(t *testing.T) {
 			Name: "Informatics",
 		}
 		mockSubject.On("CreateSubject", data).Return(nil).Once()
-		subject, err := subjectService.CreateSubject(data)
-		assert.NotEmpty(t, subject)
+		err := subjectService.CreateSubject(data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockSubject.On("CreateSubject", mock.Anything).Return(errors.New("error")).Once()
-		subject, err := subjectService.CreateSubject(models.Subject{})
-		assert.Empty(t, subject)
+		err := subjectService.CreateSubject(models.Subject{})
 		assert.Error(t, err)
 	})
 
@@ -42,15 +40,13 @@ func TestUpdateSubject(t *testing.T) {
 			Name: "Informatics",
 		}
 		mockSubject.On("UpdateSubject", data).Return(nil).Once()
-		subject, err := subjectService.UpdateSubject(1, data)
-		assert.NotEmpty(t, subject)
+		err := subjectService.UpdateSubject(1, data)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockSubject.On("UpdateSubject", mock.Anything).Return(errors.New("error")).Once()
-		subject, err := subjectService.UpdateSubject(1, models.Subject{})
-		assert.Empty(t, subject)
+		err := subjectService.UpdateSubject(1, models.Subject{})
 		assert.Error(t, err)
 	})
 }

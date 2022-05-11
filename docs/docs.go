@@ -20,40 +20,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/dashboard": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Get List of Questionnaire.",
-                "tags": [
-                    "Questionnaire"
-                ],
-                "summary": "Get All Questionnaire",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/login": {
             "post": {
                 "description": "Login and get Authorization Token",
@@ -314,18 +280,18 @@ const docTemplate = `{
                 }
             }
         },
-        "/questionnaire": {
+        "/quest": {
             "get": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Questionnaire.",
+                "description": "Route Path for Get List of Quest By User ID.",
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Get All Questionnaire",
+                "summary": "Get All Quest",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -359,7 +325,7 @@ const docTemplate = `{
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Insert New Questionnaire.",
+                "description": "Route Path for Insert New Quest.",
                 "consumes": [
                     "application/json"
                 ],
@@ -369,10 +335,10 @@ const docTemplate = `{
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Create New Questionnaire",
+                "summary": "Create New Quest",
                 "parameters": [
                     {
-                        "description": "send request questionnaire code and questionnaire name",
+                        "description": "send quest data",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -409,18 +375,35 @@ const docTemplate = `{
                 }
             }
         },
-        "/questionnaire/{id}": {
-            "get": {
+        "/quest/answer": {
+            "post": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Questionnaire.",
+                "description": "Route Path for Answer Quest.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Get All Questionnaire",
+                "summary": "Answer Quest",
+                "parameters": [
+                    {
+                        "description": "send answer, quest, and user data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Answer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -449,14 +432,99 @@ const docTemplate = `{
                 }
             }
         },
-        "/questionnaire/{id}/delete": {
+        "/quest/available": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of Quest with User Tag Filter.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Quest with Tag Filter",
+                "parameters": [
+                    {
+                        "description": "send logged in user data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/quest/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of Quest.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Quest",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/quest/{id}/delete": {
             "delete": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Delete Questionnaire.",
+                "description": "Route Path for Delete Quest.",
                 "consumes": [
                     "application/json"
                 ],
@@ -466,11 +534,11 @@ const docTemplate = `{
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Delete Questionnaire",
+                "summary": "Delete Quest",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "questionnaire id",
+                        "description": "quest id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -504,7 +572,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/questionnaire/{id}/update": {
+        "/quest/{id}/response": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of Quest.",
+                "tags": [
+                    "Questionnaire"
+                ],
+                "summary": "Get All Quest",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/quest/{id}/update": {
             "put": {
                 "security": [
                     {
@@ -525,13 +633,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "questionnaire id",
+                        "description": "quest id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "send request questionnaire code and questionnaire name",
+                        "description": "send quest data",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1355,6 +1463,12 @@ const docTemplate = `{
                 "questionnaire_id": {
                     "type": "integer"
                 },
+                "user_response": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.UserAnswer"
+                    }
+                },
                 "with_option": {
                     "type": "integer"
                 }
@@ -1499,6 +1613,40 @@ const docTemplate = `{
                 }
             }
         },
+        "models.UserAnswer": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "question_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.Answer": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.UserAnswer"
+                    }
+                },
+                "quest": {
+                    "$ref": "#/definitions/models.Questionnaire"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
         "request.LoginRequest": {
             "type": "object",
             "properties": {
@@ -1507,6 +1655,20 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "request.UserAnswer": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "question_id": {
+                    "type": "integer"
                 }
             }
         },

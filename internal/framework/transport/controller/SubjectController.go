@@ -43,7 +43,7 @@ func (ucon SubjectController) CreateSubject(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Create Subject",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
@@ -68,7 +68,7 @@ func (ucon SubjectController) ReadSubject(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Fetch Subject",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
@@ -99,7 +99,7 @@ func (ucon SubjectController) UpdateSubject(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Update Subject",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
@@ -127,7 +127,7 @@ func (ucon SubjectController) DeleteSubject(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Delete Subject",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
