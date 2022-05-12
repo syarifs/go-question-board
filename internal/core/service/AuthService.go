@@ -29,7 +29,6 @@ func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetai
 		res.Email = user.Email
 		res.Name = user.Name
 		res.Level = user.Level
-		res.Subject = user.Subject
 		res.Tags = user.Tags
 		res.Major = user.Major
 		res.Status = user.Status

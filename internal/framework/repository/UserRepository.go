@@ -37,11 +37,18 @@ func (repo userRepository) DeleteUser(id int) (err error) {
 }
 
 func (repo userRepository) ReadUser() (user *[]m.User, err error) {
-	err = repo.db.Preload(clause.Associations).Find(&user).Error
+	err = repo.db.Preload(clause.Associations).
+		Find(&user).Error
 	return
 }
 
 func (repo userRepository) ReadUserByID(id int) (user *m.User, err error) {
-	err = repo.db.Preload(clause.Associations).Find(&user, id).Error
+	err = repo.db.Debug().Preload(clause.Associations).
+		Preload("TeacherSubject.Subject").
+		Preload("TeacherSubject.Subject.Major").
+		Preload("TeacherSubject.User").
+		Preload("Subject.Teacher.User").
+		Preload("Subject.Major").
+		Find(&user, id).Error
 	return
 }

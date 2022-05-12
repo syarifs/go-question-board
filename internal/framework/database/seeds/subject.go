@@ -8,8 +8,8 @@ import (
 
 func subjectSeeder() Seed {
 	seeds := []models.Subject{
-		{Code: "BSPGM", Name: "Basic Programming"},
-		{Code: "PRALG", Name: "Programming Algorithm"},
+		{Code: "BSPGM", Name: "Basic Programming", MajorID: 1},
+		{Code: "PRALG", Name: "Programming Algorithm", MajorID: 1},
 	}
 	model := &models.Subject{}
 

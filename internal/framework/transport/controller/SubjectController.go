@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/service"
 	"net/http"
@@ -26,14 +26,14 @@ func NewSubjectController(srv *service.SubjectService) *SubjectController {
 // @Security ApiKey
 // @Accept json
 // @Produce json
-// @Param body  body  models.Subject{}  true "send request subject code and subject name"
+// @Param body  body  request.SubjectRequest{}  true "send request subject code and subject name"
 // @Success 200 {object} response.MessageOnly{} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /subject [post]
 func (ucon SubjectController) CreateSubject(c echo.Context) error {
-	subject := models.Subject{}
+	subject := request.SubjectRequest{}
 	c.Bind(&subject)
 	err := ucon.srv.CreateSubject(subject)
 	if err == nil {
@@ -81,14 +81,14 @@ func (ucon SubjectController) ReadSubject(c echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param id path int true "subject id"
-// @Param body  body  models.Subject{}  true "send request subject code and subject name"
+// @Param body  body  request.SubjectRequest{}  true "send request subject code and subject name"
 // @Success 200 {object} response.MessageOnly{} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /subject/{id}/update [PUT]
 func (ucon SubjectController) UpdateSubject(c echo.Context) error {
-	subject := models.Subject{}
+	subject := request.SubjectRequest{}
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.Bind(&subject)
 	err := ucon.srv.UpdateSubject(id, subject)

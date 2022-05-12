@@ -1,9 +1,11 @@
 package service
 
 import (
+	"fmt"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
+	"go-question-board/internal/utils"
 )
 
 type UserService struct {
@@ -38,7 +40,11 @@ func (srv UserService) ReadUser() (res []response.UserList, err error) {
 
 func (srv UserService) ReadUserByID(id int) (res response.UserDetails, err error) {
 	var user *models.User
+	var subject response.UserSubject
+
 	user, err  = srv.repo.ReadUserByID(id)
+	class := utils.GetTagByName("Class", user.Tags)
+
 	if err == nil {
 		res = response.UserDetails{
 			ID:      user.ID,
@@ -47,8 +53,40 @@ func (srv UserService) ReadUserByID(id int) (res response.UserDetails, err error
 			Level:   user.Level,
 			Status:  user.Status,
 			Major: user.Major,
-			Subject: user.Subject,
 			Tags: user.Tags,
+		}
+
+		if user.Level.Name == "Teacher" {
+			for _, v := range user.TeacherSubject {
+				subject.ID = v.SubjectID
+				subject.Code = v.Subject.Code
+				subject.Name = v.Subject.Name
+				subject.Major = v.Subject.Major
+
+				subject.Teacher.ID = v.UserID
+				subject.Teacher.Name = v.User.Name
+				subject.Teacher.Class = v.Class
+
+				res.Subject = append(res.Subject, subject)
+			}
+		} else {
+			for _, v := range user.Subject {
+				subject.ID = int(v.ID)
+				subject.Code = v.Code
+				subject.Name = v.Name
+				subject.Major = v.Major
+
+				for _, val := range v.Teacher {
+					if val.Class == class {
+						subject.Teacher.ID = val.UserID
+						subject.Teacher.Name = val.User.Name
+						subject.Teacher.Class = val.Class
+					}
+				}
+
+				fmt.Println(subject)
+				res.Subject = append(res.Subject, subject)
+			}
 		}
 	}
 	return

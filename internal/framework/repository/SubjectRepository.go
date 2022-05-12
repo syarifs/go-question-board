@@ -4,6 +4,7 @@ import (
 	m "go-question-board/internal/core/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type subjectRepository struct {
@@ -31,6 +32,9 @@ func (repo subjectRepository) DeleteSubject(id int) (err error) {
 }
 
 func (repo subjectRepository) ReadSubject() (subject *[]m.Subject, err error) {
-	err = repo.db.Find(&subject).Error
+	err = repo.db.
+		Preload(clause.Associations).
+		Preload("Teacher.User").
+		Find(&subject).Error
 	return
 }

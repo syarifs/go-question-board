@@ -1,5 +1,5 @@
 {
-	"id": 1,
+	"id": 3,
 	"name": "Syarif Ubaidillah",
 	"email": "ubed56pb@gmail.com",
 	"password": "password",
@@ -17,5 +17,11 @@
 			"value": "A"
 		}
 	],
-	"subject": []
+	"subject": [
+		{
+			"id": 1,
+			"code": "ALGP",
+			"name": "Algorithm Programming"
+		}
+	]
 }

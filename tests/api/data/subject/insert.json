@@ -1,4 +1,17 @@
 {
+	"id": 1,
 	"code": "ALG1",
-	"name": "Programming Algorithm"
+	"name": "Programming Algorithm",
+	"major": {
+		"id": 1,
+		"code": "INF",
+		"name": "Informatics"
+	},
+	"teacher": [
+		{
+			"id": 2,
+			"name": "Ach. Dafid",
+			"class": "A"
+		}
+	]
 }

@@ -13,8 +13,9 @@ type User struct {
 
 	Tags []Tag `json:"tags" gorm:"many2many:user_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Subject []Subject `json:"subject" gorm:"many2many:user_subjects;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Level Level
-	Major Major
+	TeacherSubject []TeacherSubject `json:"teahcer_subject"`
+	Level Level `json:"level"`
+	Major Major `json:"major"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`

@@ -1,10 +1,12 @@
 package response
 
-type MessageData struct {
-	Message string `json:"message"`
-	Data interface{} `json:"data"`
-}
+type (
+	MessageData struct {
+		Message string `json:"message"`
+		Data interface{} `json:"data"`
+	}
 
-type MessageOnly struct {
-	Message string `json:"message"`
-}
+	MessageOnly struct {
+		Message string `json:"message"`
+	}
+) 

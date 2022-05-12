@@ -47,6 +47,8 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Menambahkan fitur **Filter by Tag** untuk **Questionnaire**.
 - [x] Implementasi **Password Hashing** agar password lebih aman.
 - [x] Menambahkan fitur **Answer Questionnaire**.
+- [x] Mendaftarkan user dengan role `Teacher` ke `Subject`.
+- [x] Menampilkan `Teacher` pada *list* `Subject`.
 - [ ] Implementasi fitur **Evaluate Teacher**.
 - [ ] Membuat **Unit Test** untuk modul *controller*.
 - [ ] Menambahkan fitur **Email Notification** untuk pemberitahuan **Questionnaire** yang dapat dikerjakan.
