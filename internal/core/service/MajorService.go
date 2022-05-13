@@ -18,14 +18,8 @@ func (srv MajorService) CreateMajor(major models.Major) (err error) {
 	return
 }
 
-func (srv MajorService) ReadMajor() (res []models.Major, err error) {
-	var major *[]models.Major
-	major, err  = srv.repo.ReadMajor()
-	if err == nil {
-		for _, um := range *major {
-			res = append(res, um)
-		}
-	}
+func (srv MajorService) ReadMajor() (res *[]models.Major, err error) {
+	res, err  = srv.repo.ReadMajor()
 	return
 }
 

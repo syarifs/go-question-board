@@ -18,14 +18,8 @@ func (srv TagService) CreateTag(tag models.Tag) (err error) {
 	return
 }
 
-func (srv TagService) ReadTag() (res []models.Tag, err error) {
-	var tag *[]models.Tag
-	tag, err  = srv.repo.ReadTag()
-	if err == nil {
-		for _, um := range *tag {
-			res = append(res, um)
-		}
-	}
+func (srv TagService) ReadTag() (res *[]models.Tag, err error) {
+	res, err  = srv.repo.ReadTag()
 	return
 }
 

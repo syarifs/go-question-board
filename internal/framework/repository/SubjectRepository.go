@@ -16,12 +16,15 @@ func NewSubjectRepository(db *gorm.DB) *subjectRepository {
 }
 
 func (repo subjectRepository) CreateSubject(subject m.Subject) (err error) {
-	err = repo.db.Save(&subject).Error
+	err = repo.db.Create(&subject).Error
 	return
 }
 
 func (repo subjectRepository) UpdateSubject(subject m.Subject) (err error) {
 	err = repo.db.Updates(&subject).Error
+	if err == nil {
+		err = repo.db.Model(&subject).Association("Teacher").Replace(&subject.Teacher)
+	}
 	return
 }
 

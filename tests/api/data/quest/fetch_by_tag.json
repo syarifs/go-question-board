@@ -1,4 +1,6 @@
 {
+	"id": 3,
+	"name": "Syarif Ubaidillah",
 	"tags": [
 		{
 			"id": 1,
@@ -6,9 +8,9 @@
 			"value": "2019"
 		},
 		{
-			"id": 4,
+			"id": 5,
 			"name": "Class",
-			"value": "A"
+			"value": "B"
 		}
 	]
 }

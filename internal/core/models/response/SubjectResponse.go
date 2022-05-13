@@ -6,22 +6,30 @@ type (
 	Teacher struct {
 		ID int `json:"id"`
 		Name string `json:"name"`
+	}
+	
+	TeacherSubject struct {
+		User Teacher	`json:"teacher"`
 		Class string `json:"class"`
 	}
 	
-	UserSubject struct {
+	SubjectTeacher struct {
+		Subject SubjectWithoutTeacher `json:"subject"`
+		Class string `json:"class"`
+	}
+	
+	SubjectWithoutTeacher struct {
 		ID int `json:"id" gorm:"primarykey"`
 		Code string `json:"code"`
 		Name string `json:"name"`
 		Major m.Major `json:"major"`
-		Teacher Teacher `json:"teacher"`
 	}
-
+	
 	Subject struct {
 		ID int `json:"id" gorm:"primarykey"`
 		Code string `json:"code"`
 		Name string `json:"name"`
 		Major m.Major `json:"major"`
-		Teacher []Teacher `json:"teacher"`
+		Teacher []TeacherSubject `json:"teacher_class"`
 	}
 )

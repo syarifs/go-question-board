@@ -25,8 +25,10 @@ func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionna
 	return
 }
 
-func (repo questionnaireRepository) QuestForMe(tag []int) (quests *[]m.Questionnaire, err error) {
+func (repo questionnaireRepository) QuestForMe(id int, tag []int) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Preload(clause.Associations).
+		Where("created_by != ?", id).
+		Where("type != 'Evaluate'").
 		Where("id IN (?)", repo.db.Table("questionnaire_tags").
 			Select("questionnaire_id").Where("tag_id IN ?", tag)).
 		Find(&quests).Error

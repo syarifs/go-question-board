@@ -13,7 +13,7 @@ type User struct {
 
 	Tags []Tag `json:"tags" gorm:"many2many:user_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Subject []Subject `json:"subject" gorm:"many2many:user_subjects;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	TeacherSubject []TeacherSubject `json:"teahcer_subject"`
+	TeacherSubject []TeacherSubject `json:"teacher_subject" gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 	Level Level `json:"level"`
 	Major Major `json:"major"`
 	CreatedAt time.Time

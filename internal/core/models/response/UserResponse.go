@@ -12,13 +12,15 @@ type (
 	}
 
 	UserDetails struct {
-		ID uint `json:"id"`
+		ID        uint `gorm:"primary_key"`
 		Email string `json:"email"`
 		Name string `json:"name"`
+		Status int `json:"status"`
+
 		Tags []m.Tag `json:"tags"`
-		Subject []interface{} `json:"subject"`
+		Subject []Subject `json:"subject"`
+		TeacherSubject []SubjectTeacher `json:"teacher_subject"`
 		Level m.Level `json:"level"`
 		Major m.Major `json:"major"`
-		Status int `json:"status"`
 	}
 )

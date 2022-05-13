@@ -17,7 +17,7 @@ func NewAuthService(repo repository.AuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetails, err error) {
+func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDetails, err error) {
 	var user models.User
 	var checkPassword bool
 	user, err  = srv.repo.Login(login)
@@ -25,13 +25,7 @@ func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetai
 		checkPassword = utils.ComparePassword(login.Password, user.Password)
 	}
 	if checkPassword {
-		res.ID = user.ID
-		res.Email = user.Email
-		res.Name = user.Name
-		res.Level = user.Level
-		res.Tags = user.Tags
-		res.Major = user.Major
-		res.Status = user.Status
+		res, _ = utils.TypeConverter[response.UserDetails](&user)
 	} else {
 		err = errors.New("Wrong Password")
 	}

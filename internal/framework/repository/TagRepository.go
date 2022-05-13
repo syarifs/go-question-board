@@ -15,7 +15,7 @@ func NewTagRepository(db *gorm.DB) *tagRepository {
 }
 
 func (repo tagRepository) CreateTag(tag m.Tag) (err error) {
-	err = repo.db.Save(&tag).Error
+	err = repo.db.Create(&tag).Error
 	return
 }
 

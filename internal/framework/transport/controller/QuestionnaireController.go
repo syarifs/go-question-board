@@ -202,7 +202,7 @@ func (ucon QuestionnaireController) DeleteQuest(c echo.Context) error {
 func (ucon QuestionnaireController) QuestForMe(c echo.Context) error {
 	var user models.User
 	c.Bind(&user)
-	res, err := ucon.srv.QuestForMe(user.Tags)
+	res, err := ucon.srv.QuestForMe(int(user.ID), user.Tags)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Quest Fetched",
