@@ -26,8 +26,8 @@ func TestLogin(t *testing.T) {
 			Password: utils.HashPassword(data.Password),
 		}
 		mockAuth.On("Login", data).Return(ret, nil).Once()
-		auth, err := authService.Login(data)
-		assert.NotEmpty(t, auth)
+		res, err := authService.Login(data)
+		assert.NotEmpty(t, res)
 		assert.NoError(t, err)
 	})
 
@@ -35,8 +35,8 @@ func TestLogin(t *testing.T) {
 		data := request.LoginRequest{}
 		ret := models.User{}
 		mockAuth.On("Login", data).Return(ret, errors.New("fail")).Once()
-		auth, err := authService.Login(data)
-		assert.Empty(t, auth)
+		res, err := authService.Login(data)
+		assert.Empty(t, res)
 		assert.Error(t, err)
 	})
 }
@@ -48,16 +48,16 @@ func TestRefreshToken(t *testing.T) {
 			RefreshToken: "aklbtfgalwetbakldfadbff",
 		}
 		mockAuth.On("RefreshToken", data).Return(data, nil).Once()
-		auth, err := authService.RefreshToken(data)
-		assert.NotEmpty(t, auth)
+		res, err := authService.RefreshToken(data)
+		assert.NotEmpty(t, res)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		data := models.Token{}
 		mockAuth.On("RefreshToken", data).Return(data, errors.New("fail")).Once()
-		auth, err := authService.RefreshToken(data)
-		assert.Empty(t, auth)
+		res, err := authService.RefreshToken(data)
+		assert.Empty(t, res)
 		assert.Error(t, err)
 	})
 }

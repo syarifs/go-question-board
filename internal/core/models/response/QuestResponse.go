@@ -34,7 +34,7 @@ type (
 		AnswerOption []m.AnswerOption `json:"answer_option"`
 	}
 
-	AvailabelQuestDetails struct {
+	AvailableQuestDetails struct {
 		ID uint `json:"id"`
 		Title string `json:"title"`
 		Description string `json:"description"`

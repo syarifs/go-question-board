@@ -4,7 +4,10 @@ run:
 
 test:
 	@clear
-	@go test -cover -coverpkg=./... ./...
+	@mkdir /tmp/go
+	@go test -coverprofile=/tmp/go/test.out -cover -coverpkg=./... ./...
+	@go tool cover -func /tmp/go/test.out
+	@rm -rf /tmp/go
 
 test_html:
 	@clear

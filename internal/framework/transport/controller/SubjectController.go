@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/service"
@@ -53,13 +54,41 @@ func (ucon SubjectController) CreateSubject(c echo.Context) error {
 // @Description Route Path for Get List of Subject, for Administrator only.
 // @Tags Subject
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=[]response.Subject{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /subject [get]
 func (ucon SubjectController) ReadSubject(c echo.Context) error {
 	res, err := ucon.srv.ReadSubject()
+	if err == nil {
+		return c.JSON(http.StatusOK, response.MessageData{
+			Message: "Subject Fetched",
+			Data: res,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Fetch Subject",
+			Error: err.Error(),
+		})
+	}
+}
+
+// CreateResource godoc
+// @Summary Get All User Subject
+// @Description Route Path for Get List of User Subject.
+// @Tags Subject
+// @Security ApiKey
+// @Param body  body  response.UserList{}  true "send user data as a request"
+// @Success 200 {object} response.MessageData{data=[]response.Subject{}} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 400 {object} response.MessageOnly{} error
+// @Failure 401 {object} response.MessageOnly{} error
+// @Router /mysubject [get]
+func (ucon SubjectController) ReadUserSubject(c echo.Context) error {
+	var user models.User
+	c.Bind(&user)
+	res, err := ucon.srv.ReadUserSubject(int(user.ID))
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Subject Fetched",

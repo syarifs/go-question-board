@@ -14,3 +14,9 @@ func NewUserRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...
 	group.PUT("/:id/update", ucon.UpdateUser)
 	group.DELETE("/:id/delete", ucon.DeleteUser)
 }
+
+func NewProfileRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
+	group := e.Group("/profile", middleware...)
+	group.GET("", ucon.ReadUser)
+	group.PUT("/update", ucon.UpdateUser)
+}

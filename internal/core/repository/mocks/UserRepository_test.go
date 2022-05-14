@@ -6,7 +6,6 @@ import (
 	"go-question-board/internal/core/service"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -22,14 +21,14 @@ func TestCreateUser(t *testing.T) {
 			LevelID: 1,
 		}
 		mockUser.On("CreateUser", data).Return(nil).Once()
-		err := userService.CreateUser(data)
-		assert.NoError(t, err)
+		userService.CreateUser(data)
+		mockUser.AssertExpectations(t)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("CreateUser", models.User{}).Return(errors.New("fail")).Once()
-		err := userService.CreateUser(models.User{})
-		assert.Error(t, err)
+		userService.CreateUser(models.User{})
+		mockUser.AssertExpectations(t)
 	})
 }
 
@@ -43,28 +42,28 @@ func TestUpdateUser(t *testing.T) {
 			LevelID: 1,
 		}
 		mockUser.On("UpdateUser", data).Return(nil).Once()
-		err := userService.UpdateUser(1, data)
-		assert.NoError(t, err)
+		userService.UpdateUser(1, data)
+		mockUser.AssertExpectations(t)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("UpdateUser", models.User{}).Return(errors.New("fail")).Once()
-		err := userService.UpdateUser(0, models.User{})
-		assert.Error(t, err)
+		userService.UpdateUser(0, models.User{})
+		mockUser.AssertExpectations(t)
 	})
 }
 
 func TestDeleteUser(t *testing.T) {
 	t.Run("Sucess", func(t *testing.T) {
 		mockUser.On("DeleteUser", 1).Return(nil).Once()
-		err := userService.DeleteUser(1)
-		assert.NoError(t, err)
+		userService.DeleteUser(1)
+		mockUser.AssertExpectations(t)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("DeleteUser", 1).Return(errors.New("fail")).Once()
-		err := userService.DeleteUser(1)
-		assert.Error(t, err)
+		userService.DeleteUser(1)
+		mockUser.AssertExpectations(t)
 	})
 }
 
@@ -79,16 +78,14 @@ func TestReadUser(t *testing.T) {
 			},
 		}
 		mockUser.On("ReadUser").Return(&data, nil).Once()
-		user, err := userService.ReadUser()
-		assert.NotEmpty(t, user)
-		assert.NoError(t, err)
+		userService.ReadUser()
+		mockUser.AssertExpectations(t)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("ReadUser").Return(&[]models.User{}, errors.New("fail")).Once()
-		user, err := userService.ReadUser()
-		assert.Empty(t, user)
-		assert.Error(t, err)
+		userService.ReadUser()
+		mockUser.AssertExpectations(t)
 	})
 }
 
@@ -102,16 +99,14 @@ func TestReadUserByID(t *testing.T) {
 			LevelID: 1,
 		}
 		mockUser.On("ReadUserByID", 1).Return(&data, nil).Once()
-		user, err := userService.ReadUserByID(1)
-		assert.NotEmpty(t, user)
-		assert.NoError(t, err)
+		userService.ReadUserByID(1)
+		mockUser.AssertExpectations(t)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("ReadUserByID", 1).Return(&models.User{}, errors.New("fail")).Once()
-		user, err := userService.ReadUserByID(1)
-		assert.Empty(t, user)
-		assert.Error(t, err)
+		userService.ReadUserByID(1)
+		mockUser.AssertExpectations(t)
 	})
 }
 

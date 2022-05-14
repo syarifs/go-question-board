@@ -5,6 +5,14 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
+# fetch subject
+GET localhost:8080/mysubject
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+< ./data/subject/get_by_user_id.json
+##############
+
 # create subject
 POST localhost:8080/subject
 Content-Type: application/json

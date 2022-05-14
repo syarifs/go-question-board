@@ -88,11 +88,11 @@ func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestRes
 	return
 }
 
-func (srv QuestionnaireService) ViewQuestByID(id int) (res *response.AvailabelQuestDetails, err error) {
+func (srv QuestionnaireService) ViewQuestByID(id int) (res *response.AvailableQuestDetails, err error) {
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestByID(id)
 	if err == nil {
-		res, _ = utils.TypeConverter[response.AvailabelQuestDetails](&quest)
+		res, _ = utils.TypeConverter[response.AvailableQuestDetails](&quest)
 	}
 	return
 }

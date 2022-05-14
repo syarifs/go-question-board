@@ -81,7 +81,7 @@ func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
 // @Description Route Path for Get List of Quest.
 // @Tags Questionnaire
 // @Security ApiKey
-// @Success 200 {object} response.MessageOnly{} success
+// @Success 200 {object} response.MessageData{data=response.QuestResponses} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
@@ -107,7 +107,7 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 // @Description Route Path for Get List of Quest By User ID.
 // @Tags Questionnaire
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=[]response.QuestList{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
@@ -195,7 +195,7 @@ func (ucon QuestionnaireController) DeleteQuest(c echo.Context) error {
 // @Tags Questionnaire
 // @Security ApiKey
 // @Param body body models.User{} true "send logged in user data"
-// @Success 200 {object} response.MessageOnly{} success
+// @Success 200 {object} response.MessageData{data=[]response.AvailableQuestList} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Router /quest/available [get]

@@ -28,7 +28,6 @@ func (repo subjectRepository) UpdateSubject(subject m.Subject) (err error) {
 	return
 }
 
-
 func (repo subjectRepository) DeleteSubject(id int) (err error) {
 	err = repo.db.Delete(&m.Subject{}, id).Error
 	return
@@ -36,6 +35,16 @@ func (repo subjectRepository) DeleteSubject(id int) (err error) {
 
 func (repo subjectRepository) ReadSubject() (subject *[]m.Subject, err error) {
 	err = repo.db.
+		Preload(clause.Associations).
+		Preload("Teacher.User").
+		Find(&subject).Error
+	return
+}
+
+func (repo subjectRepository) ReadSubjectByUserID(user_id int) (subject *[]m.Subject, err error) {
+	err = repo.db.Debug().
+		Where("id IN (?)", repo.db.Table("student_subject").
+			Select("subject_id").Where("user_id = ?", user_id)).
 		Preload(clause.Associations).
 		Preload("Teacher.User").
 		Find(&subject).Error

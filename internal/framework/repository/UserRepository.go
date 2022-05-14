@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	m "go-question-board/internal/core/models"
 	"go-question-board/internal/utils"
 
@@ -46,19 +45,18 @@ func (repo userRepository) ReadUser() (user *[]m.User, err error) {
 func (repo userRepository) ReadUserByID(id int) (user *m.User, err error) {
 	var class string
 
-	err = repo.db.Select("value").
-		Find(&m.Tag{}, "id IN (?) AND name = 'Class'", repo.db.
-			Table("user_tags").Select("tag_id").Where("user_id = ?", id)).
-		Scan(&class).Error
-	fmt.Println(class)
+	repo.db.Find(m.Tag{}, "id = ? AND name = 'class'", repo.db.Table("user_tags").
+		Select("subject_id").
+		Where("user_id = ?", id)).Scan(&class)
 
 	err = repo.db.Debug().Preload(clause.Associations).
-		Preload("Subject.Teacher", "class = ?", class).
 		Preload("TeacherSubject.Subject").
 		Preload("TeacherSubject.Subject.Major").
 		Preload("TeacherSubject.User").
-		Preload("Subject.Teacher.User").
+		Preload("Subject").
 		Preload("Subject.Major").
+		Preload("Subject.Teacher.User").
+		Preload("Subject.Teacher", "class = ?", class).
 		Find(&user, id).Error
 	return
 }

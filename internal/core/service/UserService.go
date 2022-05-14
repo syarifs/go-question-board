@@ -28,10 +28,9 @@ func (srv UserService) ReadUser() (res *[]response.UserList, err error) {
 }
 
 func (srv UserService) ReadUserByID(id int) (res *response.UserDetails, err error) {
-	var user *models.User
-
-	user, err  = srv.repo.ReadUserByID(id)
-	res, err = utils.TypeConverter[response.UserDetails](&user)
+	var users *models.User
+	users, err  = srv.repo.ReadUserByID(id)
+	res, err = utils.TypeConverter[response.UserDetails](&users)
 
 	return
 }

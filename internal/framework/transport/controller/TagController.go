@@ -53,7 +53,7 @@ func (ucon TagController) CreateTag(c echo.Context) error {
 // @Description Route Path for Get List of Tag, for Administrator only.
 // @Tags Tag
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=[]models.Tag{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error

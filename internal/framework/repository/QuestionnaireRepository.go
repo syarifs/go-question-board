@@ -57,6 +57,14 @@ func (repo questionnaireRepository) Answer(quest m.Questionnaire, ans []m.UserAn
 	return
 }
 
+func (repo questionnaireRepository) EvaluateTeacher(quest m.Questionnaire, ans []m.UserAnswer) (err error) {
+	err = repo.db.Create(&ans).Error
+	if err == nil {
+		err = repo.db.Model(&quest).Association("Completor").Append(&quest.Completor)
+	}
+	return
+}
+
 func (repo questionnaireRepository) ViewQuestResponse(id int) (quests *m.Questionnaire, err error) {
 	err = repo.db.Preload(clause.Associations).Preload("Question.AnswerOption").Preload("Question.UserResponse").Find(&quests, id).Error
 	return

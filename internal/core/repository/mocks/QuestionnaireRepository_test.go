@@ -107,7 +107,7 @@ func TestListMyQuestionnaire(t *testing.T) {
 		assert.Empty(t, quest)
 		assert.Error(t, err)
 	})
-	
+
 	t.Run("Fail 0 integer", func(t *testing.T) {
 		data := []models.Questionnaire{}
 		mockQuestionnaire.On("MyQuest", nil).Return(&data, errors.New("fail")).Once()
@@ -135,18 +135,16 @@ func TestAvalaibleQuestionnaire(t *testing.T) {
 		tag := []models.Tag{
 			{ID: 1, Name: "Year", Value: "2019"},
 		}
-		mockQuestionnaire.On("QuestForMe",  []int{1}).Return(&data, nil).Once()
-		quest, err := questionnaireService.QuestForMe(tag)
+		mockQuestionnaire.On("QuestForMe", 1,  []int{1}).Return(&data, nil).Once()
+		quest, err := questionnaireService.QuestForMe(1, tag)
 		assert.NotEmpty(t, quest)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
-		tag := []models.Tag{
-			{ID: 1, Name: "Year", Value: "2019"},
-		}
-		mockQuestionnaire.On("QuestForMe", []int{1}).Return(nil, errors.New("fail")).Once()
-		quest, err := questionnaireService.QuestForMe(tag)
+		tag := []models.Tag{}
+		mockQuestionnaire.On("QuestForMe", 1, []int(nil)).Return(nil, errors.New("fail")).Once()
+		quest, err := questionnaireService.QuestForMe(1, tag)
 		assert.Empty(t, quest)
 		assert.Error(t, err)
 	})

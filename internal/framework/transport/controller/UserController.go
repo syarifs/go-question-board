@@ -53,7 +53,7 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 // @Description Route Path for Get List of User, for Administrator only.
 // @Tags User
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=[]response.UserList{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
@@ -78,7 +78,7 @@ func (ucon UserController) ReadUser(c echo.Context) error {
 // @Description Route Path for Get List of User, for Administrator only.
 // @Tags User
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=response.UserDetails} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error

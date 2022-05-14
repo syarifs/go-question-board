@@ -53,7 +53,7 @@ func (ucon MajorController) CreateMajor(c echo.Context) error {
 // @Description Route Path for Get List of Major, for Administrator only.
 // @Tags Major
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{} success
+// @Success 200 {object} response.MessageData{data=[]models.Major} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error

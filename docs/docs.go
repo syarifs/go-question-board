@@ -82,7 +82,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Major"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -280,6 +295,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/mysubject": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of User Subject.",
+                "tags": [
+                    "Subject"
+                ],
+                "summary": "Get All User Subject",
+                "parameters": [
+                    {
+                        "description": "send user data as a request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/response.UserList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.Subject"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/quest": {
             "get": {
                 "security": [
@@ -296,7 +377,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.QuestList"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -459,7 +555,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.AvailableQuestList"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -588,7 +699,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.QuestResponses"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -738,7 +861,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.Subject"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -785,7 +923,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Subject"
+                            "$ref": "#/definitions/request.SubjectRequest"
                         }
                     }
                 ],
@@ -904,7 +1042,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Subject"
+                            "$ref": "#/definitions/request.SubjectRequest"
                         }
                     }
                 ],
@@ -952,7 +1090,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Tag"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1166,7 +1319,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.UserList"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1261,7 +1429,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageData"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.UserDetails"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1516,6 +1696,9 @@ const docTemplate = `{
                 "title": {
                     "type": "string"
                 },
+                "type": {
+                    "type": "string"
+                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -1530,8 +1713,20 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "major_id": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
+                },
+                "teacher_class": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TeacherSubject"
+                    }
                 }
             }
         },
@@ -1546,6 +1741,29 @@ const docTemplate = `{
                 },
                 "value": {
                     "type": "string"
+                }
+            }
+        },
+        "models.TeacherSubject": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "$ref": "#/definitions/models.Subject"
+                },
+                "subject_id": {
+                    "type": "integer"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "teacher_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1608,6 +1826,12 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Tag"
                     }
                 },
+                "teacher_subject": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TeacherSubject"
+                    }
+                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -1658,6 +1882,51 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SubjectRequest": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "teacher_class": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.TeacherSubject"
+                    }
+                }
+            }
+        },
+        "request.Teacher": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.TeacherSubject": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/request.Teacher"
+                }
+            }
+        },
         "request.UserAnswer": {
             "type": "object",
             "properties": {
@@ -1669,6 +1938,23 @@ const docTemplate = `{
                 },
                 "question_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "response.AvailableQuestList": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
@@ -1698,6 +1984,136 @@ const docTemplate = `{
                 }
             }
         },
+        "response.QuestList": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.QuestResponses": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Respondent"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Respondent": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.UserAnswer"
+                    }
+                },
+                "number_of_response": {
+                    "type": "integer"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.Subject": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "teacher_class": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.TeacherSubject"
+                    }
+                }
+            }
+        },
+        "response.SubjectTeacher": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "subject": {
+                    "$ref": "#/definitions/response.SubjectWithoutTeacher"
+                }
+            }
+        },
+        "response.SubjectWithoutTeacher": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Teacher": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.TeacherSubject": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/response.Teacher"
+                }
+            }
+        },
         "response.UserDetails": {
             "type": "object",
             "properties": {
@@ -1722,7 +2138,7 @@ const docTemplate = `{
                 "subject": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Subject"
+                        "$ref": "#/definitions/response.Subject"
                     }
                 },
                 "tags": {
@@ -1730,6 +2146,32 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.Tag"
                     }
+                },
+                "teacher_subject": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.SubjectTeacher"
+                    }
+                }
+            }
+        },
+        "response.UserList": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "$ref": "#/definitions/models.Level"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }

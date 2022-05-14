@@ -30,6 +30,13 @@ func (srv SubjectService) ReadSubject() (res *[]response.Subject, err error) {
 	return
 }
 
+func (srv SubjectService) ReadUserSubject(user_id int) (res *[]response.Subject, err error) {
+	var subject *[]models.Subject
+	subject, err  = srv.repo.ReadSubjectByUserID(user_id)
+	res, _ = utils.TypeConverter[[]response.Subject](&subject)
+	return
+}
+
 func (srv SubjectService) UpdateSubject(id int, subject request.SubjectRequest) (err error) {
 	subject.ID = id
 	sub, _ := utils.TypeConverter[models.Subject](&subject)
