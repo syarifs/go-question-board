@@ -55,6 +55,7 @@ func (ucon EvaluateController) GetQuest(c echo.Context) error {
 // @Security ApiKey
 // @Accept json
 // @Produce json
+// @Param class query string false "class"
 // @Param teacher_id query int false "teacher id"
 // @Param subject_id query int false "subject id"
 // @Param body body request.Answer{} true "send quest data"
@@ -65,12 +66,13 @@ func (ucon EvaluateController) GetQuest(c echo.Context) error {
 // @Router /student/evaluate [post]
 func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 	questAnswer := request.Answer{}
+	class := c.QueryParam("class")
 	teacher_id, _ := strconv.Atoi(c.QueryParam("teacher_id"))
 	subject_id, _ := strconv.Atoi(c.QueryParam("subject_id"))
 
 	c.Bind(&questAnswer)
 
-	err := ucon.srv.Evaluate(questAnswer, teacher_id, subject_id)
+	err := ucon.srv.Evaluate(questAnswer, teacher_id, subject_id, class)
 	if err == nil {
 		return c.JSON(http.StatusCreated, response.MessageOnly{
 			Message: "Quest Answered",
@@ -98,8 +100,8 @@ func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 // @Router /teacher/subject [get]
 func (ucon EvaluateController) ViewEvaluateResponse(c echo.Context) error {
 	class := c.QueryParam("class")
-	teacher_id, _ := strconv.Atoi(c.Param("teacher_id"))
-	subject_id, _ := strconv.Atoi(c.Param("subject_id"))
+	teacher_id, _ := strconv.Atoi(c.QueryParam("teacher_id"))
+	subject_id, _ := strconv.Atoi(c.QueryParam("subject_id"))
 	res, err := ucon.srv.ViewEvaluateResponse(teacher_id, subject_id, class)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{

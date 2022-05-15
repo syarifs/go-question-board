@@ -35,13 +35,18 @@ func (repo subjectRepository) ReadSubject() (subject *[]m.Subject, err error) {
 }
 
 func (repo subjectRepository)	ReadTeacherSubject(id int) (sub *[]m.Subject, err error) {
+	var subject_id []int
+
+	repo.db.Table("teacher_subjects").Select("subject_id").
+			Where("user_id = ?", id).Scan(&subject_id)
+
 	err = repo.db.
 		Preload("Major").
-		Preload("Teacher", "id = ?", id).
+		Preload("Teacher").
 		Preload("Student").
 		Preload("Student.Tags").
 		Preload("Student.Major").
-		Find(&sub).Error
+		Find(&sub, subject_id).Error
 	return
 }
 

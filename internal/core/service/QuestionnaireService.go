@@ -7,7 +7,6 @@ import (
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
 	"go-question-board/internal/utils"
-	"reflect"
 )
 
 type QuestionnaireService struct {
@@ -63,10 +62,13 @@ func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []res
 
 	if err == nil {
 		for _, v := range *quest {
-			if reflect.DeepEqual(v.Tags, tags) {
+			if utils.TagEqual(tags, v.Tags) {
 				que, _ := utils.TypeConverter[response.AvailableQuestList](&v)
 				res = append(res, *que)
 			}
+		}
+		if utils.IsEmpty(res) {
+			err = errors.New("Data Not Found")
 		}
 	}
 

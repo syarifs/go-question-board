@@ -1,72 +1,69 @@
 {
-	"id": 5,
-	"title": "Evaluasi B",
-	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
-	"tags": [
-		{
-			"id": 2,
-			"name": "Year",
-			"value": "2020"
-		},
-		{
-			"id": 5,
-			"name": "Class",
-			"value": "B"
-		}
-	],
+	"title": "Evaluasi Dosen",
+	"description": "Survey A.",
 	"type": "Evaluate",
 	"created_by": 1,
 	"questions": [
 		{
-			"id": 1,
 			"question": "Pertanyaan 1",
 			"with_option": 1,
 			"answer_option": [
 				{ 
-					"id": 1,
 					"string_answer": "A" 
 				},
 				{ 
-					"id": 2,
 					"string_answer": "B" 
 				},
 				{ 
-					"id": 3,
 					"string_answer": "C" 
 				},
 				{ 
-					"id": 4,
 					"string_answer": "D" 
 				},
 				{ 
-					"id": 5,
 					"string_answer": "E" 
 				}
 			]
 		},
 		{
-			"id": 2,
 			"question": "Pertanyaan 2",
 			"with_option": 1,
 			"answer_option": [
 				{ 
-					"id": 6,
 					"string_answer": "A" 
 				},
 				{ 
-					"id": 7,
 					"string_answer": "B" 
 				},
 				{ 
-					"id": 8,
 					"string_answer": "C" 
 				},
 				{ 
-					"id": 9,
 					"string_answer": "D" 
 				},
 				{ 
-					"id": 10,
+					"string_answer": "E" 
+				}
+			]
+		},
+		{
+			"id": 3,
+			"question": "Pertanyaan 3",
+			"with_option": 1,
+			"answer_option": [
+				{ 
+					"string_answer": "A" 
+				},
+				{ 
+					"string_answer": "B" 
+				},
+				{ 
+					"string_answer": "C" 
+				},
+				{ 
+					"string_answer": "D" 
+				},
+				{ 
 					"string_answer": "E" 
 				}
 			]

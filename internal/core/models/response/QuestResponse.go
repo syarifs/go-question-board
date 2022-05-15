@@ -23,7 +23,7 @@ type (
 		ID uint `json:"id"`
 		Title string `json:"title"`
 		Description string `json:"description"`
-		CreatedBy m.User `json:"created_by"`
+		CreatedBy UserList `json:"creator"`
 	}
 
 	Question struct {

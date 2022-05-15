@@ -7,7 +7,7 @@ type UserAnswer struct {
 	UserID uint `json:"user_id"`
 	User User `json:"user"`
 	EvaluateTeacherID *uint `json:"evaluate_teacher_id"`
-	EvaluateTeacher EvaluateTeacher `json:"evaluate_teacher"`
+	EvaluateTeacher EvaluateTeacher
 }
 
 func (*UserAnswer) TableName() string {

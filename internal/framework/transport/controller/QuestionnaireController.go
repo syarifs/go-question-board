@@ -5,7 +5,6 @@ import (
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/service"
-	"go-question-board/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -116,8 +115,9 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /quest [get]
 func (ucon QuestionnaireController) MyQuest(c echo.Context) error {
-	created_by := int(utils.GetTokenData(c, "user_id").(float64))
-	res, err := ucon.srv.MyQuest(created_by)
+	var user models.User
+	c.Bind(&user)
+	res, err := ucon.srv.MyQuest(int(user.ID))
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Quest Fetched",

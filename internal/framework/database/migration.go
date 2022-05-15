@@ -15,9 +15,9 @@ func migrateDB(db *gorm.DB) (err error) {
 		models.Questionnaire{},
 		models.Question{},
 		models.AnswerOption{},
-		models.UserAnswer{},
 		models.TeacherSubject{},
 		models.EvaluateTeacher{},
+		models.UserAnswer{},
 	)
 	return
 }

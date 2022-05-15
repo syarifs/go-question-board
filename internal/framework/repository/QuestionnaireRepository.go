@@ -16,7 +16,7 @@ func NewQuestionnaireRepository(db *gorm.DB) *questionnaireRepository {
 }
 
 func (repo questionnaireRepository)CreateQuest(quest m.Questionnaire) (err error) {
-	err = repo.db.Omit("Tags.*").Create(&quest).Error
+	err = repo.db.Create(&quest).Error
 	return
 }
 
@@ -27,6 +27,7 @@ func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionna
 
 func (repo questionnaireRepository) QuestForMe(id int, tag []int) (quests *[]m.Questionnaire, err error) {
 	err = repo.db.Preload(clause.Associations).
+		Preload("Creator.Level").
 		Where("created_by != ?", id).
 		Where("type != 'Evaluate'").
 		Where("id IN (?)", repo.db.Table("questionnaire_tags").

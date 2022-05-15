@@ -8,5 +8,9 @@
 			"question_id": 1,
 			"answer": "A"
 		}
-	]
+	],
+	"user": {
+		"id": 3,
+		"name": "Syarif Ubaidillah"
+	}
 }

@@ -39,19 +39,22 @@ func (repo evaluateRepository) GetEvaluateResponse(user_id, subject_id int, clas
 		Where("subject_id = ?", subject_id).
 		Where("class = ?", class).Scan(&response_id)
 
-	err = repo.db.Preload(clause.Associations).
+	err = repo.db.Debug().Preload(clause.Associations).
 		Preload("Question.AnswerOption").
-		Preload("Question.UserResponse", "evaluate_id IN ?", response_id).
+		Preload("Question.UserResponse", "evaluate_teacher_id IN ?", response_id).
 		Preload("Question.UserResponse.User").
 		Preload("Question.UserResponse.User.Level").
 		Find(&quest, "type = 'Evaluate'").Error
 	return
 }
 
-func (repo evaluateRepository) Evaluate(quest m.Questionnaire, ans []m.UserAnswer) (err error) {
+func (repo evaluateRepository) Evaluate(ans []m.UserAnswer) (err error) {
 	err = repo.db.Create(&ans).Error
 	if err == nil {
-		err = repo.db.Model(&quest).Association("Completor").Append(&quest.Completor)
+		for _, et := range ans {
+			err = repo.db.Create(&et.EvaluateTeacher).Error
+			err = repo.db.Model(&ans).Association("EvaluateTeacher").Append(&et.EvaluateTeacher)
+		}
 	}
 	return
 }

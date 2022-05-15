@@ -5,6 +5,12 @@ Authorization: Bearer <token_string_from_login>
 
 ##############
 
+# fetch subject by id
+GET localhost:8080/api/admin/subject/1
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+##############
 # fetch teacher subject
 GET localhost:8080/api/teacher/subject
 Content-Type: application/json

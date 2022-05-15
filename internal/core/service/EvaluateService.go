@@ -27,7 +27,6 @@ func (srv EvaluateService) GetQuest(subject_id int, class string) (res *response
 		err = errors.New("Data Not Found")
 	}
 
-
 	if err == nil {
 		res, _ = utils.TypeConverter[response.EvaluateQuestDetails](&quest)
 		sub, _ := utils.TypeConverter[response.SubjectWithoutTeacher](&subject)
@@ -41,7 +40,7 @@ func (srv EvaluateService) GetQuest(subject_id int, class string) (res *response
 	return
 }
 
-func (srv EvaluateService) Evaluate(req request.Answer, teacher_id, subject_id int) (err error) {
+func (srv EvaluateService) Evaluate(req request.Answer, teacher_id, subject_id int, class string) (err error) {
 	var answer []models.UserAnswer
 
 	for _, v := range req.Answer {
@@ -49,11 +48,11 @@ func (srv EvaluateService) Evaluate(req request.Answer, teacher_id, subject_id i
 		ans.UserID = req.User.ID
 		ans.EvaluateTeacher.SubjectID = uint(subject_id)
 		ans.EvaluateTeacher.TeacherID = uint(teacher_id)
+		ans.EvaluateTeacher.Class = class
 		answer = append(answer, *ans)
 	}
 
-	req.Questionnaire.Completor = []models.User{req.User}
-	err = srv.repo.Evaluate(req.Questionnaire, answer)
+	err = srv.repo.Evaluate(answer)
 	return
 }
 

@@ -1,7 +1,7 @@
 {
 	"title": "Evaluasi Dosen",
-	"description": "Survey untuk mengevaluasi kinerja mengajar dosen.",
-	"type": "Evaluate",
+	"description": "Survey A.",
+	"type": "Survey",
 	"tags": [
 		{
 			"id": 1,
@@ -14,6 +14,7 @@
 			"value": "B"
 		}
 	],
+	"created_by": 1,
 	"questions": [
 		{
 			"question": "Pertanyaan 1",
