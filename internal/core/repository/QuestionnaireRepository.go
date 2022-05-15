@@ -13,5 +13,4 @@ type QuestionnaireRepository interface {
 	ViewQuestResponse(int) (*m.Questionnaire, error)
 	QuestForMe(int, []int) (*[]m.Questionnaire, error)
 	Answer(m.Questionnaire, []m.UserAnswer) error
-	EvaluateTeacher(m.Questionnaire, []m.UserAnswer) error
 }

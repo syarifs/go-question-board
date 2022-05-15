@@ -21,7 +21,7 @@ func (repo questionnaireRepository)CreateQuest(quest m.Questionnaire) (err error
 }
 
 func (repo questionnaireRepository) MyQuest(user_id int) (quests *[]m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Where("created_by = ?", user_id).Find(&quests).Error
+	err = repo.db.Debug().Preload(clause.Associations).Where("created_by = ?", user_id).Find(&quests).Error
 	return
 }
 
@@ -57,16 +57,13 @@ func (repo questionnaireRepository) Answer(quest m.Questionnaire, ans []m.UserAn
 	return
 }
 
-func (repo questionnaireRepository) EvaluateTeacher(quest m.Questionnaire, ans []m.UserAnswer) (err error) {
-	err = repo.db.Create(&ans).Error
-	if err == nil {
-		err = repo.db.Model(&quest).Association("Completor").Append(&quest.Completor)
-	}
-	return
-}
-
 func (repo questionnaireRepository) ViewQuestResponse(id int) (quests *m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Preload("Question.AnswerOption").Preload("Question.UserResponse").Find(&quests, id).Error
+	err = repo.db.Preload(clause.Associations).
+		Preload("Question.AnswerOption").
+		Preload("Question.UserResponse").
+		Preload("Question.UserResponse.User").
+		Preload("Question.UserResponse.User.Level").
+		Find(&quests, id).Error
 	return
 }
 

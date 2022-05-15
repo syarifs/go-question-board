@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/repository"
@@ -24,6 +25,12 @@ func (srv UserService) ReadUser() (res *[]response.UserList, err error) {
 	var user *[]models.User
 	user, err  = srv.repo.ReadUser()
 	res, _ = utils.TypeConverter[[]response.UserList](&user)
+
+	if utils.IsEmpty(res) {
+		err = errors.New("Data Not Found")
+	}
+
+	
 	return
 }
 
@@ -31,6 +38,10 @@ func (srv UserService) ReadUserByID(id int) (res *response.UserDetails, err erro
 	var users *models.User
 	users, err  = srv.repo.ReadUserByID(id)
 	res, err = utils.TypeConverter[response.UserDetails](&users)
+
+	if utils.IsEmpty(res) {
+		err = errors.New("Data Not Found")
+	}
 
 	return
 }

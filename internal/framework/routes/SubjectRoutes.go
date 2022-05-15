@@ -7,7 +7,6 @@ import (
 )
 
 func NewSubjectRoutes(e *echo.Echo, ucon *controller.SubjectController, middleware ...echo.MiddlewareFunc) {
-	e.GET("/mysubject", ucon.ReadUserSubject)
 	group := e.Group("/subject", middleware...)
 	group.GET("", ucon.ReadSubject)
 	group.POST("", ucon.CreateSubject)

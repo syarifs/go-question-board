@@ -14,4 +14,5 @@ func NewRoutes (e *echo.Echo, ctrl *controller.Controller) {
 	NewTagRoutes(e, ctrl.Tag)
 	NewSubjectRoutes(e, ctrl.Subject)
 	NewQuestionnaireRoutes(e, ctrl.Questionnare)
+	NewEvaluateRoutes(e, ctrl.Evaluate)
 }

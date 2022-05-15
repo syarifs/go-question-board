@@ -45,7 +45,7 @@ func (ucon QuestionnaireController) CreateQuest(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Create Quest",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
@@ -71,7 +71,7 @@ func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Fetch Quest",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }
@@ -97,7 +97,7 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Fetch Quest Response",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 }

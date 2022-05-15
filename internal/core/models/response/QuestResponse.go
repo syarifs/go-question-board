@@ -43,10 +43,17 @@ type (
 	}
 
 	Respondent struct {
-		QuestionID uint `json:"question_id"`
+		QuestionID uint `json:"id"`
 		Question string `json:"question"`
 		NumberRespondent uint `json:"number_of_response"`
-		Response []m.UserAnswer `json:"answer"`
+		Response []UserAnswer `json:"user_response"`
+	}
+
+	UserAnswer struct {
+		ID uint `json:"id" gorm:"primarykey"`
+		Answer string `json:"answer"`
+		QuestionID uint `json:"question_id"`
+		User UserList `json:"user"`
 	}
 
 	QuestResponses struct {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
@@ -27,6 +28,11 @@ func (srv SubjectService) ReadSubject() (res *[]response.Subject, err error) {
 	var subject *[]models.Subject
 	subject, err  = srv.repo.ReadSubject()
 	res, _ = utils.TypeConverter[[]response.Subject](&subject)
+
+	if utils.IsEmpty(res) {
+		err = errors.New("Data Not Found")
+	}
+
 	return
 }
 
@@ -34,6 +40,11 @@ func (srv SubjectService) ReadUserSubject(user_id int) (res *[]response.Subject,
 	var subject *[]models.Subject
 	subject, err  = srv.repo.ReadSubjectByUserID(user_id)
 	res, _ = utils.TypeConverter[[]response.Subject](&subject)
+
+	if res == nil {
+		err = errors.New("Data Not Found")
+	}
+
 	return
 }
 

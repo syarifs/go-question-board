@@ -20,12 +20,10 @@ type (
 
 	EvaluateTeacher struct {
 		ID uint `json:"id" gorm:"primaryKey"`
-		UserAnswerID uint `json:"user_answer_id"`
-		UserID uint `json:"student_id"`
 		SubjectID uint `json:"subject_id"`
-		UserAnswer UserAnswer
-		User User
-		Major Major
+		TeacherID uint `json:"teacher_id"`
+		User User `gorm:"foreignKey:TeacherID;references:ID"`
+		Subject Subject
 		Class string `json:"class"`
 	}
 )

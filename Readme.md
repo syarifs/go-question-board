@@ -24,15 +24,17 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 	- [x] Major
 	- [x] User
 	- [x] Questionnaire
-- [ ] Subject
+- [x] Subject
 	- [x] Register Teacher to Subject
-	- [ ] Evaluate Teacher by Subject
 - [ ] Questionnaire
 	- [x] Create Survey
 	- [x] View Survey Response
 	- [x] Answer Survey
 	- [x] Filter By Tags
 	- [ ] Filter Completed Survey
+- [ ] Teacher Evaluation
+	- [x] Evaluate Teacher by Subject
+	- [ ] View Evaluated Data from Teacher Side
 - [ ] Profile Management
 	- [ ] Read & Update Profile
 - [ ] Email Notification
@@ -61,9 +63,9 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Menambahkan fitur `Answer Questionnaire`.
 - [x] Mendaftarkan user dengan role `Teacher` ke `Subject`.
 - [x] Menampilkan `Teacher` pada *list* `Subject`.
-- [ ] Membuat *route list* `Subject` yang diikuti `Student`.
+- [x] Membuat *route list* `Subject` yang diikuti `Student`.
+- [x] Implementasi fitur `Evaluate Teacher`.
 - [ ] Membuat fitur `Management Profile` untuk `User`.
-- [ ] Implementasi fitur `Evaluate Teacher`.
 - [ ] Membuat `Unit Test` untuk modul *controller*.
 - [ ] Menambahkan fitur `Email Notification` untuk pemberitahuan `Questionnaire` yang dapat dikerjakan.
 - [ ] Menggunakan MongoDB untuk filter JSON Web Token.

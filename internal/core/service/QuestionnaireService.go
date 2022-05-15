@@ -32,6 +32,12 @@ func (srv QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, 
 	}
 
 	quest, err = srv.repo.MyQuest(user_id)
+
+	if utils.IsEmpty(quest) {
+		err = errors.New("Data Not Found")
+	}
+
+
 	if err == nil {
 		for _, v := range *quest {
 			que, _ := utils.TypeConverter[response.QuestList](&v)
@@ -50,6 +56,11 @@ func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []res
 	}
 
 	quest, err = srv.repo.QuestForMe(id, tag_id)
+
+	if utils.IsEmpty(quest) {
+		err = errors.New("Data Not Found")
+	}
+
 	if err == nil {
 		for _, v := range *quest {
 			if reflect.DeepEqual(v.Tags, tags) {
@@ -76,6 +87,11 @@ func (srv QuestionnaireService) DeleteQuest(id int) (err error) {
 func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestResponses, err error) {
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestResponse(id)
+	
+	if utils.IsEmpty(quest) {
+		err = errors.New("Data Not Found")
+	}
+
 	if err == nil {
 		res.ID = quest.ID
 		res.Title = quest.Title
@@ -91,22 +107,24 @@ func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestRes
 func (srv QuestionnaireService) ViewQuestByID(id int) (res *response.AvailableQuestDetails, err error) {
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestByID(id)
+	
+	if utils.IsEmpty(quest) {
+		err = errors.New("Data Not Found")
+	}
+
 	if err == nil {
 		res, _ = utils.TypeConverter[response.AvailableQuestDetails](&quest)
 	}
+
 	return
 }
 
 func (srv QuestionnaireService) AnswerQuest(req request.Answer) (err error) {
 	var answer []models.UserAnswer
 	for _, v := range req.Answer {
-		ans := models.UserAnswer{
-			ID: v.ID,
-			QuestionID: v.QuestionID,
-			Answer: v.Answer,
-			UserID: req.User.ID,
-		}
-		answer = append(answer, ans)
+		ans, _ := utils.TypeConverter[models.UserAnswer](&v)
+		ans.UserID = req.User.ID
+		answer = append(answer, *ans)
 	}
 	req.Questionnaire.Completor = []models.User{req.User}
 	err = srv.repo.Answer(req.Questionnaire, answer)

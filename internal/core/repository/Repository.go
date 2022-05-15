@@ -7,5 +7,6 @@ type Repository struct {
 	Subject SubjectRepository
 	Major MajorRepository
 	Questionnaire QuestionnaireRepository
+	EvaluateTeacher EvaluateRepository
 }
 

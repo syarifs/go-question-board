@@ -5,6 +5,9 @@ type UserAnswer struct {
 	Answer string `json:"answer"`
 	QuestionID uint `json:"question_id"`
 	UserID uint `json:"user_id"`
+	User User `json:"user"`
+	EvaluateTeacherID *uint `json:"evaluate_teacher_id"`
+	EvaluateTeacher EvaluateTeacher `json:"evaluate_teacher"`
 }
 
 func (*UserAnswer) TableName() string {

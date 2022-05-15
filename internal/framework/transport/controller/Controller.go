@@ -9,6 +9,7 @@ type Controller struct {
 	Tag *TagController
 	Subject *SubjectController
 	Questionnare *QuestionnaireController
+	Evaluate *EvaluateController
 }
 
 func NewController(srv *service.Service) *Controller {
@@ -19,5 +20,6 @@ func NewController(srv *service.Service) *Controller {
 		Subject: NewSubjectController(srv.Subject),
 		Tag: NewTagController(srv.Tag),
 		Questionnare: NewQuestionnaireController(srv.Question),
+		Evaluate: NewEvaluateController(srv.Evaluate),
 	}
 }

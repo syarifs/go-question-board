@@ -46,6 +46,10 @@ func (repo subjectRepository) ReadSubjectByUserID(user_id int) (subject *[]m.Sub
 		Where("id IN (?)", repo.db.Table("student_subject").
 			Select("subject_id").Where("user_id = ?", user_id)).
 		Preload(clause.Associations).
+		Preload("Teacher", "class = (?)", repo.db.Debug().
+			Find(&m.Tag{}, "id in (?)", repo.db.Table("user_tags").
+			Select("tag_id").Where("user_id = ? AND name = 'Class'", user_id)).
+			Select("value")).
 		Preload("Teacher.User").
 		Find(&subject).Error
 	return
