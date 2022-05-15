@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api
 definitions:
   models.AnswerOption:
     properties:
@@ -8,6 +8,21 @@ definitions:
         type: integer
       string_answer:
         type: string
+    type: object
+  models.EvaluateTeacher:
+    properties:
+      class:
+        type: string
+      id:
+        type: integer
+      subject:
+        $ref: '#/definitions/models.Subject'
+      subject_id:
+        type: integer
+      teacher_id:
+        type: integer
+      user:
+        $ref: '#/definitions/models.User'
     type: object
   models.Level:
     properties:
@@ -89,6 +104,10 @@ definitions:
         type: integer
       name:
         type: string
+      student:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
       teacher_class:
         items:
           $ref: '#/definitions/models.TeacherSubject'
@@ -168,10 +187,16 @@ definitions:
     properties:
       answer:
         type: string
+      evaluate_teacher:
+        $ref: '#/definitions/models.EvaluateTeacher'
+      evaluate_teacher_id:
+        type: integer
       id:
         type: integer
       question_id:
         type: integer
+      user:
+        $ref: '#/definitions/models.User'
       user_id:
         type: integer
     type: object
@@ -285,16 +310,31 @@ definitions:
     type: object
   response.Respondent:
     properties:
-      answer:
-        items:
-          $ref: '#/definitions/models.UserAnswer'
-        type: array
+      id:
+        type: integer
       number_of_response:
         type: integer
       question:
         type: string
-      question_id:
+      user_response:
+        items:
+          $ref: '#/definitions/response.UserAnswer'
+        type: array
+    type: object
+  response.Student:
+    properties:
+      email:
+        type: string
+      id:
         type: integer
+      major:
+        $ref: '#/definitions/models.Major'
+      name:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
     type: object
   response.Subject:
     properties:
@@ -306,9 +346,13 @@ definitions:
         $ref: '#/definitions/models.Major'
       name:
         type: string
+      student:
+        items:
+          $ref: '#/definitions/response.Student'
+        type: array
       teacher_class:
         items:
-          $ref: '#/definitions/response.TeacherSubject'
+          $ref: '#/definitions/response.TeacherClass'
         type: array
     type: object
   response.SubjectTeacher:
@@ -317,6 +361,36 @@ definitions:
         type: string
       subject:
         $ref: '#/definitions/response.SubjectWithoutTeacher'
+    type: object
+  response.SubjectWithStudent:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      major:
+        $ref: '#/definitions/models.Major'
+      name:
+        type: string
+      student:
+        items:
+          $ref: '#/definitions/response.Student'
+        type: array
+    type: object
+  response.SubjectWithTeacher:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      major:
+        $ref: '#/definitions/models.Major'
+      name:
+        type: string
+      teacher_class:
+        items:
+          $ref: '#/definitions/response.TeacherClass'
+        type: array
     type: object
   response.SubjectWithoutTeacher:
     properties:
@@ -336,12 +410,23 @@ definitions:
       name:
         type: string
     type: object
-  response.TeacherSubject:
+  response.TeacherClass:
     properties:
       class:
         type: string
       teacher:
         $ref: '#/definitions/response.Teacher'
+    type: object
+  response.UserAnswer:
+    properties:
+      answer:
+        type: string
+      id:
+        type: integer
+      question_id:
+        type: integer
+      user:
+        $ref: '#/definitions/response.UserList'
     type: object
   response.UserDetails:
     properties:
@@ -393,37 +478,7 @@ info:
   title: Question Board
   version: "1.0"
 paths:
-  /login:
-    post:
-      consumes:
-      - application/json
-      description: Login and get Authorization Token
-      parameters:
-      - description: send request email, password
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/request.LoginRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.UserDetails'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Error'
-      summary: Login
-      tags:
-      - Authorization
-  /major:
+  /admin/major:
     get:
       description: Route Path for Get List of Major, for Administrator only.
       responses:
@@ -490,7 +545,7 @@ paths:
       summary: Create New Major
       tags:
       - Major
-  /major/{id}/delete:
+  /admin/major/{id}/delete:
     delete:
       consumes:
       - application/json
@@ -525,7 +580,7 @@ paths:
       summary: Delete Major
       tags:
       - Major
-  /major/{id}/update:
+  /admin/major/{id}/update:
     put:
       consumes:
       - application/json
@@ -566,16 +621,82 @@ paths:
       summary: Update Major
       tags:
       - Major
-  /mysubject:
+  /admin/subject:
     get:
-      description: Route Path for Get List of User Subject.
+      description: Route Path for Get List of Subject, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.SubjectWithoutTeacher'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get All Subject
+      tags:
+      - Subject
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Subject, for Administrator only.
       parameters:
-      - description: send user data as a request
+      - description: send request subject code and subject name
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/response.UserList'
+          $ref: '#/definitions/request.SubjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Create New Subject
+      tags:
+      - Subject
+  /admin/subject/{id}:
+    get:
+      description: Route Path for Get Subject Details By ID.
+      parameters:
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -602,9 +723,437 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All User Subject
+      summary: Get Subject By ID
       tags:
       - Subject
+  /admin/subject/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Subject, for Administrator only.
+      parameters:
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Delete Subject
+      tags:
+      - Subject
+  /admin/subject/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Subject, for Administrator only.
+      parameters:
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: send request subject code and subject name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/request.SubjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Update Subject
+      tags:
+      - Subject
+  /admin/tag:
+    get:
+      description: Route Path for Get List of Tag, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Tag'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get All Tag
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New Tag, for Administrator only.
+      parameters:
+      - description: send request tag code and tag name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Create New Tag
+      tags:
+      - Tag
+  /admin/tag/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete Tag, for Administrator only.
+      parameters:
+      - description: tag id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Delete Tag
+      tags:
+      - Tag
+  /admin/tag/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update Tag, for Administrator only.
+      parameters:
+      - description: tag id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: send request tag code and tag name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Update Tag
+      tags:
+      - Tag
+  /admin/user:
+    get:
+      description: Route Path for Get List of User, for Administrator only.
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.UserList'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get All User
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Route Path for Insert New User, for Administrator only.
+      parameters:
+      - description: send request user code and user name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Create New User
+      tags:
+      - User
+  /admin/user/{id}:
+    get:
+      description: Route Path for Get User Details By ID, for Administrator only.
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UserDetails'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Get User By ID
+      tags:
+      - User
+  /admin/user/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Route Path for Delete User, for Administrator only.
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Delete User
+      tags:
+      - User
+  /admin/user/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Route Path for Update User, for Administrator only.
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: send request user code and user name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Update User
+      tags:
+      - User
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login and get Authorization Token
+      parameters:
+      - description: send request email, password
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserDetails'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Login
+      tags:
+      - Authorization
   /quest:
     get:
       description: Route Path for Get List of Quest By User ID.
@@ -674,7 +1223,13 @@ paths:
       - Questionnaire
   /quest/{id}:
     get:
-      description: Route Path for Get List of Quest.
+      description: Route Path for Get Quest Details By ID.
+      parameters:
+      - description: quest id
+        in: path
+        name: id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -694,7 +1249,7 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All Quest
+      summary: Get Quest Details By ID
       tags:
       - Questionnaire
   /quest/{id}/delete:
@@ -734,7 +1289,13 @@ paths:
       - Questionnaire
   /quest/{id}/response:
     get:
-      description: Route Path for Get List of Quest.
+      description: Route Path for Get Quest Response By Quest ID.
+      parameters:
+      - description: quest id
+        in: path
+        name: id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -759,7 +1320,7 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All Quest
+      summary: Quest Response By Quest ID
       tags:
       - Questionnaire
   /quest/{id}/update:
@@ -871,7 +1432,7 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get All Quest with Tag Filter
+      summary: Get All Quest with User Tag Filter
       tags:
       - Questionnaire
   /refresh_token:
@@ -904,91 +1465,31 @@ paths:
       summary: Refresh Token
       tags:
       - Authorization
-  /subject:
+  /student/evaluate:
     get:
-      description: Route Path for Get List of Subject, for Administrator only.
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.MessageData'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/response.Subject'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Get All Subject
-      tags:
-      - Subject
-    post:
-      consumes:
-      - application/json
-      description: Route Path for Insert New Subject, for Administrator only.
+      description: Route Path for Get List of Evaluation Quest with Subject ID and
+        Class.
       parameters:
-      - description: send request subject code and subject name
-        in: body
-        name: body
+      - description: class
+        in: query
+        name: class
         required: true
-        schema:
-          $ref: '#/definitions/request.SubjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Create New Subject
-      tags:
-      - Subject
-  /subject/{id}/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Route Path for Delete Subject, for Administrator only.
-      parameters:
+        type: string
       - description: subject id
-        in: path
-        name: id
+        in: query
+        name: subject_id
         required: true
         type: integer
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnly'
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.QuestList'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1003,26 +1504,28 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Delete Subject
+      summary: Get Evaluate Quest
       tags:
-      - Subject
-  /subject/{id}/update:
-    put:
+      - Evaluate
+    post:
       consumes:
       - application/json
-      description: Route Path for Update Subject, for Administrator only.
+      description: Route Path for Answer Evaluate Quesition.
       parameters:
+      - description: teacher id
+        in: query
+        name: teacher_id
+        type: integer
       - description: subject id
-        in: path
-        name: id
-        required: true
+        in: query
+        name: subject_id
         type: integer
-      - description: send request subject code and subject name
+      - description: send quest data
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/request.SubjectRequest'
+          $ref: '#/definitions/request.Answer'
       produces:
       - application/json
       responses:
@@ -1044,222 +1547,19 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Update Subject
+      summary: Create New Quest
       tags:
-      - Subject
-  /tag:
+      - Questionnaire
+  /student/subject:
     get:
-      description: Route Path for Get List of Tag, for Administrator only.
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.MessageData'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/models.Tag'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Get All Tag
-      tags:
-      - Tag
-    post:
-      consumes:
-      - application/json
-      description: Route Path for Insert New Tag, for Administrator only.
+      description: Route Path for Get List of Student Subject, for Student only.
       parameters:
-      - description: send request tag code and tag name
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Tag'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Create New Tag
-      tags:
-      - Tag
-  /tag/{id}/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Route Path for Delete Tag, for Administrator only.
-      parameters:
-      - description: tag id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Delete Tag
-      tags:
-      - Tag
-  /tag/{id}/update:
-    put:
-      consumes:
-      - application/json
-      description: Route Path for Update Tag, for Administrator only.
-      parameters:
-      - description: tag id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: send request tag code and tag name
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Tag'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Update Tag
-      tags:
-      - Tag
-  /user:
-    get:
-      description: Route Path for Get List of User, for Administrator only.
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.MessageData'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/response.UserList'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Get All User
-      tags:
-      - User
-    post:
-      consumes:
-      - application/json
-      description: Route Path for Insert New User, for Administrator only.
-      parameters:
-      - description: send request user code and user name
+      - description: user data for fetch subject
         in: body
         name: body
         required: true
         schema:
           $ref: '#/definitions/models.User'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Create New User
-      tags:
-      - User
-  /user/{id}:
-    get:
-      description: Route Path for Get List of User, for Administrator only.
       responses:
         "200":
           description: OK
@@ -1268,7 +1568,9 @@ paths:
             - $ref: '#/definitions/response.MessageData'
             - properties:
                 data:
-                  $ref: '#/definitions/response.UserDetails'
+                  items:
+                    $ref: '#/definitions/response.SubjectWithTeacher'
+                  type: array
               type: object
         "400":
           description: Bad Request
@@ -1284,68 +1586,31 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Get User By ID
+      summary: Get Student Subject
       tags:
-      - User
-  /user/{id}/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Route Path for Delete User, for Administrator only.
+      - Subject
+  /teacher/subject:
+    get:
+      description: Route Path for Get List of Teacher Subject, for Teacher only.
       parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.MessageOnly'
-        "417":
-          description: Expectation Failed
-          schema:
-            $ref: '#/definitions/response.Error'
-      security:
-      - ApiKey: []
-      summary: Delete User
-      tags:
-      - User
-  /user/{id}/update:
-    put:
-      consumes:
-      - application/json
-      description: Route Path for Update User, for Administrator only.
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: send request user code and user name
+      - description: user data for fetch subject
         in: body
         name: body
         required: true
         schema:
           $ref: '#/definitions/models.User'
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.MessageOnly'
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.SubjectWithStudent'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1360,9 +1625,9 @@ paths:
             $ref: '#/definitions/response.Error'
       security:
       - ApiKey: []
-      summary: Update User
+      summary: Get Teacher Subject
       tags:
-      - User
+      - Subject
 securityDefinitions:
   ApiKey:
     in: header

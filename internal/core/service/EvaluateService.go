@@ -18,9 +18,10 @@ func NewEvaluateService(repo repository.EvaluateRepository) *EvaluateService {
 	return &EvaluateService{repo: repo}
 }
 
-func (srv EvaluateService) GetQuest() (res *response.AvailableQuestDetails, err error) {
+func (srv EvaluateService) GetQuest(subject_id int, class string) (res *response.EvaluateQuestDetails, err error) {
 	var quest *models.Questionnaire
-	quest, err = srv.repo.GetEvaluateQuest()
+	var subject *models.Subject
+	subject, quest, err = srv.repo.GetEvaluateQuest(subject_id, class)
 
 	if utils.IsEmpty(quest) {
 		err = errors.New("Data Not Found")
@@ -28,7 +29,14 @@ func (srv EvaluateService) GetQuest() (res *response.AvailableQuestDetails, err 
 
 
 	if err == nil {
-		res, _ = utils.TypeConverter[response.AvailableQuestDetails](&quest)
+		res, _ = utils.TypeConverter[response.EvaluateQuestDetails](&quest)
+		sub, _ := utils.TypeConverter[response.SubjectWithoutTeacher](&subject)
+		res.Subject.ID = int(subject.ID)
+		res.Subject = *sub
+		for _, v := range subject.Teacher {
+			res.Teacher.ID = int(v.User.ID)
+			res.Teacher.Name = v.User.Name
+		}
 	}
 	return
 }
@@ -46,5 +54,25 @@ func (srv EvaluateService) Evaluate(req request.Answer, teacher_id, subject_id i
 
 	req.Questionnaire.Completor = []models.User{req.User}
 	err = srv.repo.Evaluate(req.Questionnaire, answer)
+	return
+}
+
+func (srv EvaluateService) ViewEvaluateResponse(teacher_id, subject_id int, class string) (res response.QuestResponses, err error) {
+	var quest *models.Questionnaire
+	quest, err = srv.repo.GetEvaluateResponse(teacher_id, subject_id, class)
+	
+	if utils.IsEmpty(quest) {
+		err = errors.New("Data Not Found")
+	}
+
+	if err == nil {
+		res.ID = quest.ID
+		res.Title = quest.Title
+		for _, v := range quest.Question {
+			respondent, _ := utils.TypeConverter[response.Respondent](&v)
+			respondent.NumberRespondent = uint(len(v.UserResponse))
+			res.Questions = append(res.Questions, *respondent)
+		}
+	}
 	return
 }

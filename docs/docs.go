@@ -20,53 +20,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/login": {
-            "post": {
-                "description": "Login and get Authorization Token",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Authorization"
-                ],
-                "summary": "Login",
-                "parameters": [
-                    {
-                        "description": "send request email, password",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.UserDetails"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/major": {
+        "/admin/major": {
             "get": {
                 "security": [
                     {
@@ -176,7 +130,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/major/{id}/delete": {
+        "/admin/major/{id}/delete": {
             "delete": {
                 "security": [
                     {
@@ -231,7 +185,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/major/{id}/update": {
+        "/admin/major/{id}/update": {
             "put": {
                 "security": [
                     {
@@ -295,27 +249,135 @@ const docTemplate = `{
                 }
             }
         },
-        "/mysubject": {
+        "/admin/subject": {
             "get": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of User Subject.",
+                "description": "Route Path for Get List of Subject, for Administrator only.",
                 "tags": [
                     "Subject"
                 ],
-                "summary": "Get All User Subject",
+                "summary": "Get All Subject",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.SubjectWithoutTeacher"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Insert New Subject, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Subject"
+                ],
+                "summary": "Create New Subject",
                 "parameters": [
                     {
-                        "description": "send user data as a request",
+                        "description": "send request subject code and subject name",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/response.UserList"
+                            "$ref": "#/definitions/request.SubjectRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/subject/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get Subject Details By ID.",
+                "tags": [
+                    "Subject"
+                ],
+                "summary": "Get Subject By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -354,6 +416,690 @@ const docTemplate = `{
                     },
                     "417": {
                         "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/subject/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Delete Subject, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Subject"
+                ],
+                "summary": "Delete Subject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/subject/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Update Subject, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Subject"
+                ],
+                "summary": "Update Subject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "send request subject code and subject name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SubjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/tag": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of Tag, for Administrator only.",
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Get All Tag",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Tag"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Insert New Tag, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Create New Tag",
+                "parameters": [
+                    {
+                        "description": "send request tag code and tag name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Tag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/tag/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Delete Tag, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Delete Tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tag id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/tag/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Update Tag, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Update Tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tag id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "send request tag code and tag name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Tag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get List of User, for Administrator only.",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get All User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.UserList"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Insert New User, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create New User",
+                "parameters": [
+                    {
+                        "description": "send request user code and user name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get User Details By ID, for Administrator only.",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.UserDetails"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Delete User, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Update User, for Administrator only.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "send request user code and user name",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login and get Authorization Token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authorization"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "send request email, password",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserDetails"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Error"
                         }
@@ -539,7 +1285,7 @@ const docTemplate = `{
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Get All Quest with Tag Filter",
+                "summary": "Get All Quest with User Tag Filter",
                 "parameters": [
                     {
                         "description": "send logged in user data",
@@ -595,11 +1341,20 @@ const docTemplate = `{
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Quest.",
+                "description": "Route Path for Get Quest Details By ID.",
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Get All Quest",
+                "summary": "Get Quest Details By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "quest id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -690,11 +1445,20 @@ const docTemplate = `{
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Quest.",
+                "description": "Route Path for Get Quest Response By Quest ID.",
                 "tags": [
                     "Questionnaire"
                 ],
-                "summary": "Get All Quest",
+                "summary": "Quest Response By Quest ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "quest id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -845,140 +1609,31 @@ const docTemplate = `{
                 }
             }
         },
-        "/subject": {
+        "/student/evaluate": {
             "get": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Subject, for Administrator only.",
+                "description": "Route Path for Get List of Evaluation Quest with Subject ID and Class.",
                 "tags": [
-                    "Subject"
+                    "Evaluate"
                 ],
-                "summary": "Get All Subject",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.MessageData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/response.Subject"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Insert New Subject, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Subject"
-                ],
-                "summary": "Create New Subject",
+                "summary": "Get Evaluate Quest",
                 "parameters": [
                     {
-                        "description": "send request subject code and subject name",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SubjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
+                        "type": "string",
+                        "description": "class",
+                        "name": "class",
+                        "in": "query",
+                        "required": true
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/subject/{id}/delete": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Delete Subject, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Subject"
-                ],
-                "summary": "Delete Subject",
-                "parameters": [
                     {
                         "type": "integer",
                         "description": "subject id",
-                        "name": "id",
-                        "in": "path",
+                        "name": "subject_id",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -986,7 +1641,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.QuestList"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1008,16 +1675,14 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/subject/{id}/update": {
-            "put": {
+            },
+            "post": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Update Subject, for Administrator only.",
+                "description": "Route Path for Answer Evaluate Quesition.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1025,24 +1690,29 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Subject"
+                    "Questionnaire"
                 ],
-                "summary": "Update Subject",
+                "summary": "Create New Quest",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "teacher id",
+                        "name": "teacher_id",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "description": "subject id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "name": "subject_id",
+                        "in": "query"
                     },
                     {
-                        "description": "send request subject code and subject name",
+                        "description": "send quest data",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.SubjectRequest"
+                            "$ref": "#/definitions/request.Answer"
                         }
                     }
                 ],
@@ -1074,309 +1744,21 @@ const docTemplate = `{
                 }
             }
         },
-        "/tag": {
+        "/student/subject": {
             "get": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Get List of Tag, for Administrator only.",
+                "description": "Route Path for Get List of Student Subject, for Student only.",
                 "tags": [
-                    "Tag"
+                    "Subject"
                 ],
-                "summary": "Get All Tag",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.MessageData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Tag"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Insert New Tag, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "Create New Tag",
+                "summary": "Get Student Subject",
                 "parameters": [
                     {
-                        "description": "send request tag code and tag name",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Tag"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/tag/{id}/delete": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Delete Tag, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "Delete Tag",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tag id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/tag/{id}/update": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Update Tag, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "Update Tag",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tag id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "send request tag code and tag name",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Tag"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Get List of User, for Administrator only.",
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get All User",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.MessageData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/response.UserList"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Insert New User, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Create New User",
-                "parameters": [
-                    {
-                        "description": "send request user code and user name",
+                        "description": "user data for fetch subject",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1389,46 +1771,6 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Get List of User, for Administrator only.",
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get User By ID",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
                             "allOf": [
                                 {
                                     "$ref": "#/definitions/response.MessageData"
@@ -1437,7 +1779,10 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.UserDetails"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.SubjectWithTeacher"
+                                            }
                                         }
                                     }
                                 }
@@ -1465,89 +1810,21 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{id}/delete": {
-            "delete": {
+        "/teacher/subject": {
+            "get": {
                 "security": [
                     {
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Delete User, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Route Path for Get List of Teacher Subject, for Teacher only.",
                 "tags": [
-                    "User"
+                    "Subject"
                 ],
-                "summary": "Delete User",
+                "summary": "Get Teacher Subject",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
-                        }
-                    },
-                    "417": {
-                        "description": "Expectation Failed",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{id}/update": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKey": []
-                    }
-                ],
-                "description": "Route Path for Update User, for Administrator only.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update User",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "send request user code and user name",
+                        "description": "user data for fetch subject",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1560,7 +1837,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.MessageOnly"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.SubjectWithStudent"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1597,6 +1889,29 @@ const docTemplate = `{
                 },
                 "string_answer": {
                     "type": "string"
+                }
+            }
+        },
+        "models.EvaluateTeacher": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "$ref": "#/definitions/models.Subject"
+                },
+                "subject_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
                 }
             }
         },
@@ -1722,6 +2037,12 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "student": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.User"
+                    }
+                },
                 "teacher_class": {
                     "type": "array",
                     "items": {
@@ -1843,11 +2164,20 @@ const docTemplate = `{
                 "answer": {
                     "type": "string"
                 },
+                "evaluate_teacher": {
+                    "$ref": "#/definitions/models.EvaluateTeacher"
+                },
+                "evaluate_teacher_id": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "question_id": {
                     "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
                 },
                 "user_id": {
                     "type": "integer"
@@ -2024,11 +2354,8 @@ const docTemplate = `{
         "response.Respondent": {
             "type": "object",
             "properties": {
-                "answer": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.UserAnswer"
-                    }
+                "id": {
+                    "type": "integer"
                 },
                 "number_of_response": {
                     "type": "integer"
@@ -2036,8 +2363,34 @@ const docTemplate = `{
                 "question": {
                     "type": "string"
                 },
-                "question_id": {
+                "user_response": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.UserAnswer"
+                    }
+                }
+            }
+        },
+        "response.Student": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
                 }
             }
         },
@@ -2056,10 +2409,16 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "student": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Student"
+                    }
+                },
                 "teacher_class": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.TeacherSubject"
+                        "$ref": "#/definitions/response.TeacherClass"
                     }
                 }
             }
@@ -2072,6 +2431,52 @@ const docTemplate = `{
                 },
                 "subject": {
                     "$ref": "#/definitions/response.SubjectWithoutTeacher"
+                }
+            }
+        },
+        "response.SubjectWithStudent": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "student": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Student"
+                    }
+                }
+            }
+        },
+        "response.SubjectWithTeacher": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/models.Major"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "teacher_class": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.TeacherClass"
+                    }
                 }
             }
         },
@@ -2103,7 +2508,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.TeacherSubject": {
+        "response.TeacherClass": {
             "type": "object",
             "properties": {
                 "class": {
@@ -2111,6 +2516,23 @@ const docTemplate = `{
                 },
                 "teacher": {
                     "$ref": "#/definitions/response.Teacher"
+                }
+            }
+        },
+        "response.UserAnswer": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "question_id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/response.UserList"
                 }
             }
         },
@@ -2189,7 +2611,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/",
+	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Question Board",
 	Description:      "server API for Question Board Application.",

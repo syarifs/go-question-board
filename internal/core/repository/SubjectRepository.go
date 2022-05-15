@@ -9,5 +9,7 @@ type SubjectRepository interface {
 	UpdateSubject(m.Subject) error
 	DeleteSubject(int) error
 	ReadSubject() (*[]m.Subject, error)
-	ReadSubjectByUserID(int) (*[]m.Subject, error)
+	ReadSubjectByID(int) (*[]m.Subject, error)
+	ReadTeacherSubject(int) (*[]m.Subject, error)
+	ReadStudentSubject(int) (*[]m.Subject, error)
 }

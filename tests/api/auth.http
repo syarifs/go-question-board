@@ -1,5 +1,5 @@
 # login
-POST localhost:8080/login
+POST localhost:8080/api/login
 Content-Type: application/json
 
 < ./data/auth/login.json

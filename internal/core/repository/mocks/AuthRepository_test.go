@@ -25,7 +25,7 @@ func TestLogin(t *testing.T) {
 			Email: data.Email,
 			Password: utils.HashPassword(data.Password),
 		}
-		mockAuth.On("Login", data).Return(ret, nil).Once()
+		mockAuth.On("Login", data.Email).Return(ret, nil).Once()
 		res, err := authService.Login(data)
 		assert.NotEmpty(t, res)
 		assert.NoError(t, err)
@@ -34,7 +34,7 @@ func TestLogin(t *testing.T) {
 	t.Run("Fail", func(t *testing.T) {
 		data := request.LoginRequest{}
 		ret := models.User{}
-		mockAuth.On("Login", data).Return(ret, errors.New("fail")).Once()
+		mockAuth.On("Login", "").Return(ret, errors.New("fail")).Once()
 		res, err := authService.Login(data)
 		assert.Empty(t, res)
 		assert.Error(t, err)

@@ -31,7 +31,7 @@ func NewTagController(srv *service.TagService) *TagController {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /tag [post]
+// @Router /admin/tag [post]
 func (ucon TagController) CreateTag(c echo.Context) error {
 	tag := models.Tag{}
 	c.Bind(&tag)
@@ -57,7 +57,7 @@ func (ucon TagController) CreateTag(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /tag [get]
+// @Router /admin/tag [get]
 func (ucon TagController) ReadTag(c echo.Context) error {
 	res, err := ucon.srv.ReadTag()
 	if err == nil {
@@ -86,7 +86,7 @@ func (ucon TagController) ReadTag(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /tag/{id}/update [PUT]
+// @Router /admin/tag/{id}/update [PUT]
 func (ucon TagController) UpdateTag(c echo.Context) error {
 	tag := models.Tag{}
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -116,7 +116,7 @@ func (ucon TagController) UpdateTag(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /tag/{id}/delete [DELETE]
+// @Router /admin/tag/{id}/delete [DELETE]
 func (ucon TagController) DeleteTag(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteTag(id)

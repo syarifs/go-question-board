@@ -32,7 +32,7 @@ func NewSubjectController(srv *service.SubjectService) *SubjectController {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /subject [post]
+// @Router /admin/subject [post]
 func (ucon SubjectController) CreateSubject(c echo.Context) error {
 	subject := request.SubjectRequest{}
 	c.Bind(&subject)
@@ -54,11 +54,11 @@ func (ucon SubjectController) CreateSubject(c echo.Context) error {
 // @Description Route Path for Get List of Subject, for Administrator only.
 // @Tags Subject
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{data=[]response.Subject{}} success
+// @Success 200 {object} response.MessageData{data=[]response.SubjectWithoutTeacher{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /subject [get]
+// @Router /admin/subject [get]
 func (ucon SubjectController) ReadSubject(c echo.Context) error {
 	res, err := ucon.srv.ReadSubject()
 	if err == nil {
@@ -75,20 +75,19 @@ func (ucon SubjectController) ReadSubject(c echo.Context) error {
 }
 
 // CreateResource godoc
-// @Summary Get All User Subject
-// @Description Route Path for Get List of User Subject.
+// @Summary Get Subject By ID
+// @Description Route Path for Get Subject Details By ID.
 // @Tags Subject
 // @Security ApiKey
-// @Param body  body  response.UserList{}  true "send user data as a request"
+// @Param id  path  int  true "subject id"
 // @Success 200 {object} response.MessageData{data=[]response.Subject{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /mysubject [get]
-func (ucon SubjectController) ReadUserSubject(c echo.Context) error {
-	var user models.User
-	c.Bind(&user)
-	res, err := ucon.srv.ReadUserSubject(int(user.ID))
+// @Router /admin/subject/{id} [get]
+func (ucon SubjectController) ReadSubjectByID(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	res, err := ucon.srv.ReadSubjectByID(id)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Subject Fetched",
@@ -115,7 +114,7 @@ func (ucon SubjectController) ReadUserSubject(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /subject/{id}/update [PUT]
+// @Router /admin/subject/{id}/update [PUT]
 func (ucon SubjectController) UpdateSubject(c echo.Context) error {
 	subject := request.SubjectRequest{}
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -145,7 +144,7 @@ func (ucon SubjectController) UpdateSubject(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /subject/{id}/delete [DELETE]
+// @Router /admin/subject/{id}/delete [DELETE]
 func (ucon SubjectController) DeleteSubject(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteSubject(id)
@@ -161,3 +160,58 @@ func (ucon SubjectController) DeleteSubject(c echo.Context) error {
 	}
 }
 
+// CreateResource godoc
+// @Summary Get Teacher Subject
+// @Description Route Path for Get List of Teacher Subject, for Teacher only.
+// @Tags Subject
+// @Security ApiKey
+// @Param body body models.User{} true "user data for fetch subject"
+// @Success 200 {object} response.MessageData{data=[]response.SubjectWithStudent{}} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 400 {object} response.MessageOnly{} error
+// @Failure 401 {object} response.MessageOnly{} error
+// @Router /teacher/subject [get]
+func (ucon SubjectController) ReadTeacherSubject(c echo.Context) error {
+	var user models.User
+	c.Bind(&user)
+	res, err := ucon.srv.ReadTeacherSubject(int(user.ID))
+	if err == nil {
+		return c.JSON(http.StatusOK, response.MessageData{
+			Message: "Subject Fetched",
+			Data: res,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Fetch Subject",
+			Error: err.Error(),
+		})
+	}
+}
+
+// CreateResource godoc
+// @Summary Get Student Subject
+// @Description Route Path for Get List of Student Subject, for Student only.
+// @Tags Subject
+// @Security ApiKey
+// @Param body body models.User{} true "user data for fetch subject"
+// @Success 200 {object} response.MessageData{data=[]response.SubjectWithTeacher{}} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 400 {object} response.MessageOnly{} error
+// @Failure 401 {object} response.MessageOnly{} error
+// @Router /student/subject [get]
+func (ucon SubjectController) ReadStudentSubject(c echo.Context) error {
+	var user models.User
+	c.Bind(&user)
+	res, err := ucon.srv.ReadStudentSubject(int(user.ID))
+	if err == nil {
+		return c.JSON(http.StatusOK, response.MessageData{
+			Message: "Subject Fetched",
+			Data: res,
+		})
+	} else {
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Fetch Subject",
+			Error: err.Error(),
+		})
+	}
+}

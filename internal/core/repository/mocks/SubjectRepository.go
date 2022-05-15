@@ -41,6 +41,29 @@ func (_m *SubjectRepository) DeleteSubject(_a0 int) error {
 	return r0
 }
 
+// ReadStudentSubject provides a mock function with given fields: _a0
+func (_m *SubjectRepository) ReadStudentSubject(_a0 int) (*[]models.Subject, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *[]models.Subject
+	if rf, ok := ret.Get(0).(func(int) *[]models.Subject); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]models.Subject)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ReadSubject provides a mock function with given fields:
 func (_m *SubjectRepository) ReadSubject() (*[]models.Subject, error) {
 	ret := _m.Called()
@@ -57,6 +80,52 @@ func (_m *SubjectRepository) ReadSubject() (*[]models.Subject, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ReadSubjectByID provides a mock function with given fields: _a0
+func (_m *SubjectRepository) ReadSubjectByID(_a0 int) (*[]models.Subject, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *[]models.Subject
+	if rf, ok := ret.Get(0).(func(int) *[]models.Subject); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]models.Subject)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ReadTeacherSubject provides a mock function with given fields: _a0
+func (_m *SubjectRepository) ReadTeacherSubject(_a0 int) (*[]models.Subject, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *[]models.Subject
+	if rf, ok := ret.Get(0).(func(int) *[]models.Subject); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]models.Subject)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
 	}

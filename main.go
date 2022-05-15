@@ -27,7 +27,7 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host      localhost:8080
-// @BasePath  /
+// @BasePath  /api
 func main() {
 
 	utils.LoadConfig()
@@ -39,7 +39,8 @@ func main() {
 
 	e := echo.New()
 	e.GET("/*", echoSwagger.WrapHandler)
-	routes.NewRoutes(e, ctrl)
+	api := e.Group("/api")
+	routes.NewRoutes(api, ctrl)
 	
 	middleware.Logging(e)
 

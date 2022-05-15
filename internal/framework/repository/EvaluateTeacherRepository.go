@@ -16,15 +16,35 @@ func NewEvaluateRepository(db *gorm.DB) *evaluateRepository {
 }
 
 
-func (repo evaluateRepository) GetEvaluateQuest() (quest *m.Questionnaire, err error) {
+func (repo evaluateRepository) GetEvaluateQuest(subject_id int, class string) (subject *m.Subject,  quest *m.Questionnaire, err error) {
+
+	err = repo.db.Debug().Preload(clause.Associations).
+		Preload("Teacher", "class = ?", class).
+		Preload("Teacher.User").
+		Find(&subject, "id = ?", subject_id).Error
+
 	err = repo.db.Preload(clause.Associations).
 		Preload("Question.AnswerOption").
 		Find(&quest, "type = 'Evaluate'").Error
 	return
 }
 
-func (repo evaluateRepository) GetEvaluateResponse(user_id int) (quest *[]m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Find(&quest, "type = 'Evaluate'").Error
+func (repo evaluateRepository) GetEvaluateResponse(user_id, subject_id int, class string) (quest *m.Questionnaire, err error) {
+
+	var response_id []int
+
+	repo.db.Model(m.EvaluateTeacher{}).
+		Select("id").
+		Where("teacher_id = ?", user_id).
+		Where("subject_id = ?", subject_id).
+		Where("class = ?", class).Scan(&response_id)
+
+	err = repo.db.Preload(clause.Associations).
+		Preload("Question.AnswerOption").
+		Preload("Question.UserResponse", "evaluate_id IN ?", response_id).
+		Preload("Question.UserResponse.User").
+		Preload("Question.UserResponse.User.Level").
+		Find(&quest, "type = 'Evaluate'").Error
 	return
 }
 

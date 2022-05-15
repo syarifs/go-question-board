@@ -9,6 +9,7 @@ type (
 		Name string `json:"name"`
 		MajorID int `json:"major_id"`
 		Major Major
+		Student []*User `json:"student" gorm:"many2many:student_subject"`
 		Teacher []TeacherSubject `json:"teacher_class" gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 	}
 

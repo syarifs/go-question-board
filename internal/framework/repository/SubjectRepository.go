@@ -4,7 +4,6 @@ import (
 	m "go-question-board/internal/core/models"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type subjectRepository struct {
@@ -22,9 +21,6 @@ func (repo subjectRepository) CreateSubject(subject m.Subject) (err error) {
 
 func (repo subjectRepository) UpdateSubject(subject m.Subject) (err error) {
 	err = repo.db.Updates(&subject).Error
-	if err == nil {
-		err = repo.db.Model(&subject).Association("Teacher").Replace(&subject.Teacher)
-	}
 	return
 }
 
@@ -34,23 +30,45 @@ func (repo subjectRepository) DeleteSubject(id int) (err error) {
 }
 
 func (repo subjectRepository) ReadSubject() (subject *[]m.Subject, err error) {
-	err = repo.db.
-		Preload(clause.Associations).
-		Preload("Teacher.User").
-		Find(&subject).Error
+	err = repo.db.Preload("Major").Find(&subject).Error
 	return
 }
 
-func (repo subjectRepository) ReadSubjectByUserID(user_id int) (subject *[]m.Subject, err error) {
-	err = repo.db.Debug().
-		Where("id IN (?)", repo.db.Table("student_subject").
-			Select("subject_id").Where("user_id = ?", user_id)).
-		Preload(clause.Associations).
-		Preload("Teacher", "class = (?)", repo.db.Debug().
-			Find(&m.Tag{}, "id in (?)", repo.db.Table("user_tags").
-			Select("tag_id").Where("user_id = ? AND name = 'Class'", user_id)).
-			Select("value")).
+func (repo subjectRepository)	ReadTeacherSubject(id int) (sub *[]m.Subject, err error) {
+	err = repo.db.
+		Preload("Major").
+		Preload("Teacher", "id = ?", id).
+		Preload("Student").
+		Preload("Student.Tags").
+		Preload("Student.Major").
+		Find(&sub).Error
+	return
+}
+
+func (repo subjectRepository) ReadStudentSubject(id int) (sub *[]m.Subject, err error) {
+	var class string
+
+	repo.db.Model(m.Tag{}).Select("value").
+		Where("id IN (?) AND name = 'Class'", repo.db.Table("user_tags").
+			Where("user_id = ?", id).Select("tag_id")).Scan(&class)
+
+	err = repo.db.
+		Preload("Major").
+		Preload("Teacher", "class = ?", class).
 		Preload("Teacher.User").
-		Find(&subject).Error
+		Find(&sub, "id IN (?)", repo.db.
+			Table("student_subject").
+			Select("subject_id").Where("user_id = ?", id)).Error
+	return
+}
+
+func (repo subjectRepository) ReadSubjectByID(id int) (subject *[]m.Subject, err error) {
+	err = repo.db.Debug().
+		Preload("Major").
+		Preload("Student.Major").
+		Preload("Student.Tags").
+		Preload("Teacher").
+		Preload("Teacher.User").
+		Find(&subject, id).Error
 	return
 }

@@ -31,7 +31,7 @@ func NewMajorController(srv *service.MajorService) *MajorController {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /major [post]
+// @Router /admin/major [post]
 func (ucon MajorController) CreateMajor(c echo.Context) error {
 	major := models.Major{}
 	c.Bind(&major)
@@ -57,7 +57,7 @@ func (ucon MajorController) CreateMajor(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /major [get]
+// @Router /admin/major [get]
 func (ucon MajorController) ReadMajor(c echo.Context) error {
 	res, err := ucon.srv.ReadMajor()
 	if err == nil {
@@ -86,7 +86,7 @@ func (ucon MajorController) ReadMajor(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /major/{id}/update [PUT]
+// @Router /admin/major/{id}/update [PUT]
 func (ucon MajorController) UpdateMajor(c echo.Context) error {
 	major := models.Major{}
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -116,7 +116,7 @@ func (ucon MajorController) UpdateMajor(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /major/{id}/delete [DELETE]
+// @Router /admin/major/{id}/delete [DELETE]
 func (ucon MajorController) DeleteMajor(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteMajor(id)

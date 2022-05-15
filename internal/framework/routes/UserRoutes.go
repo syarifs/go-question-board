@@ -2,11 +2,16 @@ package routes
 
 import (
 	"go-question-board/internal/framework/transport/controller"
+	// mw "go-question-board/internal/framework/transport/middleware"
 
 	"github.com/labstack/echo/v4"
 )
 
-func NewUserRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
+func NewUserRoutes(e *echo.Group, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
+	newAdminUserRoutes(e.Group("/admin"), ucon)
+}
+
+func newAdminUserRoutes(e *echo.Group, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
 	group := e.Group("/user", middleware...)
 	group.GET("", ucon.ReadUser)
 	group.POST("", ucon.CreateUser)
@@ -15,7 +20,7 @@ func NewUserRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...
 	group.DELETE("/:id/delete", ucon.DeleteUser)
 }
 
-func NewProfileRoutes(e *echo.Echo, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
+func NewProfileRoutes(e *echo.Group, ucon *controller.UserController, middleware ...echo.MiddlewareFunc) {
 	group := e.Group("/profile", middleware...)
 	group.GET("", ucon.ReadUser)
 	group.PUT("/update", ucon.UpdateUser)

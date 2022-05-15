@@ -24,10 +24,10 @@ func (srv SubjectService) CreateSubject(subject request.SubjectRequest) (err err
 	return
 }
 
-func (srv SubjectService) ReadSubject() (res *[]response.Subject, err error) {
+func (srv SubjectService) ReadSubject() (res *[]response.SubjectWithoutTeacher, err error) {
 	var subject *[]models.Subject
 	subject, err  = srv.repo.ReadSubject()
-	res, _ = utils.TypeConverter[[]response.Subject](&subject)
+	res, _ = utils.TypeConverter[[]response.SubjectWithoutTeacher](&subject)
 
 	if utils.IsEmpty(res) {
 		err = errors.New("Data Not Found")
@@ -36,10 +36,34 @@ func (srv SubjectService) ReadSubject() (res *[]response.Subject, err error) {
 	return
 }
 
-func (srv SubjectService) ReadUserSubject(user_id int) (res *[]response.Subject, err error) {
+func (srv SubjectService) ReadSubjectByID(id int) (res *[]response.Subject, err error) {
 	var subject *[]models.Subject
-	subject, err  = srv.repo.ReadSubjectByUserID(user_id)
+	subject, err  = srv.repo.ReadSubjectByID(id)
 	res, _ = utils.TypeConverter[[]response.Subject](&subject)
+
+	if res == nil {
+		err = errors.New("Data Not Found")
+	}
+
+	return
+}
+
+func (srv SubjectService) ReadStudentSubject(id int) (res *[]response.SubjectWithTeacher, err error) {
+	var subject *[]models.Subject
+	subject, err  = srv.repo.ReadStudentSubject(id)
+	res, _ = utils.TypeConverter[[]response.SubjectWithTeacher](&subject)
+
+	if res == nil {
+		err = errors.New("Data Not Found")
+	}
+
+	return
+}
+
+func (srv SubjectService) ReadTeacherSubject(id int) (res *[]response.SubjectWithStudent, err error) {
+	var subject *[]models.Subject
+	subject, err  = srv.repo.ReadTeacherSubject(id)
+	res, _ = utils.TypeConverter[[]response.SubjectWithStudent](&subject)
 
 	if res == nil {
 		err = errors.New("Data Not Found")

@@ -2,11 +2,9 @@ package middleware
 
 import (
 	"errors"
-	"fmt"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/utils"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -22,10 +20,7 @@ func JWT() echo.MiddlewareFunc {
 
 func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		header := c.Request().Header.Get("Authorization")
-		header = strings.Split(header, " ")[1]
-		extract, _ := extractToken(header)
-		if extract.(jwt.MapClaims)["role"] != "Administrator" {
+		if utils.GetTokenData(c, "role") != "Administrator" {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
 				"message": "access only for administrator",
 			})
@@ -34,9 +29,10 @@ func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func CreateToken(level string) (t models.Token, err error) {
+func CreateToken(id int, level string) (t models.Token, err error) {
 	expTime := time.Now().Add(time.Minute * 15).Unix()
 	claims := jwt.MapClaims{}
+	claims["user_id"] = id
 	claims["role"] = level
 	claims["exp"] = expTime
 	claims["iat"] = time.Now().Unix()
@@ -54,25 +50,14 @@ func CreateToken(level string) (t models.Token, err error) {
 	return
 }
 
-func extractToken(tkn string) (token interface{}, err error) {
-	token, err = jwt.Parse(tkn, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])
-		}
-		return utils.SERVER_SECRET, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return token.(*jwt.Token).Claims, nil
-}
-
 func RefreshToken(token_string models.Token) (t models.Token, err error) {
-	token, err := extractToken(token_string.RefreshToken)
+	token, err := utils.ExtractToken(token_string.RefreshToken)
 	if _, ok := token.(jwt.MapClaims); ok {
-		tkn, _ := extractToken(token_string.AccessToken)
-		if role := tkn.(jwt.MapClaims)["role"]; role != nil {
-			return CreateToken(role.(string))
+		tkn, _ := utils.ExtractToken(token_string.AccessToken)
+		user_id := tkn.(jwt.MapClaims)["user_id"]
+		role := tkn.(jwt.MapClaims)["role"]
+		if user_id != nil && role != nil {
+			return CreateToken(user_id.(int) ,role.(string))
 		}
 	}
 	return t, errors.New("failed to generate new token")

@@ -12,7 +12,7 @@ type User struct {
 	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	Tags []Tag `json:"tags" gorm:"many2many:user_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Subject []Subject `json:"subject" gorm:"many2many:student_subject;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Subject []*Subject `json:"subject" gorm:"many2many:student_subject;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	TeacherSubject []TeacherSubject `json:"teacher_subject" gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 	Level Level `json:"level"`
 	Major Major `json:"major"`

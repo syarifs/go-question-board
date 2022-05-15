@@ -5,6 +5,7 @@ import (
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -51,10 +52,11 @@ func (ucon QuestionnaireController) CreateQuest(c echo.Context) error {
 }
 
 // CreateResource godoc
-// @Summary Get All Quest
-// @Description Route Path for Get List of Quest.
+// @Summary Get Quest Details By ID
+// @Description Route Path for Get Quest Details By ID.
 // @Tags Questionnaire
 // @Security ApiKey
+// @Param id path int true "quest id"
 // @Success 200 {object} response.MessageOnly{} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
@@ -77,10 +79,11 @@ func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
 }
 
 // CreateResource godoc
-// @Summary Get All Quest
-// @Description Route Path for Get List of Quest.
+// @Summary Quest Response By Quest ID
+// @Description Route Path for Get Quest Response By Quest ID.
 // @Tags Questionnaire
 // @Security ApiKey
+// @Param id path int true "quest id"
 // @Success 200 {object} response.MessageData{data=response.QuestResponses} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
@@ -113,10 +116,8 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /quest [get]
 func (ucon QuestionnaireController) MyQuest(c echo.Context) error {
-	var user models.User
-	c.Bind(&user)
-
-	res, err := ucon.srv.MyQuest(int(user.ID))
+	created_by := int(utils.GetTokenData(c, "user_id").(float64))
+	res, err := ucon.srv.MyQuest(created_by)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Quest Fetched",
@@ -190,7 +191,7 @@ func (ucon QuestionnaireController) DeleteQuest(c echo.Context) error {
 }
 
 // CreateResource godoc
-// @Summary Get All Quest with Tag Filter
+// @Summary Get All Quest with User Tag Filter
 // @Description Route Path for Get List of Quest with User Tag Filter.
 // @Tags Questionnaire
 // @Security ApiKey

@@ -15,4 +15,14 @@ type (
 		Title string `json:"title"`
 		Questions []EvaluateQuestResponses `json:"questions"`
 	}
+
+	EvaluateQuestDetails struct {
+		ID uint `json:"id"`
+		Title string `json:"title"`
+		Description string `json:"description"`
+		Teacher Teacher `json:"teacher"`
+		Subject SubjectWithoutTeacher `json:"subject"`
+		Tag []m.Tag `json:"tags"`
+		Question []Question `json:"questions"`
+	}
 )

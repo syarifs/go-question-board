@@ -1,20 +1,27 @@
 # fetch subject
-GET localhost:8080/subject
+GET localhost:8080/api/admin/subject
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 ##############
 
-# fetch subject
-GET localhost:8080/mysubject
+# fetch teacher subject
+GET localhost:8080/api/teacher/subject
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
-< ./data/subject/get_by_user_id.json
+< ./data/subject/fetch_by_teacher_id.json
 ##############
 
+# fetch student subject
+GET localhost:8080/api/student/subject
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>
+
+< ./data/subject/fetch_by_student_id.json
+##############
 # create subject
-POST localhost:8080/subject
+POST localhost:8080/api/admin/subject
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
@@ -22,7 +29,7 @@ Authorization: Bearer <token_string_from_login>
 ##############
 
 # update subject
-PUT localhost:8080/subject/1/update
+PUT localhost:8080/api/admin/subject/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
@@ -30,7 +37,7 @@ Authorization: Bearer <token_string_from_login>
 ##############
 
 # delete subject
-DELETE localhost:8080/subject/1/delete
+DELETE localhost:8080/api/admin/subject/1/delete
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 

@@ -1,11 +1,20 @@
 # fetch quest
-GET localhost:8080/evaluate
+GET localhost:8080/api/student/evaluate?subject_id=1&class=A
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
+##############
+
 # answer quest
-POST localhost:8080/evaluate?subject_id=1&teacher_id=2
+POST localhost:8080/api/student/evaluate?subject_id=1&teacher_id=2
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 < ./data/quest/answer.json
+
+##############
+
+# answer quest
+GET localhost:8080/api/teacher/evaluate?subject_id=1&teacher_id=2&class=A
+Content-Type: application/json
+Authorization: Bearer <token_string_from_login>

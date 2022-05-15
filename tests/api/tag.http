@@ -1,12 +1,12 @@
 # fetch tag
-GET localhost:8080/tag
+GET localhost:8080/api/tag
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
 ##############
 
 # create tag
-POST localhost:8080/tag
+POST localhost:8080/api/tag
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
@@ -14,7 +14,7 @@ Authorization: Bearer <token_string_from_login>
 ##############
 
 # update tag
-PUT localhost:8080/tag/1/update
+PUT localhost:8080/api/tag/1/update
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 
@@ -22,7 +22,7 @@ Authorization: Bearer <token_string_from_login>
 ##############
 
 # delete tag
-DELETE localhost:8080/tag/1/delete
+DELETE localhost:8080/api/tag/1/delete
 Content-Type: application/json
 Authorization: Bearer <token_string_from_login>
 

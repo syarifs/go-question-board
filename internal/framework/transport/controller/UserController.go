@@ -31,7 +31,7 @@ func NewUserController(srv *service.UserService) *UserController {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /user [post]
+// @Router /admin/user [post]
 func (ucon UserController) CreateUser(c echo.Context) error {
 	user := models.User{}
 	c.Bind(&user)
@@ -57,7 +57,7 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /user [get]
+// @Router /admin/user [get]
 func (ucon UserController) ReadUser(c echo.Context) error {
 	res, err := ucon.srv.ReadUser()
 	if err == nil {
@@ -75,14 +75,15 @@ func (ucon UserController) ReadUser(c echo.Context) error {
 
 // CreateResource godoc
 // @Summary Get User By ID
-// @Description Route Path for Get List of User, for Administrator only.
+// @Description Route Path for Get User Details By ID, for Administrator only.
 // @Tags User
 // @Security ApiKey
+// @Param id path int true "user id"
 // @Success 200 {object} response.MessageData{data=response.UserDetails} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /user/{id} [get]
+// @Router /admin/user/{id} [get]
 func (ucon UserController) ReadUserByID(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := ucon.srv.ReadUserByID(id)
@@ -112,7 +113,7 @@ func (ucon UserController) ReadUserByID(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /user/{id}/update [PUT]
+// @Router /admin/user/{id}/update [PUT]
 func (ucon UserController) UpdateUser(c echo.Context) error {
 	user := models.User{}
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -142,7 +143,7 @@ func (ucon UserController) UpdateUser(c echo.Context) error {
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /user/{id}/delete [DELETE]
+// @Router /admin/user/{id}/delete [DELETE]
 func (ucon UserController) DeleteUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteUser(id)

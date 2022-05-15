@@ -23,6 +23,7 @@ func (repo userRepository) CreateUser(user m.User) (err error) {
 }
 
 func (repo userRepository) UpdateUser(user m.User) (err error) {
+	user.Password = utils.HashPassword(user.Password)
 	err = repo.db.Updates(&user).Error
 	if err == nil {
 		err = repo.db.Model(&user).Association("Tags").Replace(&user.Tags)
@@ -45,11 +46,11 @@ func (repo userRepository) ReadUser() (user *[]m.User, err error) {
 func (repo userRepository) ReadUserByID(id int) (user *m.User, err error) {
 	var class string
 
-	repo.db.Find(m.Tag{}, "id = ? AND name = 'class'", repo.db.Table("user_tags").
-		Select("subject_id").
-		Where("user_id = ?", id)).Scan(&class)
+	repo.db.Model(m.Tag{}).Select("value").
+		Where("id IN (?) AND name = 'Class'", repo.db.Table("user_tags").
+			Where("user_id = ?", id).Select("tag_id")).Scan(&class)
 
-	err = repo.db.Debug().Preload(clause.Associations).
+	err = repo.db.Preload(clause.Associations).
 		Preload("TeacherSubject.Subject").
 		Preload("TeacherSubject.Subject.Major").
 		Preload("TeacherSubject.User").

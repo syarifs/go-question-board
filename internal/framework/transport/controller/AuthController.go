@@ -40,7 +40,7 @@ func (acon AuthController) Login(c echo.Context) error {
 			"error": err.Error(),
 		})
 	}
-	jwt, err := middleware.CreateToken(res.Level.Name)
+	jwt, err := middleware.CreateToken(int(res.ID), res.Level.Name)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"message": "Failed to Createn Token",

@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func NewAuthRoutes(e *echo.Echo, acon *controller.AuthController, middleware ...echo.MiddlewareFunc) {
+func NewAuthRoutes(e *echo.Group, acon *controller.AuthController, middleware ...echo.MiddlewareFunc) {
 	e.POST("/refresh_token", acon.RefreshToken, middleware...)
 	e.POST("/login", acon.Login, middleware...)
 }
