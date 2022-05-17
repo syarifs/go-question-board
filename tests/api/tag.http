@@ -1,14 +1,14 @@
 # fetch tag
 GET localhost:8080/api/tag
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 
 # create tag
 POST localhost:8080/api/tag
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/tag/insert.json
 ##############
@@ -16,7 +16,7 @@ Authorization: Bearer <token_string_from_login>
 # update tag
 PUT localhost:8080/api/tag/1/update
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/tag/update.json
 ##############
@@ -24,6 +24,6 @@ Authorization: Bearer <token_string_from_login>
 # delete tag
 DELETE localhost:8080/api/tag/1/delete
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############

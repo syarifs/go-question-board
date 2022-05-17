@@ -7,6 +7,6 @@ import (
 )
 
 func NewAuthRoutes(e *echo.Group, acon *controller.AuthController, middleware ...echo.MiddlewareFunc) {
-	e.POST("/refresh_token", acon.RefreshToken, middleware...)
-	e.POST("/login", acon.Login, middleware...)
+	e.POST("/refresh_token", acon.RefreshToken)
+	e.POST("/login", acon.Login)
 }

@@ -90,19 +90,19 @@ func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 // @Description Route Path for Get Quest Response By Quest ID.
 // @Tags Questionnaire
 // @Security ApiKey
-// @Param teacher_id query int true "teacher id"
 // @Param subject_id query int true "subject id"
 // @Param class query int true "class"
 // @Success 200 {object} response.MessageData{data=response.QuestResponses} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
-// @Router /teacher/subject [get]
+// @Router /teacher/evaluate [get]
 func (ucon EvaluateController) ViewEvaluateResponse(c echo.Context) error {
+	var user response.UserList
+	c.Bind(&user)
 	class := c.QueryParam("class")
-	teacher_id, _ := strconv.Atoi(c.QueryParam("teacher_id"))
 	subject_id, _ := strconv.Atoi(c.QueryParam("subject_id"))
-	res, err := ucon.srv.ViewEvaluateResponse(teacher_id, subject_id, class)
+	res, err := ucon.srv.ViewEvaluateResponse(int(user.ID), subject_id, class)
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Quest Response Fetched",

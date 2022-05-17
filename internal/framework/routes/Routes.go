@@ -6,12 +6,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func NewRoutes (e *echo.Group, ctrl *controller.Controller) {
+func NewRoutes (e *echo.Group, ctrl *controller.Controller, middleware ...echo.MiddlewareFunc) {
 	NewAuthRoutes(e, ctrl.Auth)
-	NewUserRoutes(e, ctrl.User)
-	NewMajorRoutes(e, ctrl.Major)
-	NewTagRoutes(e, ctrl.Tag)
-	NewSubjectRoutes(e, ctrl.Subject)
-	NewQuestionnaireRoutes(e, ctrl.Questionnare)
-	NewEvaluateRoutes(e, ctrl.Evaluate)
+	NewUserRoutes(e, ctrl.User, middleware...)
+	NewMajorRoutes(e, ctrl.Major, middleware...)
+	NewTagRoutes(e, ctrl.Tag, middleware...)
+	NewSubjectRoutes(e, ctrl.Subject, middleware...)
+	NewQuestionnaireRoutes(e, ctrl.Questionnare, middleware...)
+	NewEvaluateRoutes(e, ctrl.Evaluate, middleware...)
 }

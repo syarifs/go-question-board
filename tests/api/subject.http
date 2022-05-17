@@ -1,20 +1,20 @@
 # fetch subject
 GET localhost:8080/api/admin/subject
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 
 # fetch subject by id
 GET localhost:8080/api/admin/subject/1
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 # fetch teacher subject
 GET localhost:8080/api/teacher/subject
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/subject/fetch_by_teacher_id.json
 ##############
@@ -22,14 +22,14 @@ Authorization: Bearer <token_string_from_login>
 # fetch student subject
 GET localhost:8080/api/student/subject
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/subject/fetch_by_student_id.json
 ##############
 # create subject
 POST localhost:8080/api/admin/subject
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/subject/insert.json
 ##############
@@ -37,7 +37,7 @@ Authorization: Bearer <token_string_from_login>
 # update subject
 PUT localhost:8080/api/admin/subject/1/update
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/subject/update.json
 ##############
@@ -45,6 +45,6 @@ Authorization: Bearer <token_string_from_login>
 # delete subject
 DELETE localhost:8080/api/admin/subject/1/delete
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############

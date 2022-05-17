@@ -64,11 +64,11 @@ func (repo questionnaireRepository) ViewQuestResponse(id int) (quests *m.Questio
 		Preload("Question.UserResponse").
 		Preload("Question.UserResponse.User").
 		Preload("Question.UserResponse.User.Level").
-		Find(&quests, id).Error
+		First(&quests, id).Error
 	return
 }
 
 func (repo questionnaireRepository) ViewQuestByID(id int) (quest *m.Questionnaire, err error) {
-	err = repo.db.Preload(clause.Associations).Preload("Question.AnswerOption").Find(&quest, id).Error
+	err = repo.db.Preload(clause.Associations).Preload("Question.AnswerOption").First(&quest, id).Error
 	return
 }

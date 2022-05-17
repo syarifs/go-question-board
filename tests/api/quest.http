@@ -1,7 +1,7 @@
 # fetch quest
 GET localhost:8080/api/quest
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/quest/filter_by_user_id.json
 ##############
@@ -9,7 +9,7 @@ Authorization: Bearer <token_string_from_login>
 # fetch my quest
 GET localhost:8080/api/quest/available
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/quest/fetch_by_tag.json
 
@@ -18,7 +18,7 @@ Authorization: Bearer <token_string_from_login>
 # answer quest
 POST localhost:8080/api/quest/answer
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/quest/answer.json
 
@@ -27,21 +27,21 @@ Authorization: Bearer <token_string_from_login>
 # fetch quest by id
 GET localhost:8080/api/quest/1
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 
 # fetch response by quest id
 GET localhost:8080/api/quest/1/response
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 
 # create quest
 POST http://localhost:8080/api/quest
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/quest/insert.json
 
@@ -50,7 +50,7 @@ Authorization: Bearer <token_string_from_login>
 # update quest
 PUT localhost:8080/api/quest/1/update
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/quest/update.json
 
@@ -59,6 +59,6 @@ Authorization: Bearer <token_string_from_login>
 # delete quest
 DELETE localhost:8080/api/quest/1/delete
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############

@@ -1,19 +1,19 @@
 # fetch user
 GET localhost:8080/api/admin/user
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############
 
 # fetch user by id
 GET localhost:8080/api/admin/user/1
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 # create user
 POST localhost:8080/api/admin/user
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/user/insert.json
 ##############
@@ -21,7 +21,7 @@ Authorization: Bearer <token_string_from_login>
 # update user
 PUT localhost:8080/api/admin/user/3/update
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 < ./data/user/update.json
 ##############
@@ -29,6 +29,6 @@ Authorization: Bearer <token_string_from_login>
 # delete user
 DELETE localhost:8080/api/admin/user/1/delete
 Content-Type: application/json
-Authorization: Bearer <token_string_from_login>
+Authorization: Bearer 
 
 ##############

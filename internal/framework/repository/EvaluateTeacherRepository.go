@@ -21,11 +21,11 @@ func (repo evaluateRepository) GetEvaluateQuest(subject_id int, class string) (s
 	err = repo.db.Debug().Preload(clause.Associations).
 		Preload("Teacher", "class = ?", class).
 		Preload("Teacher.User").
-		Find(&subject, "id = ?", subject_id).Error
+		First(&subject, "id = ?", subject_id).Error
 
 	err = repo.db.Preload(clause.Associations).
 		Preload("Question.AnswerOption").
-		Find(&quest, "type = 'Evaluate'").Error
+		First(&quest, "type = 'Evaluate'").Error
 	return
 }
 
@@ -44,7 +44,7 @@ func (repo evaluateRepository) GetEvaluateResponse(user_id, subject_id int, clas
 		Preload("Question.UserResponse", "evaluate_teacher_id IN ?", response_id).
 		Preload("Question.UserResponse.User").
 		Preload("Question.UserResponse.User.Level").
-		Find(&quest, "type = 'Evaluate'").Error
+		First(&quest, "type = 'Evaluate'").Error
 	return
 }
 

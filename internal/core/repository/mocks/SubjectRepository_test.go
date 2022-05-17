@@ -76,15 +76,76 @@ func TestReadSubject(t *testing.T) {
 		}
 		mockSubject.On("ReadSubject").Return(&data, nil).Once()
 		subject, err := subjectService.ReadSubject()
-		assert.NotNil(t, subject)
+		assert.NotEmpty(t, subject)
 		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockSubject.On("ReadSubject").Return(nil, errors.New("error")).Once()
 		subject, err := subjectService.ReadSubject()
-		assert.Nil(t, subject)
+		assert.Empty(t, subject)
 		assert.Error(t, err)
 	})
 }
 
+func TestReadSubjectByID(t *testing.T) {
+	t.Run("Sucess", func(t *testing.T) {
+		data := models.Subject{
+			ID: 1,
+			Code: "INF",
+			Name: "Informatics",
+		}
+		mockSubject.On("ReadSubjectByID", 1).Return(&data, nil).Once()
+		subject, err := subjectService.ReadSubjectByID(1)
+		assert.NotEmpty(t, subject)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Fail", func(t *testing.T) {
+		data := models.Subject{}
+		mockSubject.On("ReadSubjectByID", 1).Return(&data, errors.New("fail")).Once()
+		subject, err := subjectService.ReadSubjectByID(1)
+		assert.Empty(t, subject)
+		assert.Error(t, err)
+	})
+}
+
+func TestReadStudentSubject(t *testing.T) {
+	t.Run("Sucess", func(t *testing.T) {
+		data := []models.Subject{
+			{Code: "NSE", Name: "Network Security",},
+		}
+		mockSubject.On("ReadStudentSubject", 1).Return(&data, nil).Once()
+		subject, err := subjectService.ReadStudentSubject(1)
+		assert.NotEmpty(t, subject)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Fail", func(t *testing.T) {
+		data := []models.Subject{}
+		mockSubject.On("ReadStudentSubject", 1).Return(&data, errors.New("fail")).Once()
+		subject, err := subjectService.ReadStudentSubject(1)
+		assert.Empty(t, subject)
+		assert.Error(t, err)
+	})
+}
+
+func TestReadTeacherSubject(t *testing.T) {
+	t.Run("Sucess", func(t *testing.T) {
+		data := []models.Subject{
+			{Code: "NSE", Name: "Network Security",},
+		}
+		mockSubject.On("ReadTeacherSubject", 1).Return(&data, nil).Once()
+		subject, err := subjectService.ReadTeacherSubject(1)
+		assert.NotEmpty(t, subject)
+		assert.NoError(t, err)
+	})
+
+	t.Run("Fail", func(t *testing.T) {
+		data := []models.Subject{}
+		mockSubject.On("ReadTeacherSubject", 1).Return(&data, errors.New("fail")).Once()
+		subject, err := subjectService.ReadTeacherSubject(1)
+		assert.Empty(t, subject)
+		assert.Error(t, err)
+	})
+}

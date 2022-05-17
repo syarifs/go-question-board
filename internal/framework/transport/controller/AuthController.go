@@ -3,6 +3,7 @@ package controller
 import (
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/request"
+	"go-question-board/internal/core/models/response"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/framework/transport/middleware"
 	"net/http"
@@ -35,9 +36,9 @@ func (acon AuthController) Login(c echo.Context) error {
 	c.Bind(&login)
 	res, err := acon.srv.Login(login)
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, echo.Map{
-			"message": "Failed to Log User In",
-			"error": err.Error(),
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Log User In",
+			Error: err,
 		})
 	}
 	jwt, err := middleware.CreateToken(int(res.ID), res.Level.Name)
@@ -48,10 +49,10 @@ func (acon AuthController) Login(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
-		"message": "User Logged In",
-		"data": res,
-		"jwt": jwt,
+	return c.JSON(http.StatusOK, response.MessageDataJWT{
+		Message: "User Logged In",
+		Data: res,
+		JWT: jwt,
 	})
 }
 

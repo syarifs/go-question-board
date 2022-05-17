@@ -22,7 +22,7 @@ func (srv QuestionnaireService) CreateQuest(quest models.Questionnaire) (err err
 	return
 }
 
-func (srv QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, err error) {
+func (srv QuestionnaireService) MyQuest(user_id int) (res *[]response.QuestList, err error) {
 	var quest *[]models.Questionnaire
 
 	if user_id == 0 {
@@ -34,15 +34,11 @@ func (srv QuestionnaireService) MyQuest(user_id int) (res []response.QuestList, 
 
 	if utils.IsEmpty(quest) {
 		err = errors.New("Data Not Found")
+		return
 	}
 
+	res, _ = utils.TypeConverter[[]response.QuestList](quest)
 
-	if err == nil {
-		for _, v := range *quest {
-			que, _ := utils.TypeConverter[response.QuestList](&v)
-			res = append(res, *que)
-		}
-	}
 	return
 }
 
@@ -58,18 +54,18 @@ func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []res
 
 	if utils.IsEmpty(quest) {
 		err = errors.New("Data Not Found")
+		return
 	}
 
-	if err == nil {
-		for _, v := range *quest {
-			if utils.TagEqual(tags, v.Tags) {
-				que, _ := utils.TypeConverter[response.AvailableQuestList](&v)
-				res = append(res, *que)
-			}
+	for _, v := range *quest {
+		if utils.TagEqual(tags, v.Tags) {
+			que, _ := utils.TypeConverter[response.AvailableQuestList](&v)
+			res = append(res, *que)
 		}
-		if utils.IsEmpty(res) {
-			err = errors.New("Data Not Found")
-		}
+	}
+
+	if utils.IsEmpty(res) {
+		err = errors.New("Data Not Found")
 	}
 
 	return
@@ -89,10 +85,6 @@ func (srv QuestionnaireService) DeleteQuest(id int) (err error) {
 func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestResponses, err error) {
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestResponse(id)
-	
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-	}
 
 	if err == nil {
 		res.ID = quest.ID
@@ -110,10 +102,6 @@ func (srv QuestionnaireService) ViewQuestByID(id int) (res *response.AvailableQu
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestByID(id)
 	
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-	}
-
 	if err == nil {
 		res, _ = utils.TypeConverter[response.AvailableQuestDetails](&quest)
 	}

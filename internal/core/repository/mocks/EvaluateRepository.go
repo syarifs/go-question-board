@@ -13,13 +13,13 @@ type EvaluateRepository struct {
 	mock.Mock
 }
 
-// Evaluate provides a mock function with given fields: _a0, _a1
-func (_m *EvaluateRepository) Evaluate(_a0 models.Questionnaire, _a1 []models.UserAnswer) error {
-	ret := _m.Called(_a0, _a1)
+// Evaluate provides a mock function with given fields: _a0
+func (_m *EvaluateRepository) Evaluate(_a0 []models.UserAnswer) error {
+	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.Questionnaire, []models.UserAnswer) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func([]models.UserAnswer) error); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -59,22 +59,22 @@ func (_m *EvaluateRepository) GetEvaluateQuest(_a0 int, _a1 string) (*models.Sub
 	return r0, r1, r2
 }
 
-// GetEvaluateResponse provides a mock function with given fields: _a0
-func (_m *EvaluateRepository) GetEvaluateResponse(_a0 int) (*[]models.Questionnaire, error) {
-	ret := _m.Called(_a0)
+// GetEvaluateResponse provides a mock function with given fields: _a0, _a1, _a2
+func (_m *EvaluateRepository) GetEvaluateResponse(_a0 int, _a1 int, _a2 string) (*models.Questionnaire, error) {
+	ret := _m.Called(_a0, _a1, _a2)
 
-	var r0 *[]models.Questionnaire
-	if rf, ok := ret.Get(0).(func(int) *[]models.Questionnaire); ok {
-		r0 = rf(_a0)
+	var r0 *models.Questionnaire
+	if rf, ok := ret.Get(0).(func(int, int, string) *models.Questionnaire); ok {
+		r0 = rf(_a0, _a1, _a2)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*[]models.Questionnaire)
+			r0 = ret.Get(0).(*models.Questionnaire)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(_a0)
+	if rf, ok := ret.Get(1).(func(int, int, string) error); ok {
+		r1 = rf(_a0, _a1, _a2)
 	} else {
 		r1 = ret.Error(1)
 	}

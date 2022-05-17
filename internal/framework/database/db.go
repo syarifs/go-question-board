@@ -10,8 +10,8 @@ func InitDatabase(driver string) (db *gorm.DB) {
 	var err error
 	if driver == "mysql" {
 		db, err = initMySQL()
-	} else if driver == "sqlite" {
-		db, err = initSQLite()
+	// } else if driver == "sqlite" {
+	// 	db, err = initSQLite()
 	}
 	if err != nil {
 		panic(err)

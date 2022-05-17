@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"go-question-board/internal/core/models"
 	"go-question-board/internal/core/models/request"
 	"go-question-board/internal/core/models/response"
@@ -22,10 +21,6 @@ func (srv EvaluateService) GetQuest(subject_id int, class string) (res *response
 	var quest *models.Questionnaire
 	var subject *models.Subject
 	subject, quest, err = srv.repo.GetEvaluateQuest(subject_id, class)
-
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-	}
 
 	if err == nil {
 		res, _ = utils.TypeConverter[response.EvaluateQuestDetails](&quest)
@@ -59,10 +54,6 @@ func (srv EvaluateService) Evaluate(req request.Answer, teacher_id, subject_id i
 func (srv EvaluateService) ViewEvaluateResponse(teacher_id, subject_id int, class string) (res response.QuestResponses, err error) {
 	var quest *models.Questionnaire
 	quest, err = srv.repo.GetEvaluateResponse(teacher_id, subject_id, class)
-	
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-	}
 
 	if err == nil {
 		res.ID = quest.ID

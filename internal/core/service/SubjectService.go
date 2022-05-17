@@ -36,13 +36,12 @@ func (srv SubjectService) ReadSubject() (res *[]response.SubjectWithoutTeacher, 
 	return
 }
 
-func (srv SubjectService) ReadSubjectByID(id int) (res *[]response.Subject, err error) {
-	var subject *[]models.Subject
+func (srv SubjectService) ReadSubjectByID(id int) (res *response.Subject, err error) {
+	var subject *models.Subject
 	subject, err  = srv.repo.ReadSubjectByID(id)
-	res, _ = utils.TypeConverter[[]response.Subject](&subject)
 
-	if res == nil {
-		err = errors.New("Data Not Found")
+	if err == nil {
+		res, _ = utils.TypeConverter[response.Subject](&subject)
 	}
 
 	return
@@ -53,7 +52,7 @@ func (srv SubjectService) ReadStudentSubject(id int) (res *[]response.SubjectWit
 	subject, err  = srv.repo.ReadStudentSubject(id)
 	res, _ = utils.TypeConverter[[]response.SubjectWithTeacher](&subject)
 
-	if res == nil {
+	if utils.IsEmpty(res) {
 		err = errors.New("Data Not Found")
 	}
 
@@ -65,7 +64,7 @@ func (srv SubjectService) ReadTeacherSubject(id int) (res *[]response.SubjectWit
 	subject, err  = srv.repo.ReadTeacherSubject(id)
 	res, _ = utils.TypeConverter[[]response.SubjectWithStudent](&subject)
 
-	if res == nil {
+	if utils.IsEmpty(res) {
 		err = errors.New("Data Not Found")
 	}
 

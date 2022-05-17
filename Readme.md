@@ -26,15 +26,15 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 	- [x] Questionnaire
 - [x] Subject
 	- [x] Register Teacher to Subject
-- [ ] Questionnaire
+- [x] Questionnaire
 	- [x] Create Survey
 	- [x] View Survey Response
 	- [x] Answer Survey
 	- [x] Filter By Tags
-	- [ ] Filter Completed Survey
-- [ ] Teacher Evaluation
+	- [x] Filter Completed Survey
+- [x] Teacher Evaluation
 	- [x] Evaluate Teacher by Subject
-	- [ ] View Evaluated Data from Teacher Side
+	- [x] View Evaluated Data from Teacher Side
 - [ ] Profile Management
 	- [ ] Read & Update Profile
 - [ ] Email Notification

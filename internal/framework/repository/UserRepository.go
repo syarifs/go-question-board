@@ -58,6 +58,6 @@ func (repo userRepository) ReadUserByID(id int) (user *m.User, err error) {
 		Preload("Subject.Major").
 		Preload("Subject.Teacher.User").
 		Preload("Subject.Teacher", "class = ?", class).
-		Find(&user, id).Error
+		First(&user, id).Error
 	return
 }

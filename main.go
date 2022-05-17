@@ -39,8 +39,9 @@ func main() {
 
 	e := echo.New()
 	e.GET("/*", echoSwagger.WrapHandler)
+
 	api := e.Group("/api")
-	routes.NewRoutes(api, ctrl)
+	routes.NewRoutes(api, ctrl, middleware.JWT())
 	
 	middleware.Logging(e)
 

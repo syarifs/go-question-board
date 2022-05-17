@@ -22,7 +22,29 @@ func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if utils.GetTokenData(c, "role") != "Administrator" {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
-				"message": "access only for administrator",
+				"message": "access for this route only for administrator",
+			})
+		}
+		return next(c)
+	}
+}
+
+func TeacherPermission(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if utils.GetTokenData(c, "role") != "Teacher" {
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"message": "access for this route only for teacher",
+			})
+		}
+		return next(c)
+	}
+}
+
+func StudentPermission(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if utils.GetTokenData(c, "role") != "Student" {
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"message": "access for this route only for student",
 			})
 		}
 		return next(c)

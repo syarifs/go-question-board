@@ -42,11 +42,11 @@ func (repo subjectRepository)	ReadTeacherSubject(id int) (sub *[]m.Subject, err 
 
 	err = repo.db.
 		Preload("Major").
-		Preload("Teacher").
 		Preload("Student").
 		Preload("Student.Tags").
 		Preload("Student.Major").
-		Find(&sub, subject_id).Error
+		Where("id IN (?)", subject_id).
+		Find(&sub).Error
 	return
 }
 
@@ -67,13 +67,13 @@ func (repo subjectRepository) ReadStudentSubject(id int) (sub *[]m.Subject, err 
 	return
 }
 
-func (repo subjectRepository) ReadSubjectByID(id int) (subject *[]m.Subject, err error) {
+func (repo subjectRepository) ReadSubjectByID(id int) (subject *m.Subject, err error) {
 	err = repo.db.Debug().
 		Preload("Major").
 		Preload("Student.Major").
 		Preload("Student.Tags").
 		Preload("Teacher").
 		Preload("Teacher.User").
-		Find(&subject, id).Error
+		First(&subject, id).Error
 	return
 }
