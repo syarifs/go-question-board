@@ -28,6 +28,7 @@ import (
 
 // @host      localhost:8080
 // @BasePath  /api
+// @schemes http
 func main() {
 
 	utils.LoadConfig()

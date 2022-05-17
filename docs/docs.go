@@ -1682,7 +1682,7 @@ const docTemplate = `{
                         "ApiKey": []
                     }
                 ],
-                "description": "Route Path for Answer Evaluate Quesition.",
+                "description": "Route Path for Answer Evaluation Quest.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1690,10 +1690,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Questionnaire"
+                    "Evaluate"
                 ],
                 "summary": "Create New Quest",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class",
+                        "name": "class",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "description": "teacher id",
@@ -1783,6 +1789,74 @@ const docTemplate = `{
                                             "items": {
                                                 "$ref": "#/definitions/response.SubjectWithTeacher"
                                             }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.MessageOnly"
+                        }
+                    },
+                    "417": {
+                        "description": "Expectation Failed",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/teacher/evaluate": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "description": "Route Path for Get Quest Response By Quest ID.",
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Quest Response By Quest ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "subject_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "class",
+                        "name": "class",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MessageData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.QuestResponses"
                                         }
                                     }
                                 }
@@ -2164,7 +2238,7 @@ const docTemplate = `{
                 "answer": {
                     "type": "string"
                 },
-                "evaluate_teacher": {
+                "evaluateTeacher": {
                     "$ref": "#/definitions/models.EvaluateTeacher"
                 },
                 "evaluate_teacher_id": {
@@ -2274,8 +2348,8 @@ const docTemplate = `{
         "response.AvailableQuestList": {
             "type": "object",
             "properties": {
-                "created_by": {
-                    "$ref": "#/definitions/models.User"
+                "creator": {
+                    "$ref": "#/definitions/response.UserList"
                 },
                 "description": {
                     "type": "string"
@@ -2612,7 +2686,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
 	BasePath:         "/api",
-	Schemes:          []string{},
+	Schemes:          []string{"http"},
 	Title:            "Question Board",
 	Description:      "server API for Question Board Application.",
 	InfoInstanceName: "swagger",

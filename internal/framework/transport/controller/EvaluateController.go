@@ -51,7 +51,7 @@ func (ucon EvaluateController) GetQuest(c echo.Context) error {
 // CreateResource godoc
 // @Summary Create New Quest
 // @Description Route Path for Answer Evaluation Quest.
-// @Tags Evaluation
+// @Tags Evaluate
 // @Security ApiKey
 // @Accept json
 // @Produce json
@@ -88,7 +88,7 @@ func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 // CreateResource godoc
 // @Summary Quest Response By Quest ID
 // @Description Route Path for Get Quest Response By Quest ID.
-// @Tags Questionnaire
+// @Tags Evaluate
 // @Security ApiKey
 // @Param subject_id query int true "subject id"
 // @Param class query int true "class"

@@ -187,10 +187,10 @@ definitions:
     properties:
       answer:
         type: string
-      evaluate_teacher:
-        $ref: '#/definitions/models.EvaluateTeacher'
       evaluate_teacher_id:
         type: integer
+      evaluateTeacher:
+        $ref: '#/definitions/models.EvaluateTeacher'
       id:
         type: integer
       question_id:
@@ -258,8 +258,8 @@ definitions:
     type: object
   response.AvailableQuestList:
     properties:
-      created_by:
-        $ref: '#/definitions/models.User'
+      creator:
+        $ref: '#/definitions/response.UserList'
       description:
         type: string
       id:
@@ -1510,8 +1510,12 @@ paths:
     post:
       consumes:
       - application/json
-      description: Route Path for Answer Evaluate Quesition.
+      description: Route Path for Answer Evaluation Quest.
       parameters:
+      - description: class
+        in: query
+        name: class
+        type: string
       - description: teacher id
         in: query
         name: teacher_id
@@ -1549,7 +1553,7 @@ paths:
       - ApiKey: []
       summary: Create New Quest
       tags:
-      - Questionnaire
+      - Evaluate
   /student/subject:
     get:
       description: Route Path for Get List of Student Subject, for Student only.
@@ -1589,6 +1593,47 @@ paths:
       summary: Get Student Subject
       tags:
       - Subject
+  /teacher/evaluate:
+    get:
+      description: Route Path for Get Quest Response By Quest ID.
+      parameters:
+      - description: subject id
+        in: query
+        name: subject_id
+        required: true
+        type: integer
+      - description: class
+        in: query
+        name: class
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MessageData'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.QuestResponses'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.MessageOnly'
+        "417":
+          description: Expectation Failed
+          schema:
+            $ref: '#/definitions/response.Error'
+      security:
+      - ApiKey: []
+      summary: Quest Response By Quest ID
+      tags:
+      - Evaluate
   /teacher/subject:
     get:
       description: Route Path for Get List of Teacher Subject, for Teacher only.
@@ -1628,6 +1673,8 @@ paths:
       summary: Get Teacher Subject
       tags:
       - Subject
+schemes:
+- http
 securityDefinitions:
   ApiKey:
     in: header
