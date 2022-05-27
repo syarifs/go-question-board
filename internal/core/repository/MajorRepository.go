@@ -1,12 +1,10 @@
 package repository
 
-import (
-	m "go-question-board/internal/core/models"
-)
+import "go-question-board/internal/core/entity/models"
 
 type MajorRepository interface {
-	CreateMajor(m.Major) error
-	UpdateMajor(m.Major) error
+	CreateMajor(models.Major) error
+	UpdateMajor(models.Major) error
 	DeleteMajor(int) error
-	ReadMajor() (*[]m.Major, error)
+	ReadMajor() (*[]models.Major, error)
 }

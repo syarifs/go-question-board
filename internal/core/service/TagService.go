@@ -1,10 +1,9 @@
 package service
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/core/repository"
-	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/errors"
 )
 
 type TagService struct {
@@ -17,15 +16,14 @@ func NewTagService(repo repository.TagRepository) *TagService {
 
 func (srv TagService) CreateTag(tag models.Tag) (err error) {
 	err  = srv.repo.CreateTag(tag)
+	err = errors.CheckError(nil, err)
 	return
 }
 
 func (srv TagService) ReadTag() (res *[]models.Tag, err error) {
 	res, err  = srv.repo.ReadTag()
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -33,10 +31,16 @@ func (srv TagService) ReadTag() (res *[]models.Tag, err error) {
 func (srv TagService) UpdateTag(id int, tag models.Tag) (err error) {
 	tag.ID = uint(id)
 	err  = srv.repo.UpdateTag(tag)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
 func (srv TagService) DeleteTag(id int) (err error) {
 	err  = srv.repo.DeleteTag(id)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }

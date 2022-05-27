@@ -1,6 +1,6 @@
 package repository
 
-import m "go-question-board/internal/core/models"
+import m "go-question-board/internal/core/entity/models"
 
 type EvaluateRepository interface {
 	Evaluate([]m.UserAnswer) error

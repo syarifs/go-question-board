@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 )

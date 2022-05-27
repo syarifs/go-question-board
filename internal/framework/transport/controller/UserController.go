@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 
 	"strconv"
@@ -41,7 +42,8 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 			Message: "User Created",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Create User",
 			Error: err.Error(),
 		})
@@ -53,7 +55,7 @@ func (ucon UserController) CreateUser(c echo.Context) error {
 // @Description Route Path for Get List of User, for Administrator only.
 // @Tags User
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{data=[]response.UserList{}} success
+// @Success 200 {object} response.MessageData{data=[]response.User{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
@@ -66,7 +68,8 @@ func (ucon UserController) ReadUser(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch User",
 			Error: err.Error(),
 		})
@@ -93,7 +96,8 @@ func (ucon UserController) ReadUserByID(c echo.Context) error {
 			Data: user,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch User",
 			Error: err.Error(),
 		})
@@ -124,7 +128,8 @@ func (ucon UserController) UpdateUser(c echo.Context) error {
 			Message: "User Updated",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Update User",
 			Error: err.Error(),
 		})
@@ -152,7 +157,8 @@ func (ucon UserController) DeleteUser(c echo.Context) error {
 			Message: "User Deleted",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Delete User",
 			Error: err.Error(),
 		})

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -40,20 +40,24 @@ func (repo questionnaireRepository) UpdateQuest(quest m.Questionnaire) (err erro
 	err = repo.db.Updates(&quest).Error
 	if err == nil {
 		err = repo.db.Model(&quest).Association("Tags").Replace(&quest.Tags)
-		err = repo.db.Model(&quest).Association("Question").Replace(&quest.Question)
+		repo.db.Model(m.Question{}).Delete("questionnaire_id = ?", quest.ID)
+		repo.db.Model(m.Question{}).Create(&quest.Question)
 	}
 	return
 }
 
 func (repo questionnaireRepository) DeleteQuest(id int) (err error) {
-	err = repo.db.Delete(&m.Questionnaire{}, id).Error
+	del := repo.db.Delete(&m.Questionnaire{}, id)
+	if del.RowsAffected < 1 {
+		err = gorm.ErrRecordNotFound
+	}
 	return
 }
 
 func (repo questionnaireRepository) Answer(quest m.Questionnaire, ans []m.UserAnswer) (err error) {
 	err = repo.db.Create(&ans).Error
 	if err == nil {
-		err = repo.db.Model(&quest).Association("Completor").Append(&quest.Completor)
+		err = repo.db.Model(&quest).Omit("Completor.*").Association("Completor").Append(&quest.Completor)
 	}
 	return
 }

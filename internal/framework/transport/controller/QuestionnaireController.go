@@ -1,14 +1,13 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 	"strconv"
-
-	// "strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -43,7 +42,8 @@ func (ucon QuestionnaireController) CreateQuest(c echo.Context) error {
 			Message: "Quest Created",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Create Quest",
 			Error: err.Error(),
 		})
@@ -70,7 +70,8 @@ func (ucon QuestionnaireController) ViewQuestByID(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest",
 			Error: err.Error(),
 		})
@@ -97,7 +98,8 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest Response",
 			Error: err.Error(),
 		})
@@ -109,13 +111,14 @@ func (ucon QuestionnaireController) ViewQuestResponse(c echo.Context) error {
 // @Description Route Path for Get List of Quest By User ID.
 // @Tags Questionnaire
 // @Security ApiKey
-// @Success 200 {object} response.MessageData{data=[]response.QuestList{}} success
+// @Param body body request.User{} true "loged in user data"
+// @Success 200 {object} response.MessageData{data=[]response.Quest{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /quest [get]
 func (ucon QuestionnaireController) MyQuest(c echo.Context) error {
-	var user models.User
+	var user request.User 
 	c.Bind(&user)
 	res, err := ucon.srv.MyQuest(int(user.ID))
 	if err == nil {
@@ -124,7 +127,8 @@ func (ucon QuestionnaireController) MyQuest(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest",
 			Error: err.Error(),
 		})
@@ -151,11 +155,12 @@ func (ucon QuestionnaireController) UpdateQuest(c echo.Context) error {
 	c.Bind(&questionnaire)
 	err := ucon.srv.UpdateQuest(id, questionnaire)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnly{
+		return c.JSON(http.StatusOK, response.MessageOnly{
 			Message: "Quest Updated",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Update Quest",
 			Error: err.Error(),
 		})
@@ -179,11 +184,12 @@ func (ucon QuestionnaireController) DeleteQuest(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := ucon.srv.DeleteQuest(id)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnly{
+		return c.JSON(http.StatusOK, response.MessageOnly{
 			Message: "Quest Deleted",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Delete Quest",
 			Error: err.Error(),
 		})
@@ -195,8 +201,8 @@ func (ucon QuestionnaireController) DeleteQuest(c echo.Context) error {
 // @Description Route Path for Get List of Quest with User Tag Filter.
 // @Tags Questionnaire
 // @Security ApiKey
-// @Param body body models.User{} true "send logged in user data"
-// @Success 200 {object} response.MessageData{data=[]response.AvailableQuestList} success
+// @Param body body request.User{} true "loged in user data"
+// @Success 200 {object} response.MessageData{data=[]response.AvailableQuest} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Router /quest/available [get]
@@ -210,7 +216,8 @@ func (ucon QuestionnaireController) QuestForMe(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest",
 			Error: err.Error(),
 		})
@@ -235,11 +242,12 @@ func (ucon QuestionnaireController) QuestAnswer(c echo.Context) error {
 	c.Bind(&questAnswer)
 	err := ucon.srv.AnswerQuest(questAnswer)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnly{
+		return c.JSON(http.StatusOK, response.MessageOnly{
 			Message: "Quest Answered",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Answer Quest",
 			Error: err.Error(),
 		})

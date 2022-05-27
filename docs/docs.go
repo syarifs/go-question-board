@@ -797,7 +797,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/response.UserList"
+                                                "$ref": "#/definitions/response.User"
                                             }
                                         }
                                     }
@@ -1119,6 +1119,17 @@ const docTemplate = `{
                     "Questionnaire"
                 ],
                 "summary": "Get All Quest",
+                "parameters": [
+                    {
+                        "description": "loged in user data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.User"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1133,7 +1144,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/response.QuestList"
+                                                "$ref": "#/definitions/response.Quest"
                                             }
                                         }
                                     }
@@ -1288,12 +1299,12 @@ const docTemplate = `{
                 "summary": "Get All Quest with User Tag Filter",
                 "parameters": [
                     {
-                        "description": "send logged in user data",
+                        "description": "loged in user data",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/request.User"
                         }
                     }
                 ],
@@ -1311,7 +1322,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/response.AvailableQuestList"
+                                                "$ref": "#/definitions/response.AvailableQuest"
                                             }
                                         }
                                     }
@@ -1623,11 +1634,13 @@ const docTemplate = `{
                 "summary": "Get Evaluate Quest",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "class",
-                        "name": "class",
-                        "in": "query",
-                        "required": true
+                        "description": "send user data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.User"
+                        }
                     },
                     {
                         "type": "integer",
@@ -1649,7 +1662,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.QuestList"
+                                            "$ref": "#/definitions/response.Quest"
                                         }
                                     }
                                 }
@@ -2004,13 +2017,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "INF"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Informatics"
                 }
             }
         },
@@ -2129,13 +2145,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Year"
                 },
                 "value": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2019"
                 }
             }
         },
@@ -2144,9 +2163,6 @@ const docTemplate = `{
             "properties": {
                 "class": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "subject": {
                     "$ref": "#/definitions/models.Subject"
@@ -2279,10 +2295,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin@web.io"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin"
                 }
             }
         },
@@ -2290,16 +2308,25 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "INF2213"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "major": {
                     "$ref": "#/definitions/models.Major"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Logic Informatic"
+                },
+                "student": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.User"
+                    }
                 },
                 "teacher_class": {
                     "type": "array",
@@ -2309,25 +2336,41 @@ const docTemplate = `{
                 }
             }
         },
-        "request.Teacher": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "request.TeacherSubject": {
             "type": "object",
             "properties": {
                 "class": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "A"
                 },
                 "teacher": {
-                    "$ref": "#/definitions/request.Teacher"
+                    "$ref": "#/definitions/request.User"
+                }
+            }
+        },
+        "request.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "$ref": "#/definitions/models.Level"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
                 }
             }
         },
@@ -2345,11 +2388,11 @@ const docTemplate = `{
                 }
             }
         },
-        "response.AvailableQuestList": {
+        "response.AvailableQuest": {
             "type": "object",
             "properties": {
                 "creator": {
-                    "$ref": "#/definitions/response.UserList"
+                    "$ref": "#/definitions/response.User"
                 },
                 "description": {
                     "type": "string"
@@ -2388,7 +2431,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.QuestList": {
+        "response.Quest": {
             "type": "object",
             "properties": {
                 "description": {
@@ -2593,6 +2636,26 @@ const docTemplate = `{
                 }
             }
         },
+        "response.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "$ref": "#/definitions/models.Level"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.UserAnswer": {
             "type": "object",
             "properties": {
@@ -2606,7 +2669,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user": {
-                    "$ref": "#/definitions/response.UserList"
+                    "$ref": "#/definitions/response.User"
                 }
             }
         },
@@ -2648,26 +2711,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/response.SubjectTeacher"
                     }
-                }
-            }
-        },
-        "response.UserList": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "level": {
-                    "$ref": "#/definitions/models.Level"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
                 }
             }
         }

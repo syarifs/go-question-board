@@ -1,0 +1,10 @@
+server:
+  SECRET: "6568135b96cd0a3d6adcae0a475f0da473e8e2bee0d800b2ba5010186b37d950"
+  PORT: "8080"
+  FIREBASE_ACCESS_KEY: "./secret/FirebaseSecretKey.json"
+db:
+  DRIVER: "mysql"
+  DATABASE: "question_board"
+  USERNAME: "admin"
+  PASSWORD: "animelovers"
+  HOST: "quest-board-db.cqnxnyowf5vq.us-west-1.rds.amazonaws.com"

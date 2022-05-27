@@ -3,7 +3,8 @@ package controller_test
 import (
 	"bytes"
 	"encoding/json"
-	"go-question-board/internal/core/models/request"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/framework/repository"
 	"go-question-board/internal/framework/routes"
@@ -61,7 +62,7 @@ func TestGetSubject(t *testing.T) {
 		ctx.SetPath("/api/admin/subject")
 
 		assert.NoError(t, controller.ReadSubject(ctx))
-		assert.Equal(t, 417, rec.Code)
+		assert.Equal(t, 404, rec.Code)
 	})
 }
 
@@ -117,7 +118,7 @@ func TestGetSubjectByID(t *testing.T) {
 		ctx.SetPath("/api/admin/subject/:id")
 
 		assert.NoError(t, controller.ReadSubjectByID(ctx))
-		assert.Equal(t, 417, rec.Code)
+		assert.Equal(t, 404, rec.Code)
 	})
 }
 
@@ -127,7 +128,7 @@ func TestGetTeacherSubject(t *testing.T) {
 		panic(err)
 	}
 	
-	user := request.Teacher{
+	user := request.User{
 		ID: 1,
 		Name: "Admin",
 	}
@@ -185,7 +186,7 @@ func TestGetTeacherSubject(t *testing.T) {
 		ctx.SetPath("/api/teacher/subject")
 
 		assert.NoError(t, controller.ReadTeacherSubject(ctx))
-		assert.Equal(t, 417, rec.Code)
+		assert.Equal(t, 404, rec.Code)
 	})
 }
 
@@ -195,7 +196,7 @@ func TestGetStudentSubject(t *testing.T) {
 		panic(err)
 	}
 	
-	user := request.Teacher{
+	user := request.User{
 		ID: 1,
 		Name: "Admin",
 	}
@@ -249,6 +250,123 @@ func TestGetStudentSubject(t *testing.T) {
 		ctx.SetPath("/api/student/subject")
 
 		assert.NoError(t, controller.ReadStudentSubject(ctx))
-		assert.Equal(t, 417, rec.Code)
+		assert.Equal(t, 404, rec.Code)
+	})
+}
+
+func TestCreateSubject(t *testing.T) {
+	gdb, mock, err := mocktesting.InitGORMSQLMock()
+	if err != nil {
+		panic(err)
+	}
+
+	mockRepo := repository.NewSubjectRepository(gdb)
+	service := service.NewSubjectService(mockRepo)
+	controller := controller.NewSubjectController(service)
+
+	e := echo.New()
+	api := e.Group("/api")
+
+	routes.NewSubjectRoutes(api, controller)
+	subject := models.Subject{
+		Code: "INF",
+		Name: "Informatics",
+		MajorID: 1,
+	}
+	body, _ := json.Marshal(subject)
+	
+	t.Run("Success", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(body))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+		mock.ExpectBegin()
+		mock.ExpectExec("INSERT INTO `subjects` (`code`,`name`,`major_id`) VALUES (?,?,?)").
+			WithArgs(subject.Code, subject.Name, subject.MajorID).
+			WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		rec := httptest.NewRecorder()
+		ctx := e.NewContext(req, rec)
+		ctx.SetPath("/api/admin/subject")
+		
+		assert.NoError(t, controller.CreateSubject(ctx))
+		assert.Equal(t, 201, rec.Code)
+	})
+}
+
+func TestUpdateSubject(t *testing.T) {
+	gdb, mock, err := mocktesting.InitGORMSQLMock()
+	if err != nil {
+		panic(err)
+	}
+
+	mockRepo := repository.NewSubjectRepository(gdb)
+	service := service.NewSubjectService(mockRepo)
+	controller := controller.NewSubjectController(service)
+
+	e := echo.New()
+	api := e.Group("/api")
+
+	routes.NewSubjectRoutes(api, controller)
+	subject := models.Subject{
+		Code: "INF",
+		Name: "Informatics",
+	}
+	body, _ := json.Marshal(subject)
+	
+	t.Run("Success", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/", bytes.NewBuffer(body))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+		mock.ExpectBegin()
+		mock.ExpectExec("UPDATE `subjects` SET `code`=?,`name`=? WHERE `id` = ?").
+			WithArgs(subject.Code, subject.Name, 1).
+			WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		rec := httptest.NewRecorder()
+		ctx := e.NewContext(req, rec)
+		ctx.SetParamNames("id")
+		ctx.SetParamValues("1")
+		ctx.SetPath("/api/admin/subject/:id/update")
+		
+		assert.NoError(t, controller.UpdateSubject(ctx))
+		assert.Equal(t, 200, rec.Code)
+	})
+}
+
+func TestDeleteSubject(t *testing.T) {
+	gdb, mock, err := mocktesting.InitGORMSQLMock()
+	if err != nil {
+		panic(err)
+	}
+
+	mockRepo := repository.NewSubjectRepository(gdb)
+	service := service.NewSubjectService(mockRepo)
+	controller := controller.NewSubjectController(service)
+
+	e := echo.New()
+	api := e.Group("/api")
+
+	routes.NewSubjectRoutes(api, controller)
+	
+	t.Run("Success", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+		mock.ExpectBegin()
+		mock.ExpectExec("DELETE FROM `subjects` WHERE `subjects`.`id` = ?").
+			WithArgs(1).
+			WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		rec := httptest.NewRecorder()
+		ctx := e.NewContext(req, rec)
+		ctx.SetParamNames("id")
+		ctx.SetParamValues("1")
+		ctx.SetPath("/api/admin/subject/:id/delete")
+		
+		assert.NoError(t, controller.DeleteSubject(ctx))
+		assert.Equal(t, 200, rec.Code)
 	})
 }

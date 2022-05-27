@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 )
@@ -25,7 +25,10 @@ func (repo tagRepository) UpdateTag(tag m.Tag) (err error) {
 }
 
 func (repo tagRepository) DeleteTag(id int) (err error) {
-	err = repo.db.Delete(&m.Tag{}, id).Error
+	del := repo.db.Delete(&m.Tag{}, id)
+	if del.RowsAffected < 1 {
+		err = gorm.ErrRecordNotFound
+	}
 	return
 }
 

@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 
 	"strconv"
@@ -41,7 +42,8 @@ func (ucon TagController) CreateTag(c echo.Context) error {
 			Message: "Tag Created",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Create Tag",
 			Error: err.Error(),
 		})
@@ -66,7 +68,8 @@ func (ucon TagController) ReadTag(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Tag",
 			Error: err.Error(),
 		})
@@ -97,7 +100,8 @@ func (ucon TagController) UpdateTag(c echo.Context) error {
 			Message: "Tag Updated",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Update Tag",
 			Error: err.Error(),
 		})
@@ -125,7 +129,8 @@ func (ucon TagController) DeleteTag(c echo.Context) error {
 			Message: "Tag Deleted",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Delete Tag",
 			Error: err.Error(),
 		})

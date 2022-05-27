@@ -3,7 +3,6 @@ package routes
 import (
 	"go-question-board/internal/framework/transport/controller"
 	mw "go-question-board/internal/framework/transport/middleware"
-	// mw "go-question-board/internal/framework/transport/middleware"
 
 	"github.com/labstack/echo/v4"
 )

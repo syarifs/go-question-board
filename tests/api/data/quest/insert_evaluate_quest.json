@@ -6,7 +6,6 @@
 	"questions": [
 		{
 			"question": "Pertanyaan 1",
-			"with_option": 1,
 			"answer_option": [
 				{ 
 					"string_answer": "A" 
@@ -27,7 +26,6 @@
 		},
 		{
 			"question": "Pertanyaan 2",
-			"with_option": 1,
 			"answer_option": [
 				{ 
 					"string_answer": "A" 
@@ -47,9 +45,7 @@
 			]
 		},
 		{
-			"id": 3,
 			"question": "Pertanyaan 3",
-			"with_option": 1,
 			"answer_option": [
 				{ 
 					"string_answer": "A" 

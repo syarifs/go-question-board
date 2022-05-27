@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

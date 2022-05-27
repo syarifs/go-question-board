@@ -1,14 +1,12 @@
 package service
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
 	"go-question-board/internal/utils"
-
-	"gorm.io/gorm"
+	"go-question-board/internal/utils/errors"
 )
 
 type AuthService struct {
@@ -24,16 +22,14 @@ func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDeta
 	var checkPassword bool
 	user, err  = srv.repo.Login(login.Email)
 
-	if errors.Is(err, gorm.ErrRecordNotFound){
-		err = errors.New("Wrong Email")
-	}
+	err = errors.CheckError(user, err)
 
 	if err == nil {
 		checkPassword = utils.ComparePassword(login.Password, user.Password)
 		if checkPassword {
 			res, _ = utils.TypeConverter[response.UserDetails](&user)
 		} else {
-			err = errors.New("Wrong Password")
+			err = errors.New(417, "Wrong Password")
 		}
 	}
 

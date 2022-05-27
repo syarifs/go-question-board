@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 )
@@ -25,7 +25,10 @@ func (repo majorRepository) UpdateMajor(major m.Major) (err error) {
 }
 
 func (repo majorRepository) DeleteMajor(id int) (err error) {
-	err = repo.db.Delete(&m.Major{}, id).Error
+	del := repo.db.Delete(&m.Major{}, id)
+	if del.RowsAffected < 1 {
+		err = gorm.ErrRecordNotFound
+	}
 	return
 }
 

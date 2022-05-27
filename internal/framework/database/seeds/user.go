@@ -1,7 +1,7 @@
 package seeds
 
 import (
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/utils"
 
 	"gorm.io/gorm"
@@ -9,18 +9,19 @@ import (
 
 func userSeeder() Seed {
 	major := 1
+	password, _ := utils.HashPassword("password")
 	seeds := []models.User{
 		{
 			Name: "Administrator",
 			Email: "admin@web.io",
-			Password: utils.HashPassword("admin"),
+			Password: password,
 			LevelID: 1,
 			Status: 1,
 		},
 		{
 			Name: "Ach. Dafid",
 			Email: "dafid@web.io",
-			Password: utils.HashPassword("admin"),
+			Password: password,
 			LevelID: 2,
 			Status: 1,
 			MajorID: &major,
@@ -28,7 +29,7 @@ func userSeeder() Seed {
 		{
 			Name: "Syarif Ubaidillah",
 			Email: "syarif@web.io",
-			Password: utils.HashPassword("admin"),
+			Password: password,
 			LevelID: 3,
 			Status: 1,
 			MajorID: &major,

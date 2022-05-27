@@ -2,7 +2,7 @@ package mocks
 
 import (
 	"errors"
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/core/service"
 	"testing"
 

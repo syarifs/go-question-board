@@ -2,8 +2,8 @@ package mocks
 
 import (
 	"errors"
-	models "go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/service"
 	"testing"
 
@@ -23,7 +23,7 @@ func TestCreateQuestionnaire(t *testing.T) {
 				{Name: "Year", Value: "2019"},
 			},
 			Question: []models.Question{
-				{Question: "Test Quest 1", WithOption: 0},
+				{Question: "Test Quest 1"},
 			},
 			CreatedBy: 1,
 		}
@@ -49,7 +49,7 @@ func TestUpdateQuestionnaire(t *testing.T) {
 				{Name: "Year", Value: "2019"},
 			},
 			Question: []models.Question{
-				{Question: "Test Quest 1", WithOption: 0},
+				{Question: "Test Quest 1"},
 			},
 			CreatedBy: 1,
 		}
@@ -89,7 +89,7 @@ func TestListMyQuestionnaire(t *testing.T) {
 					{Name: "Year", Value: "2019"},
 				},
 				Question: []models.Question{
-					{Question: "Test Quest 1", WithOption: 0},
+					{Question: "Test Quest 1"},
 				},
 				CreatedBy: 1,
 			},
@@ -127,7 +127,7 @@ func TestAvalaibleQuestionnaire(t *testing.T) {
 					{ID: 1, Name: "Year", Value: "2019"},
 				},
 				Question: []models.Question{
-					{Question: "Test Quest 1", WithOption: 0},
+					{Question: "Test Quest 1"},
 				},
 				CreatedBy: 1,
 			},
@@ -143,8 +143,8 @@ func TestAvalaibleQuestionnaire(t *testing.T) {
 
 	t.Run("Fail", func(t *testing.T) {
 		tag := []models.Tag{}
-		mockQuestionnaire.On("QuestForMe", 1, []int(nil)).Return(nil, errors.New("fail")).Once()
-		quest, err := questionnaireService.QuestForMe(1, tag)
+		mockQuestionnaire.On("QuestForMe", 0, []int(nil)).Return(nil, errors.New("fail")).Once()
+		quest, err := questionnaireService.QuestForMe(0, tag)
 		assert.Empty(t, quest)
 		assert.Error(t, err)
 	})
@@ -159,7 +159,7 @@ func TestViewQuestionnaireByID(t *testing.T) {
 				{ID: 1, Name: "Year", Value: "2019"},
 			},
 			Question: []models.Question{
-				{Question: "Test Quest 1", WithOption: 0},
+				{Question: "Test Quest 1"},
 			},
 			CreatedBy: 1,
 		}
@@ -187,7 +187,7 @@ func TestViewQuestResponse(t *testing.T) {
 				{ID: 1, Name: "Year", Value: "2019"},
 			},
 			Question: []models.Question{
-				{Question: "Test Quest 1", WithOption: 0},
+				{Question: "Test Quest 1"},
 			},
 			CreatedBy: 1,
 		}
@@ -214,7 +214,7 @@ func TestQuestAnswer(t *testing.T) {
 				{ID: 1, Name: "Year", Value: "2019"},
 			},
 			Question: []models.Question{
-				{Question: "Test Quest 1", WithOption: 0},
+				{Question: "Test Quest 1"},
 			},
 			CreatedBy: 1,
 			Completor: []models.User{{ID: 1},},

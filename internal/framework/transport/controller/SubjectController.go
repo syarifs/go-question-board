@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
 	"net/http"
 
+	"go-question-board/internal/utils/errors"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -42,7 +43,8 @@ func (ucon SubjectController) CreateSubject(c echo.Context) error {
 			Message: "Subject Created",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Create Subject",
 			Error: err.Error(),
 		})
@@ -67,7 +69,8 @@ func (ucon SubjectController) ReadSubject(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Subject",
 			Error: err.Error(),
 		})
@@ -94,7 +97,8 @@ func (ucon SubjectController) ReadSubjectByID(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Subject",
 			Error: err.Error(),
 		})
@@ -125,7 +129,8 @@ func (ucon SubjectController) UpdateSubject(c echo.Context) error {
 			Message: "Subject Updated",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Update Subject",
 			Error: err.Error(),
 		})
@@ -153,7 +158,8 @@ func (ucon SubjectController) DeleteSubject(c echo.Context) error {
 			Message: "Subject Deleted",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Delete Subject",
 			Error: err.Error(),
 		})
@@ -181,7 +187,8 @@ func (ucon SubjectController) ReadTeacherSubject(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Subject",
 			Error: err.Error(),
 		})
@@ -209,7 +216,8 @@ func (ucon SubjectController) ReadStudentSubject(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Subject",
 			Error: err.Error(),
 		})

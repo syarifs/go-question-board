@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 	"strconv"
 
@@ -23,25 +24,29 @@ func NewEvaluateController(srv *service.EvaluateService) *EvaluateController {
 // @Description Route Path for Get List of Evaluation Quest with Subject ID and Class.
 // @Tags Evaluate
 // @Security ApiKey
-// @Param class query string true "class"
+// @Param body body request.User{} true "send user data"
 // @Param subject_id query int true "subject id"
-// @Success 200 {object} response.MessageData{data=response.QuestList{}} success
+// @Success 200 {object} response.MessageData{data=response.Quest{}} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 400 {object} response.MessageOnly{} error
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /student/evaluate [get]
 func (ucon EvaluateController) GetQuest(c echo.Context) error {
-	class := c.QueryParam("class")
+	var user request.User
+	c.Bind(&user)
+
 	subject_id, _ := strconv.Atoi(c.QueryParam("subject_id"))
 
-	res, err := ucon.srv.GetQuest(subject_id, class)
+	res, err := ucon.srv.GetQuest(subject_id, user)
+
 	if err == nil {
 		return c.JSON(http.StatusOK, response.MessageData{
 			Message: "Quest Fetched",
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest",
 			Error: err.Error(),
 		})
@@ -49,7 +54,7 @@ func (ucon EvaluateController) GetQuest(c echo.Context) error {
 }
 
 // CreateResource godoc
-// @Summary Create New Quest
+// @Summary Answer Evaluation Quest
 // @Description Route Path for Answer Evaluation Quest.
 // @Tags Evaluate
 // @Security ApiKey
@@ -74,11 +79,12 @@ func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 
 	err := ucon.srv.Evaluate(questAnswer, teacher_id, subject_id, class)
 	if err == nil {
-		return c.JSON(http.StatusCreated, response.MessageOnly{
+		return c.JSON(http.StatusOK, response.MessageOnly{
 			Message: "Quest Answered",
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Answer Quest",
 			Error: err.Error(),
 		})
@@ -98,7 +104,7 @@ func (ucon EvaluateController) QuestAnswer(c echo.Context) error {
 // @Failure 401 {object} response.MessageOnly{} error
 // @Router /teacher/evaluate [get]
 func (ucon EvaluateController) ViewEvaluateResponse(c echo.Context) error {
-	var user response.UserList
+	var user response.User
 	c.Bind(&user)
 	class := c.QueryParam("class")
 	subject_id, _ := strconv.Atoi(c.QueryParam("subject_id"))
@@ -109,7 +115,8 @@ func (ucon EvaluateController) ViewEvaluateResponse(c echo.Context) error {
 			Data: res,
 		})
 	} else {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Fetch Quest Response",
 			Error: err.Error(),
 		})

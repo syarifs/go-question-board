@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 	"go-question-board/internal/framework/transport/middleware"
 
 	"gorm.io/gorm"
@@ -17,7 +17,9 @@ func NewAuthRepository(db *gorm.DB) *authRepository {
 }
 
 func (repo authRepository) Login(email string) (users m.User, err error) {
-	err = repo.db.Preload(clause.Associations).Where("email = ?", email).First(&users).Error
+	err = repo.db.
+		Preload(clause.Associations).
+		Where("email = ?", email).First(&users).Error
 	return
 }
 

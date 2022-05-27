@@ -2,8 +2,8 @@ package mocks
 
 import (
 	"errors"
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/utils"
 	"testing"
@@ -16,14 +16,16 @@ var mockAuth = &AuthRepository{Mock: mock.Mock{}}
 var authService = service.NewAuthService(mockAuth)
 
 func TestLogin(t *testing.T) {
+	password, _ := utils.HashPassword("test")
 	t.Run("Succes", func(t *testing.T) {
 		data := request.LoginRequest{
 			Email: "test@testify.io",
 			Password: "test",
 		}
+
 		ret := models.User{
 			Email: data.Email,
-			Password: utils.HashPassword(data.Password),
+			Password: password,
 		}
 		mockAuth.On("Login", data.Email).Return(ret, nil).Once()
 		res, err := authService.Login(data)

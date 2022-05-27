@@ -6,7 +6,7 @@ Authorization: Bearer
 ##############
 
 # fetch user by id
-GET localhost:8080/api/admin/user/1
+GET localhost:8080/api/admin/user/5
 Content-Type: application/json
 Authorization: Bearer 
 
@@ -19,7 +19,7 @@ Authorization: Bearer
 ##############
 
 # update user
-PUT localhost:8080/api/admin/user/3/update
+PUT localhost:8080/api/admin/user/5/update
 Content-Type: application/json
 Authorization: Bearer 
 

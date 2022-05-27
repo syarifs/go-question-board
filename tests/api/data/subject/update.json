@@ -1,5 +1,4 @@
 {
-	"id": 1,
 	"code": "ALG1",
 	"name": "Algoritma Pemrograman",
 	"major": {
@@ -7,6 +6,12 @@
 		"code": "INF",
 		"name": "Informatics"
 	},
+	"student": [
+		{
+			"id": 3,
+			"name": "Syarif Ubaidillah"
+		}
+	],
 	"teacher_class": [
 		{
 			"teacher": {

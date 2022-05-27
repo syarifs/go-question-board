@@ -8,12 +8,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetTokenData(c echo.Context, data string) interface{} {
+func GetTokenData(c echo.Context, data string) (interface{}, error) {
 	header := c.Request().Header.Get("Authorization")
 	header = strings.Split(header, " ")[1]
 	extract, err := ExtractToken(header)
-	fmt.Println(err)
-	return extract.(jwt.MapClaims)[data]
+	return extract.(jwt.MapClaims)[data], err
 }
 
 func ExtractToken(tkn string) (token interface{}, err error) {

@@ -1,12 +1,12 @@
 # fetch major
-GET localhost:8080/api/major
+GET localhost:8080/api/admin/major
 Content-Type: application/json
 Authorization: Bearer 
 
 ##############
 
 # create major
-POST localhost:8080/api/major
+POST localhost:8080/api/admin/major
 Content-Type: application/json
 Authorization: Bearer 
 
@@ -14,7 +14,7 @@ Authorization: Bearer
 ##############
 
 # update major
-PUT localhost:8080/api/major/1/update
+PUT localhost:8080/api/admin/major/1/update
 Content-Type: application/json
 Authorization: Bearer 
 
@@ -22,7 +22,7 @@ Authorization: Bearer
 ##############
 
 # delete major
-DELETE localhost:8080/api/major/1/delete
+DELETE localhost:8080/api/admin/major/3/delete
 Content-Type: application/json
 Authorization: Bearer 
 

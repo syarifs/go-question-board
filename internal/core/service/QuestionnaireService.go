@@ -1,12 +1,12 @@
 package service
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
 	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/errors"
 )
 
 type QuestionnaireService struct {
@@ -19,54 +19,51 @@ func NewQuestionnaireService(srv repository.QuestionnaireRepository) *Questionna
 
 func (srv QuestionnaireService) CreateQuest(quest models.Questionnaire) (err error) {
 	err = srv.repo.CreateQuest(quest)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
-func (srv QuestionnaireService) MyQuest(user_id int) (res *[]response.QuestList, err error) {
+func (srv QuestionnaireService) MyQuest(user_id int) (res *[]response.Quest, err error) {
 	var quest *[]models.Questionnaire
 
-	if user_id == 0 {
-		err = errors.New("User ID not provided")
+	if err = errors.CheckError(user_id, nil); err != nil {
 		return
 	}
-
+	
 	quest, err = srv.repo.MyQuest(user_id)
+	res, err = utils.TypeConverter[[]response.Quest](quest)
 
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-		return
-	}
-
-	res, _ = utils.TypeConverter[[]response.QuestList](quest)
+	err = errors.CheckError(res, err)
 
 	return
 }
 
-func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []response.AvailableQuestList, err error) {
+func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []response.AvailableQuest, err error) {
 	var tag_id []int
 	var quest *[]models.Questionnaire
 
+	if err = errors.CheckError(id, nil); err != nil {
+		return
+	}
+	
 	for _, v := range tags {
 		tag_id = append(tag_id, int(v.ID))
 	}
 
 	quest, err = srv.repo.QuestForMe(id, tag_id)
 
-	if utils.IsEmpty(quest) {
-		err = errors.New("Data Not Found")
-		return
-	}
+	err = errors.CheckError(quest, err)
 
 	for _, v := range *quest {
 		if utils.TagEqual(tags, v.Tags) {
-			que, _ := utils.TypeConverter[response.AvailableQuestList](&v)
+			que, _ := utils.TypeConverter[response.AvailableQuest](&v)
 			res = append(res, *que)
 		}
 	}
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -74,11 +71,17 @@ func (srv QuestionnaireService) QuestForMe(id int, tags []models.Tag) (res []res
 func (srv QuestionnaireService) UpdateQuest(id int, quest models.Questionnaire) (err error) {
 	quest.ID = uint(id)
 	err = srv.repo.UpdateQuest(quest)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
 func (srv QuestionnaireService) DeleteQuest(id int) (err error) {
 	err = srv.repo.DeleteQuest(id)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
@@ -95,6 +98,9 @@ func (srv QuestionnaireService) ViewQuestResponse(id int) (res response.QuestRes
 			res.Questions = append(res.Questions, *respondent)
 		}
 	}
+
+	err = errors.CheckError(res, err)
+
 	return
 }
 
@@ -102,6 +108,8 @@ func (srv QuestionnaireService) ViewQuestByID(id int) (res *response.AvailableQu
 	var quest *models.Questionnaire
 	quest, err = srv.repo.ViewQuestByID(id)
 	
+	err = errors.CheckError(quest, err)
+
 	if err == nil {
 		res, _ = utils.TypeConverter[response.AvailableQuestDetails](&quest)
 	}
@@ -116,7 +124,10 @@ func (srv QuestionnaireService) AnswerQuest(req request.Answer) (err error) {
 		ans.UserID = req.User.ID
 		answer = append(answer, *ans)
 	}
-	req.Questionnaire.Completor = []models.User{req.User}
+	req.Questionnaire.Completor = []models.User{{ID: req.User.ID}}
 	err = srv.repo.Answer(req.Questionnaire, answer)
+	
+	err = errors.CheckError(nil, err)
+
 	return
 }

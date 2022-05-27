@@ -1,12 +1,12 @@
 package service
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
 	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/errors"
 )
 
 type SubjectService struct {
@@ -21,6 +21,9 @@ func (srv SubjectService) CreateSubject(subject request.SubjectRequest) (err err
 	var sub *models.Subject
 	sub, err = utils.TypeConverter[models.Subject](&subject)
 	err  = srv.repo.CreateSubject(*sub)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
@@ -29,9 +32,7 @@ func (srv SubjectService) ReadSubject() (res *[]response.SubjectWithoutTeacher, 
 	subject, err  = srv.repo.ReadSubject()
 	res, _ = utils.TypeConverter[[]response.SubjectWithoutTeacher](&subject)
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -39,10 +40,9 @@ func (srv SubjectService) ReadSubject() (res *[]response.SubjectWithoutTeacher, 
 func (srv SubjectService) ReadSubjectByID(id int) (res *response.Subject, err error) {
 	var subject *models.Subject
 	subject, err  = srv.repo.ReadSubjectByID(id)
-
-	if err == nil {
-		res, _ = utils.TypeConverter[response.Subject](&subject)
-	}
+	res, _ = utils.TypeConverter[response.Subject](&subject)
+	
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -52,9 +52,7 @@ func (srv SubjectService) ReadStudentSubject(id int) (res *[]response.SubjectWit
 	subject, err  = srv.repo.ReadStudentSubject(id)
 	res, _ = utils.TypeConverter[[]response.SubjectWithTeacher](&subject)
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -64,15 +62,13 @@ func (srv SubjectService) ReadTeacherSubject(id int) (res *[]response.SubjectWit
 	subject, err  = srv.repo.ReadTeacherSubject(id)
 	res, _ = utils.TypeConverter[[]response.SubjectWithStudent](&subject)
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
 
 func (srv SubjectService) UpdateSubject(id int, subject request.SubjectRequest) (err error) {
-	subject.ID = id
+	subject.ID = uint(id)
 	sub, _ := utils.TypeConverter[models.Subject](&subject)
 
 	for i := range sub.Teacher {
@@ -80,10 +76,12 @@ func (srv SubjectService) UpdateSubject(id int, subject request.SubjectRequest) 
 	}
 
 	err  = srv.repo.UpdateSubject(*sub)
+	err = errors.CheckError(nil, err)
 	return
 }
 
 func (srv SubjectService) DeleteSubject(id int) (err error) {
 	err  = srv.repo.DeleteSubject(id)
+	err = errors.CheckError(nil, err)
 	return
 }

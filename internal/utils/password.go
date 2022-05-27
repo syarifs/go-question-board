@@ -13,10 +13,7 @@ func ComparePassword(password_input, password_storage string) bool {
 	}
 }
 
-func HashPassword(pwd string) string {
+func HashPassword(pwd string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.MinCost)
-	if err != nil {
-		panic(err)
-	}
-	return string(hash)
+	return string(hash), err
 }

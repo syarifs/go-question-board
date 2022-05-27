@@ -2,10 +2,11 @@ package mocks
 
 import (
 	"errors"
-	models "go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/core/service"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -20,15 +21,15 @@ func TestCreateUser(t *testing.T) {
 			Password: "test2",
 			LevelID: 1,
 		}
-		mockUser.On("CreateUser", data).Return(nil).Once()
-		userService.CreateUser(data)
-		mockUser.AssertExpectations(t)
+		mockUser.On("CreateUser", mock.Anything).Return(nil).Once()
+		err := userService.CreateUser(data)
+		assert.NoError(t, err)
 	})
 
 	t.Run("Fail", func(t *testing.T) {
 		mockUser.On("CreateUser", models.User{}).Return(errors.New("fail")).Once()
-		userService.CreateUser(models.User{})
-		mockUser.AssertExpectations(t)
+		err := userService.CreateUser(models.User{})
+		assert.Error(t, err)
 	})
 }
 
@@ -41,7 +42,7 @@ func TestUpdateUser(t *testing.T) {
 			Password: "test2",
 			LevelID: 1,
 		}
-		mockUser.On("UpdateUser", data).Return(nil).Once()
+		mockUser.On("UpdateUser", mock.Anything).Return(nil).Once()
 		userService.UpdateUser(1, data)
 		mockUser.AssertExpectations(t)
 	})

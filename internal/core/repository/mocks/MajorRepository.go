@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "go-question-board/internal/core/models"
+	models "go-question-board/internal/core/entity/models"
 
 	mock "github.com/stretchr/testify/mock"
 )

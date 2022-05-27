@@ -3,8 +3,8 @@ package controller_test
 import (
 	"bytes"
 	"encoding/json"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/framework/repository"
 	"go-question-board/internal/framework/routes"
@@ -34,6 +34,8 @@ func TestLogin(t *testing.T) {
 		Password: "admin",
 	}
 
+	password, _ := utils.HashPassword(loginBody.Password)
+
 	mockAuth := repository.NewAuthRepository(gdb)
 	authService := service.NewAuthService(mockAuth)
 	authController := controller.NewAuthController(authService)
@@ -50,7 +52,7 @@ func TestLogin(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 		rowUsers := sqlmock.NewRows([]string{"id", "name", "email", "password", "level_id", "major_id", "status"}).
-			AddRow(1, "Administrator", loginBody.Email, utils.HashPassword(loginBody.Password), 1, 1, 1)
+			AddRow(1, "Administrator", loginBody.Email, password, 1, 1, 1)
 
 		rowRole := sqlmock.NewRows([]string{"id", "name"}).AddRow(1, "Administrator")
 		rowMajor := sqlmock.NewRows([]string{"id", "code", "name"})
@@ -84,7 +86,7 @@ func TestLogin(t *testing.T) {
 	t.Run("Test Wrong Password", func(t *testing.T) {
 
 		rowUsers := sqlmock.NewRows([]string{"id", "name", "email", "password", "level_id", "major_id", "status"}).
-			AddRow(1, "Administrator", loginBody.Email, utils.HashPassword(loginBody.Password), 1, 1, 1)
+			AddRow(1, "Administrator", loginBody.Email, password, 1, 1, 1)
 
 		rowRole := sqlmock.NewRows([]string{"id", "name"}).AddRow(1, "Administrator")
 		rowMajor := sqlmock.NewRows([]string{"id", "code", "name"})

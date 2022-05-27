@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/request"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/framework/transport/middleware"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -36,16 +37,17 @@ func (acon AuthController) Login(c echo.Context) error {
 	c.Bind(&login)
 	res, err := acon.srv.Login(login)
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
 			Message: "Failed to Log User In",
-			Error: err,
+			Error: err.Error(),
 		})
 	}
 	jwt, err := middleware.CreateToken(int(res.ID), res.Level.Name)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"message": "Failed to Createn Token",
-			"error": err.Error(),
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Create Authentication Token",
+			Error: err.Error(),
 		})
 	}
 

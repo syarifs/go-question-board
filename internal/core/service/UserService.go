@@ -1,12 +1,11 @@
 package service
 
 import (
-	"go-question-board/internal/core/models"
-	"go-question-board/internal/core/models/response"
+	"go-question-board/internal/core/entity/models"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
 	"go-question-board/internal/utils"
-
-	"gorm.io/gorm"
+	"go-question-board/internal/utils/errors"
 )
 
 type UserService struct {
@@ -18,18 +17,23 @@ func NewUserService(repo repository.UserRepository) *UserService {
 }
 
 func (srv UserService) CreateUser(user models.User) (err error) {
-	err  = srv.repo.CreateUser(user)
+
+	if user.Password != "" {
+		user.Password, err = utils.HashPassword(user.Password)
+	}
+
+	err = srv.repo.CreateUser(user)
+
+	err = errors.CheckError(nil, err)
 	return
 }
 
-func (srv UserService) ReadUser() (res *[]response.UserList, err error) {
+func (srv UserService) ReadUser() (res *[]response.User, err error) {
 	var user *[]models.User
 	user, err  = srv.repo.ReadUser()
 
-	if !utils.IsEmpty(user) {
-		res, _ = utils.TypeConverter[[]response.UserList](&user)
-	} else {
-		err = gorm.ErrRecordNotFound
+	if err = errors.CheckError(user, err); err == nil {
+		res, _ = utils.TypeConverter[[]response.User](&user)
 	}
 
 	return
@@ -39,7 +43,7 @@ func (srv UserService) ReadUserByID(id int) (res *response.UserDetails, err erro
 	var users *models.User
 	users, err  = srv.repo.ReadUserByID(id)
 
-	if err == nil {
+	if err = errors.CheckError(users, err); err == nil {
 		res, _ = utils.TypeConverter[response.UserDetails](&users)
 	}
 
@@ -48,11 +52,24 @@ func (srv UserService) ReadUserByID(id int) (res *response.UserDetails, err erro
 
 func (srv UserService) UpdateUser(id int, user models.User) (err error) {
 	user.ID = uint(id)
+
+	if user.Password != "" {
+		user.Password, err = utils.HashPassword(user.Password)
+	}
+
+	if ! utils.IsEmpty(user.TeacherSubject) {
+		for i := range user.TeacherSubject {
+			user.TeacherSubject[i].SubjectID = user.TeacherSubject[i].Subject.ID
+			user.TeacherSubject[i].UserID = &user.ID
+		}
+	}
 	err  = srv.repo.UpdateUser(user)
+	err = errors.CheckError(nil, err)
 	return
 }
 
 func (srv UserService) DeleteUser(id int) (err error) {
 	err  = srv.repo.DeleteUser(id)
+	err = errors.CheckError(nil, err)
 	return
 }

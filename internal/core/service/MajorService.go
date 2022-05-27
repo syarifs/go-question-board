@@ -1,10 +1,9 @@
 package service
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/core/repository"
-	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/errors"
 )
 
 type MajorService struct {
@@ -17,15 +16,16 @@ func NewMajorService(repo repository.MajorRepository) *MajorService {
 
 func (srv MajorService) CreateMajor(major models.Major) (err error) {
 	err  = srv.repo.CreateMajor(major)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
 func (srv MajorService) ReadMajor() (res *[]models.Major, err error) {
 	res, err  = srv.repo.ReadMajor()
 
-	if utils.IsEmpty(res) {
-		err = errors.New("Data Not Found")
-	}
+	err = errors.CheckError(res, err)
 
 	return
 }
@@ -33,10 +33,16 @@ func (srv MajorService) ReadMajor() (res *[]models.Major, err error) {
 func (srv MajorService) UpdateMajor(id int, major models.Major) (err error) {
 	major.ID = uint(id)
 	err  = srv.repo.UpdateMajor(major)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }
 
 func (srv MajorService) DeleteMajor(id int) (err error) {
 	err  = srv.repo.DeleteMajor(id)
+
+	err = errors.CheckError(nil, err)
+
 	return
 }

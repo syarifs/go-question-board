@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 
 	"gorm.io/gorm"
 )
@@ -25,7 +25,10 @@ func (repo subjectRepository) UpdateSubject(subject m.Subject) (err error) {
 }
 
 func (repo subjectRepository) DeleteSubject(id int) (err error) {
-	err = repo.db.Delete(&m.Subject{}, id).Error
+	del := repo.db.Delete(&m.Subject{}, id)
+	if del.RowsAffected < 1 {
+		err = gorm.ErrRecordNotFound
+	}
 	return
 }
 

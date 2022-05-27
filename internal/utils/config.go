@@ -11,11 +11,12 @@ var (
 	DB_HOST string
 	DB_DRIVER string
 	SERVER_PORT string
+	FIREBASE_ACCESS_KEY string
 	SERVER_SECRET []byte
 )
 
 func LoadConfig() {
-	viper.AddConfigPath(".")
+	viper.AddConfigPath("config")
 	viper.SetConfigName("config")
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -28,5 +29,6 @@ func LoadConfig() {
 	DB_HOST = viper.Get("db.HOST").(string)
 	DB_DRIVER = viper.Get("db.DRIVER").(string)
 	SERVER_PORT = viper.Get("server.PORT").(string)
+	FIREBASE_ACCESS_KEY = viper.Get("server.FIREBASE_ACCESS_KEY").(string)
 	SERVER_SECRET= []byte(viper.GetString("server.SECRET"))
 }

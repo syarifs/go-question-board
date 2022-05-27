@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"errors"
-	"go-question-board/internal/core/models"
+	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/errors"
 	"net/http"
 	"time"
 
@@ -20,7 +20,13 @@ func JWT() echo.MiddlewareFunc {
 
 func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if utils.GetTokenData(c, "role") != "Administrator" {
+		role, err := utils.GetTokenData(c, "role")
+
+		if err := errors.CheckError(nil, err); err != nil {
+			return err
+		}
+
+		if role != "Administrator" {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
 				"message": "access for this route only for administrator",
 			})
@@ -31,7 +37,13 @@ func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 
 func TeacherPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if utils.GetTokenData(c, "role") != "Teacher" {
+		role, err := utils.GetTokenData(c, "role")
+
+		if err := errors.CheckError(nil, err); err != nil {
+			return err
+		}
+
+		if role != "Teacher" {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
 				"message": "access for this route only for teacher",
 			})
@@ -42,7 +54,13 @@ func TeacherPermission(next echo.HandlerFunc) echo.HandlerFunc {
 
 func StudentPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if utils.GetTokenData(c, "role") != "Student" {
+		role, err := utils.GetTokenData(c, "role")
+
+		if err := errors.CheckError(nil, err); err != nil {
+			return err
+		}
+
+		if role != "Student" {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
 				"message": "access for this route only for student",
 			})
@@ -52,7 +70,7 @@ func StudentPermission(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func CreateToken(id int, level string) (t models.Token, err error) {
-	expTime := time.Now().Add(time.Minute * 15).Unix()
+	expTime := time.Now().Add(time.Hour * 1).Unix()
 	claims := jwt.MapClaims{}
 	claims["user_id"] = id
 	claims["role"] = level
@@ -82,7 +100,7 @@ func RefreshToken(token_string models.Token) (t models.Token, err error) {
 			return CreateToken(user_id.(int) ,role.(string))
 		}
 	}
-	return t, errors.New("failed to generate new token")
+	return t, errors.New(500, "failed to generate new token")
 }
 
 

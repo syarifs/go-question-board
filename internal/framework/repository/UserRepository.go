@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "go-question-board/internal/core/models"
+	m "go-question-board/internal/core/entity/models"
 	"go-question-board/internal/utils"
 
 	"gorm.io/gorm"
@@ -17,23 +17,31 @@ func NewUserRepository(db *gorm.DB) *userRepository {
 }
 
 func (repo userRepository) CreateUser(user m.User) (err error) {
-	user.Password = utils.HashPassword(user.Password)
 	err = repo.db.Omit("Tags.*", "Subject.*").Create(&user).Error
 	return
 }
 
 func (repo userRepository) UpdateUser(user m.User) (err error) {
-	user.Password = utils.HashPassword(user.Password)
-	err = repo.db.Updates(&user).Error
+	if ! utils.IsEmpty(user.TeacherSubject) {
+		repo.db.Model(m.TeacherSubject{}).Delete("user_id = ?", user.ID)
+		repo.db.Model(m.TeacherSubject{}).Create(&user.TeacherSubject)
+	}
+
+	err = repo.db.Omit(clause.Associations).Updates(&user).Error
+
 	if err == nil {
 		err = repo.db.Model(&user).Association("Tags").Replace(&user.Tags)
 		err = repo.db.Model(&user).Association("Subject").Replace(&user.Subject)
 	}
+
 	return
 }
 
 func (repo userRepository) DeleteUser(id int) (err error) {
-	err = repo.db.Delete(&m.User{}, id).Error
+	del := repo.db.Delete(&m.User{}, id)
+	if del.RowsAffected < 1 {
+		err = gorm.ErrRecordNotFound
+	}
 	return
 }
 

@@ -33,7 +33,7 @@ func main() {
 
 	utils.LoadConfig()
 
-	db := database.InitDatabase(utils.DB_DRIVER)
+	db := database.InitDatabase()
 	repo := repository.NewRepository(db)
 	serv := service.NewService(repo)
 	ctrl := controller.NewController(serv)
@@ -43,7 +43,7 @@ func main() {
 
 	api := e.Group("/api")
 	routes.NewRoutes(api, ctrl, middleware.JWT())
-	
+
 	middleware.Logging(e)
 
 	e.Start(":" + utils.SERVER_PORT)

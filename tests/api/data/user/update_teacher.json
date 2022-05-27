@@ -1,0 +1,18 @@
+{
+	"name": "Ach Dafid",
+	"email": "dafid@web.io",
+	"password": "password",
+	"level_id": 2,
+	"major_id": 1,
+	"status": 1,
+	"teacher_subject": [
+		{
+			"subject": {
+				"id": 2,
+				"code": "ALGP",
+				"name": "Algorithm Programming"
+			},
+			"class": "A"
+		}
+	]
+}

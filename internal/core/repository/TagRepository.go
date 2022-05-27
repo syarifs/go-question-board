@@ -1,8 +1,6 @@
 package repository
 
-import (
-	m "go-question-board/internal/core/models"
-)
+import m "go-question-board/internal/core/entity/models"
 
 type TagRepository interface {
 	CreateTag(m.Tag) error

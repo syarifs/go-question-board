@@ -2,6 +2,8 @@
 POST localhost:8080/api/login
 Content-Type: application/json
 
-< ./data/auth/login.json
+< ./data/auth/login_admin.json
+#< ./data/auth/login_dosen.json
+#< ./data/auth/login_mahasiswa.json
 ##############
 
