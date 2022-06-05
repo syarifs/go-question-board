@@ -2,7 +2,6 @@ package repository
 
 import (
 	m "go-question-board/internal/core/entity/models"
-	"go-question-board/internal/framework/transport/middleware"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -23,7 +22,10 @@ func (repo authRepository) Login(email string) (users m.User, err error) {
 	return
 }
 
+func (repo authRepository) SaveToken(token m.Token) (err error) {
+	return
+}
+
 func (repo authRepository) RefreshToken(str m.Token) (token m.Token, err error) {
-	token, err = middleware.RefreshToken(str)
 	return
 }

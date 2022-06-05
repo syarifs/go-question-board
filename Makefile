@@ -6,14 +6,14 @@ test:
 	@clear
 	@rm -rf /tmp/go
 	@mkdir /tmp/go
-	@go test -coverprofile=/tmp/go/test.out -cover -coverpkg=./... ./...
+	@Env=testing go test -coverprofile=/tmp/go/test.out -cover -coverpkg=./... ./...
 	@go tool cover -func /tmp/go/test.out
 
 test_html:
 	@clear
 	@rm -rf /tmp/go
 	@mkdir /tmp/go
-	@go test -coverprofile=/tmp/go/test.out -coverpkg=./... ./...
+	@Env=testing go test -coverprofile=/tmp/go/test.out -coverpkg=./... ./...
 	@go tool cover -html=/tmp/go/test.out
 
 build:

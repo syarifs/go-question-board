@@ -5,7 +5,6 @@ import (
 	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
-	"go-question-board/internal/framework/transport/middleware"
 	"go-question-board/internal/utils/errors"
 	"net/http"
 
@@ -43,7 +42,8 @@ func (acon AuthController) Login(c echo.Context) error {
 			Error: err.Error(),
 		})
 	}
-	jwt, err := middleware.CreateToken(int(res.ID), res.Level.Name)
+
+	jwt, err := acon.srv.CreateToken(int(res.ID), res.Level.Name)
 	if err != nil {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Create Authentication Token",

@@ -5,6 +5,7 @@ import (
 	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
+	"go-question-board/internal/framework/transport/middleware"
 	"go-question-board/internal/utils"
 	"go-question-board/internal/utils/errors"
 )
@@ -33,6 +34,12 @@ func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDeta
 		}
 	}
 
+	return
+}
+
+func (srv AuthService) CreateToken(id int, level string) (t models.Token, err error) {
+	t, err = middleware.CreateToken(id, level)
+	err = srv.repo.SaveToken(t)
 	return
 }
 

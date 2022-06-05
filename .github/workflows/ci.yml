@@ -15,5 +15,8 @@ jobs:
         with:
           go-version: 1.18
 
+      - name: Configure
+        run: cp ./config/config.example.yaml ./config/config.yaml
+
       - name: Testing
-        run: go test -v ./...
+        run: Env=testing go test -v ./...
