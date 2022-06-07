@@ -2,7 +2,6 @@ package logger
 
 import (
 	"context"
-	"go-question-board/internal/framework/database"
 	"log"
 	"time"
 
@@ -20,13 +19,14 @@ type (
 	}
 )
 
-var client, isTest = database.InitMongoDB() 
+var LogDriver mongoWriter
 
-var LogDriver = mongoWriter{client: client}
-var Logger = log.New(&LogDriver, "", 0)
+func NewLogger(c *mongo.Client) {
+	LogDriver = mongoWriter{client: c}
+}
 
 func (mw *mongoWriter) Write(p []byte) (n int, err error) {
-	var db = mw.client.Database("hospital").Collection("logs")
+	var db = mw.client.Database("question_board").Collection("logs")
 	doc := logStruct{
 		Timestamp: time.Now().Unix(),
 		Logs: string(p),
@@ -40,10 +40,11 @@ func (mw *mongoWriter) Write(p []byte) (n int, err error) {
 }
 
 func WriteLog(logs interface{}) {
-	if !isTest {
-		Logger.Println(logs)
-	} else {
-		log.Println(logs)
+	if LogDriver.client != nil {
+		log.SetOutput(&LogDriver)
+		log.SetPrefix("")
 	}
+
+	log.Println(logs)
 }
 

@@ -34,25 +34,18 @@ func (_m *AuthRepository) Login(_a0 string) (models.User, error) {
 	return r0, r1
 }
 
-// RefreshToken provides a mock function with given fields: _a0
-func (_m *AuthRepository) RefreshToken(_a0 models.Token) (models.Token, error) {
+// RevokeToken provides a mock function with given fields: _a0
+func (_m *AuthRepository) RevokeToken(_a0 models.Token) error {
 	ret := _m.Called(_a0)
 
-	var r0 models.Token
-	if rf, ok := ret.Get(0).(func(models.Token) models.Token); ok {
+	var r0 error
+	if rf, ok := ret.Get(0).(func(models.Token) error); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(models.Token)
+		r0 = ret.Error(0)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(models.Token) error); ok {
-		r1 = rf(_a0)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // SaveToken provides a mock function with given fields: _a0
@@ -62,6 +55,20 @@ func (_m *AuthRepository) SaveToken(_a0 models.Token) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(models.Token) error); ok {
 		r0 = rf(_a0)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateToken provides a mock function with given fields: _a0, _a1
+func (_m *AuthRepository) UpdateToken(_a0 models.Token, _a1 models.Token) error {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(models.Token, models.Token) error); ok {
+		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)
 	}

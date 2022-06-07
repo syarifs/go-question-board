@@ -36,7 +36,7 @@ func TestLogin(t *testing.T) {
 
 	password, _ := utils.HashPassword(loginBody.Password)
 
-	mockAuth := repository.NewAuthRepository(gdb)
+	mockAuth := repository.NewAuthRepository(gdb, nil)
 	authService := service.NewAuthService(mockAuth)
 	authController := controller.NewAuthController(authService)
 

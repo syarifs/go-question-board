@@ -7,7 +7,8 @@ import (
 	"go-question-board/internal/framework/routes"
 	"go-question-board/internal/framework/transport/controller"
 	"go-question-board/internal/framework/transport/middleware"
-	"go-question-board/internal/utils"
+	"go-question-board/internal/utils/config"
+	"go-question-board/internal/utils/logger"
 
 	_ "go-question-board/docs"
 
@@ -31,20 +32,22 @@ import (
 // @schemes http
 func main() {
 
-	utils.LoadConfig()
+	config.LoadConfig()
 
-	db := database.InitDatabase()
-	repo := repository.NewRepository(db)
+	db, mongodb := database.InitDatabase()
+	repo := repository.NewRepository(db, mongodb)
 	serv := service.NewService(repo)
 	ctrl := controller.NewController(serv)
+	logger.NewLogger(mongodb)
 
 	e := echo.New()
 	e.GET("/*", echoSwagger.WrapHandler)
 
 	api := e.Group("/api")
-	routes.NewRoutes(api, ctrl, middleware.JWT())
+	middleware.NewJWTConnection(mongodb)
+	routes.NewRoutes(api, ctrl, middleware.JWT)
 
 	middleware.Logging(e)
 
-	e.Start(":" + utils.SERVER_PORT)
+	e.Start(":" + config.SERVER_PORT)
 }

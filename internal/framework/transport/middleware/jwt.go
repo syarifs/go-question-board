@@ -1,34 +1,56 @@
 package middleware
 
 import (
-	"go-question-board/internal/core/entity/models"
-	"go-question-board/internal/utils"
-	"go-question-board/internal/utils/errors"
+	"context"
+	"go-question-board/internal/core/entity/response"
+	ujwt "go-question-board/internal/utils/jwt"
 	"net/http"
-	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func JWT() echo.MiddlewareFunc {
-	return middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey: utils.SERVER_SECRET,
-	})
+var client *mongo.Client
+
+func NewJWTConnection(mongo *mongo.Client) {
+	client = mongo
+}
+
+func JWT(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token, _ := ujwt.GetToken(c)
+
+		filter := bson.D{
+			{Key: "accesstoken", Value: token},
+		}
+
+		db := client.Database("question_board").Collection("token")
+		_, err := db.Find(context.TODO(), filter)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: "invalid or expired token",
+			})
+		}
+
+		return next(c)
+	}
 }
 
 func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		role, err := utils.GetTokenData(c, "role")
+		role, err := ujwt.GetTokenData(c, "administrator")
 
-		if err := errors.CheckError(nil, err); err != nil {
-			return err
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: err.Error(),
+			})
 		}
 
-		if role != "Administrator" {
-			return c.JSON(http.StatusUnauthorized, map[string]string{
-				"message": "access for this route only for administrator",
+
+		if role == nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: "access for this route only for administrator",
 			})
 		}
 		return next(c)
@@ -37,15 +59,17 @@ func AdminPermission(next echo.HandlerFunc) echo.HandlerFunc {
 
 func TeacherPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		role, err := utils.GetTokenData(c, "role")
+		role, err := ujwt.GetTokenData(c, "teacher")
 
-		if err := errors.CheckError(nil, err); err != nil {
-			return err
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: err.Error(),
+			})
 		}
 
-		if role != "Teacher" {
-			return c.JSON(http.StatusUnauthorized, map[string]string{
-				"message": "access for this route only for teacher",
+		if role == nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: "access for this route only for teacher",
 			})
 		}
 		return next(c)
@@ -54,13 +78,15 @@ func TeacherPermission(next echo.HandlerFunc) echo.HandlerFunc {
 
 func StudentPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		role, err := utils.GetTokenData(c, "role")
+		role, err := ujwt.GetTokenData(c, "student")
 
-		if err := errors.CheckError(nil, err); err != nil {
-			return err
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: err.Error(),
+			})
 		}
 
-		if role != "Student" {
+		if role == nil {
 			return c.JSON(http.StatusUnauthorized, map[string]string{
 				"message": "access for this route only for student",
 			})
@@ -68,39 +94,3 @@ func StudentPermission(next echo.HandlerFunc) echo.HandlerFunc {
 		return next(c)
 	}
 }
-
-func CreateToken(id int, level string) (t models.Token, err error) {
-	expTime := time.Now().Add(time.Hour * 1).Unix()
-	claims := jwt.MapClaims{}
-	claims["user_id"] = id
-	claims["role"] = level
-	claims["exp"] = expTime
-	claims["iat"] = time.Now().Unix()
-	claims["nbf"] = time.Now().Unix()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	t.AccessToken, err = token.SignedString(utils.SERVER_SECRET)
-
-	rexpTime := time.Now().Add(time.Hour * 24).Unix()
-	rclaims := jwt.MapClaims{}
-	rclaims["exp"] = rexpTime
-	rclaims["iat"] = time.Now().Unix()
-	rclaims["nbf"] = time.Now().Unix()
-	rtoken := jwt.NewWithClaims(jwt.SigningMethodHS256, rclaims)
-	t.RefreshToken, err = rtoken.SignedString(utils.SERVER_SECRET)
-	return
-}
-
-func RefreshToken(token_string models.Token) (t models.Token, err error) {
-	token, err := utils.ExtractToken(token_string.RefreshToken)
-	if _, ok := token.(jwt.MapClaims); ok {
-		tkn, _ := utils.ExtractToken(token_string.AccessToken)
-		user_id := tkn.(jwt.MapClaims)["user_id"]
-		role := tkn.(jwt.MapClaims)["role"]
-		if user_id != nil && role != nil {
-			return CreateToken(user_id.(int) ,role.(string))
-		}
-	}
-	return t, errors.New(500, "failed to generate new token")
-}
-
-

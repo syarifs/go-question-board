@@ -42,25 +42,3 @@ func TestLogin(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
-
-func TestRefreshToken(t *testing.T) {
-	t.Run("Succes", func(t *testing.T) {
-		data := models.Token{
-			AccessToken: "lasgbfuilawfgbklabfgla",
-			RefreshToken: "aklbtfgalwetbakldfadbff",
-		}
-		mockAuth.On("RefreshToken", data).Return(data, nil).Once()
-		res, err := authService.RefreshToken(data)
-		assert.NotEmpty(t, res)
-		assert.NoError(t, err)
-	})
-
-	t.Run("Fail", func(t *testing.T) {
-		data := models.Token{}
-		mockAuth.On("RefreshToken", data).Return(data, errors.New("fail")).Once()
-		res, err := authService.RefreshToken(data)
-		assert.Empty(t, res)
-		assert.Error(t, err)
-	})
-}
-

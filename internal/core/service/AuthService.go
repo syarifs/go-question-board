@@ -5,9 +5,9 @@ import (
 	"go-question-board/internal/core/entity/request"
 	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/repository"
-	"go-question-board/internal/framework/transport/middleware"
 	"go-question-board/internal/utils"
 	"go-question-board/internal/utils/errors"
+	"go-question-board/internal/utils/jwt"
 )
 
 type AuthService struct {
@@ -37,13 +37,26 @@ func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDeta
 	return
 }
 
+func (srv AuthService) Logout(token models.Token) (err error) {
+	err = srv.repo.RevokeToken(token)
+	return
+}
+
 func (srv AuthService) CreateToken(id int, level string) (t models.Token, err error) {
-	t, err = middleware.CreateToken(id, level)
+	t, err = jwt.CreateToken(float64(id), level)
 	err = srv.repo.SaveToken(t)
 	return
 }
 
-func (srv AuthService) RefreshToken(str models.Token) (token models.Token, err error) {
-	token, err = srv.repo.RefreshToken(str)
+func (srv AuthService) RefreshToken(tkn models.Token) (token models.Token, err error) {
+
+	if tkn.AccessToken == "" {
+		err = errors.New(401, "Token Not Provided")
+		return
+	}
+
+	new_token, err := jwt.RefreshToken(tkn)
+	err = srv.repo.UpdateToken(tkn, new_token)
+	token = new_token
 	return
 }

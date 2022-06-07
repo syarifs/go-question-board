@@ -58,6 +58,23 @@ func (acon AuthController) Login(c echo.Context) error {
 	})
 }
 
+func (acon AuthController) Logout(c echo.Context) error {
+	var token models.Token
+	c.Bind(&token)
+	err := acon.srv.Logout(token)
+	if err != nil {
+		error := err.(*errors.RequestError)
+		return c.JSON(error.Code(), response.Error{
+			Message: "Failed to Log User Out",
+			Error: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, response.MessageOnly{
+		Message: "User Logged Out",
+	})
+}
+
 // CreateResource godoc
 // @Summary Refresh Token
 // @Description Route Path for Get New Access Token
@@ -75,15 +92,14 @@ func (acon AuthController) RefreshToken(c echo.Context) error {
 	token, err := acon.srv.RefreshToken(rtoken)
 	
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, echo.Map{
-			"message": "Failed to Refresh Token",
-			"error": err.Error(),
+		return c.JSON(http.StatusExpectationFailed, response.MessageOnly{
+			Message: err.Error(),
 		})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
-		"message": "Token Refreshed",
-		"jwt": token,
+	return c.JSON(http.StatusOK, response.MessageData{
+		Message: "Token Refreshed",
+		Data: token,
 	})
 }
 
