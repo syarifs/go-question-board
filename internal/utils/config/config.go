@@ -13,6 +13,7 @@ var (
 	DB_DATABASE string
 	DB_HOST string
 	MONGODB_STRING string
+	MONGODB_DATABASE string
 	SERVER_PORT string
 	SERVER_SECRET []byte
 )
@@ -32,6 +33,7 @@ func LoadConfig() {
 	}
 
 	MONGODB_STRING = viper.GetString("mongo.STRING")
+	MONGODB_DATABASE = viper.GetString("mongo.DATABASE")
 	DB_DATABASE = viper.GetString("mysql.DATABASE")
 	DB_USERNAME = viper.GetString("mysql.USERNAME")
 	DB_PASSWORD = viper.GetString("mysql.PASSWORD")

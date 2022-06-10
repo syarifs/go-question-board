@@ -11,23 +11,29 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var client *mongo.Client
+var client *mongo.Database
 
-func NewJWTConnection(mongo *mongo.Client) {
+func NewJWTConnection(mongo *mongo.Database) {
 	client = mongo
 }
 
 func JWT(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		token, _ := ujwt.GetToken(c)
+		token, err := ujwt.GetToken(c)
 
-		filter := bson.D{
-			{Key: "accesstoken", Value: token},
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
+				Message: err.Error(),
+			})
 		}
 
-		db := client.Database("question_board").Collection("token")
-		_, err := db.Find(context.TODO(), filter)
-		if err != nil {
+		filter := bson.D{
+			{Key: "access_token", Value: token},
+		}
+
+		db := client.Collection("token")
+		res := db.FindOne(context.TODO(), filter)
+		if res.Err() != nil {
 			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
 				Message: "invalid or expired token",
 			})

@@ -19,7 +19,7 @@ func TestCreateUser(t *testing.T) {
 			Name: "Test",
 			Email: "test@testify.io",
 			Password: "test2",
-			LevelID: 1,
+			RoleID: 1,
 		}
 		mockUser.On("CreateUser", mock.Anything).Return(nil).Once()
 		err := userService.CreateUser(data)
@@ -40,7 +40,7 @@ func TestUpdateUser(t *testing.T) {
 			Name: "Test",
 			Email: "test@testify.io",
 			Password: "test2",
-			LevelID: 1,
+			RoleID: 1,
 		}
 		mockUser.On("UpdateUser", mock.Anything).Return(nil).Once()
 		userService.UpdateUser(1, data)
@@ -75,7 +75,7 @@ func TestReadUser(t *testing.T) {
 				Name: "Test",
 				Email: "test@testify.io",
 				Password: "test2",
-				LevelID: 1,
+				RoleID: 1,
 			},
 		}
 		mockUser.On("ReadUser").Return(&data, nil).Once()
@@ -97,7 +97,7 @@ func TestReadUserByID(t *testing.T) {
 			Name: "Test",
 			Email: "test@testify.io",
 			Password: "test2",
-			LevelID: 1,
+			RoleID: 1,
 		}
 		mockUser.On("ReadUserByID", 1).Return(&data, nil).Once()
 		userService.ReadUserByID(1)

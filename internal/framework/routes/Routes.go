@@ -7,7 +7,7 @@ import (
 )
 
 func NewRoutes (e *echo.Group, ctrl *controller.Controller, middleware ...echo.MiddlewareFunc) {
-	NewAuthRoutes(e, ctrl.Auth)
+	NewAuthRoutes(e, ctrl.Auth, middleware...)
 	NewUserRoutes(e, ctrl.User, middleware...)
 	NewMajorRoutes(e, ctrl.Major, middleware...)
 	NewTagRoutes(e, ctrl.Tag, middleware...)

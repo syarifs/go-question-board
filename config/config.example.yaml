@@ -2,10 +2,11 @@ server:
   SECRET: "6568135b96cd0a3d6adcae0a475f0da473e8e2bee0d800b2ba5010186b37d950"
   PORT: "8080"
 mysql:
-  DATABASE: "hospital"
+  DATABASE: "question_board"
   USERNAME: "root"
   PASSWORD: ""
   HOST: "localhost"
 mongo:
-  STRING: "mongodb://127.0.0.1:27017/hospital?compressors=disabled&gssapiServiceName=mongodb"
+  STRING: "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb"
+  DATABASE: "question_board"
 

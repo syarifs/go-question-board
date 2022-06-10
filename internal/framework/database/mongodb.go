@@ -11,10 +11,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func initMongoDB() (client *mongo.Client) {
+func initMongoDB() (db *mongo.Database) {
 
 	if os.Getenv("Env") == "testing" {
-		client = nil
+		db = nil
 		return
 	}
 	
@@ -24,6 +24,8 @@ func initMongoDB() (client *mongo.Client) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db = client.Database(config.MONGODB_DATABASE)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()

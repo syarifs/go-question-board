@@ -6,6 +6,7 @@ import (
 	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/utils/errors"
+	"go-question-board/internal/utils/jwt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -43,14 +44,14 @@ func (acon AuthController) Login(c echo.Context) error {
 		})
 	}
 
-	jwt, err := acon.srv.CreateToken(int(res.ID), res.Level.Name)
+	jwt, err := acon.srv.CreateToken(res.ID, res.Role)
 	if err != nil {
 		return c.JSON(http.StatusExpectationFailed, response.Error{
 			Message: "Failed to Create Authentication Token",
 			Error: err.Error(),
 		})
 	}
-
+	
 	return c.JSON(http.StatusOK, response.MessageDataJWT{
 		Message: "User Logged In",
 		Data: res,
@@ -58,20 +59,38 @@ func (acon AuthController) Login(c echo.Context) error {
 	})
 }
 
-func (acon AuthController) Logout(c echo.Context) error {
-	var token models.Token
-	c.Bind(&token)
-	err := acon.srv.Logout(token)
+// CreateResource godoc
+// @Summary Refresh Token
+// @Description Route Path for Get New Access Token
+// @Tags Authorization
+// @Accept json
+// @Produce json
+// @Param token  query  string  true "pass access token here"
+// @Success 200 {object} models.Token{} success
+// @Failure 417 {object} response.Error{} error
+// @Failure 500 {object} response.Error{} error
+// @Router /refresh_token [post]
+func (acon AuthController) RefreshToken(c echo.Context) error {
+	var t models.Token
+	token, err := jwt.GetToken(c)
+
+	if err == nil {
+		t.RefreshToken = token
+		t.AccessToken = c.QueryParam("token")
+
+		t, err = acon.srv.RefreshToken(t)
+	}
+
 	if err != nil {
-		error := err.(*errors.RequestError)
-		return c.JSON(error.Code(), response.Error{
-			Message: "Failed to Log User Out",
+		return c.JSON(http.StatusExpectationFailed, response.Error{
+			Message: "Failed to Generate New Token",
 			Error: err.Error(),
 		})
 	}
 
-	return c.JSON(http.StatusOK, response.MessageOnly{
-		Message: "User Logged Out",
+	return c.JSON(http.StatusOK, response.MessageData{
+		Message: "New Token Generated",
+		Data: t,
 	})
 }
 
@@ -85,21 +104,23 @@ func (acon AuthController) Logout(c echo.Context) error {
 // @Success 200 {object} models.Token{} success
 // @Failure 417 {object} response.Error{} error
 // @Failure 500 {object} response.Error{} error
-// @Router /refresh_token [post]
-func (acon AuthController) RefreshToken(c echo.Context) error {
-	rtoken := models.Token{}
-	c.Bind(&rtoken)
-	token, err := acon.srv.RefreshToken(rtoken)
+// @Router /login [post]
+func (acon AuthController) Logout(c echo.Context) error {
+	token, err := jwt.GetToken(c)
+
+	if err == nil {
+		err = acon.srv.Logout(token)
+
+	}
 	
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, response.MessageOnly{
-			Message: err.Error(),
+		return c.JSON(http.StatusExpectationFailed, echo.Map{
+			"message": "Failed to Revoke Token",
+			"error": err.Error(),
 		})
 	}
 
-	return c.JSON(http.StatusOK, response.MessageData{
-		Message: "Token Refreshed",
-		Data: token,
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "User Logged Out",
 	})
 }
-

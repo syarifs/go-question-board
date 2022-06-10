@@ -15,14 +15,14 @@ func userSeeder() Seed {
 			Name: "Administrator",
 			Email: "admin@web.io",
 			Password: password,
-			LevelID: 1,
+			RoleID: 1,
 			Status: 1,
 		},
 		{
 			Name: "Ach. Dafid",
 			Email: "dafid@web.io",
 			Password: password,
-			LevelID: 2,
+			RoleID: 2,
 			Status: 1,
 			MajorID: &major,
 		},
@@ -30,9 +30,13 @@ func userSeeder() Seed {
 			Name: "Syarif Ubaidillah",
 			Email: "syarif@web.io",
 			Password: password,
-			LevelID: 3,
+			RoleID: 3,
 			Status: 1,
 			MajorID: &major,
+			Tags: []models.Tag{
+				{ID: 1, Name: "Year", Value: "2019"},
+				{ID: 4, Name: "Class", Value: "A"},
+			},
 		},
 	}
 	model := &models.User{}

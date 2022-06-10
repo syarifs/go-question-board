@@ -16,7 +16,7 @@ func CreateToken(id float64, level string) (t models.Token, err error) {
 	expTime := time.Now().Add(time.Hour * 1).Unix()
 	claims := jwt.MapClaims{}
 	claims["user_id"] = id
-	claims[role] = true
+	claims["role"] = role
 	claims["exp"] = expTime
 	claims["iat"] = time.Now().Unix()
 	claims["nbf"] = time.Now().Unix()

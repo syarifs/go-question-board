@@ -10,7 +10,7 @@ import (
 
 type (
 	mongoWriter struct {
-    client *mongo.Client
+    db *mongo.Database
 	}
 	
 	logStruct struct {
@@ -21,12 +21,12 @@ type (
 
 var LogDriver mongoWriter
 
-func NewLogger(c *mongo.Client) {
-	LogDriver = mongoWriter{client: c}
+func NewLogger(database *mongo.Database) {
+	LogDriver = mongoWriter{db: database}
 }
 
 func (mw *mongoWriter) Write(p []byte) (n int, err error) {
-	var db = mw.client.Database("question_board").Collection("logs")
+	var db = mw.db.Collection("logs")
 	doc := logStruct{
 		Timestamp: time.Now().Unix(),
 		Logs: string(p),
@@ -40,7 +40,7 @@ func (mw *mongoWriter) Write(p []byte) (n int, err error) {
 }
 
 func WriteLog(logs interface{}) {
-	if LogDriver.client != nil {
+	if LogDriver.db != nil {
 		log.SetOutput(&LogDriver)
 		log.SetPrefix("")
 	}

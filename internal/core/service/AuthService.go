@@ -18,18 +18,15 @@ func NewAuthService(repo repository.AuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDetails, err error) {
-	var user models.User
+func (srv AuthService) Login(login request.LoginRequest) (res response.UserDetails, err error) {
 	var checkPassword bool
-	user, err  = srv.repo.Login(login.Email)
+	res, err  = srv.repo.Login(login.Email)
 
-	err = errors.CheckError(user, err)
+	err = errors.CheckError(res, err)
 
 	if err == nil {
-		checkPassword = utils.ComparePassword(login.Password, user.Password)
-		if checkPassword {
-			res, _ = utils.TypeConverter[response.UserDetails](&user)
-		} else {
+		checkPassword = utils.ComparePassword(login.Password, res.Password)
+		if !checkPassword {
 			err = errors.New(417, "Wrong Password")
 		}
 	}
@@ -37,12 +34,12 @@ func (srv AuthService) Login(login request.LoginRequest) (res *response.UserDeta
 	return
 }
 
-func (srv AuthService) Logout(token models.Token) (err error) {
+func (srv AuthService) Logout(token string) (err error) {
 	err = srv.repo.RevokeToken(token)
 	return
 }
 
-func (srv AuthService) CreateToken(id int, level string) (t models.Token, err error) {
+func (srv AuthService) CreateToken(id uint, level string) (t models.Token, err error) {
 	t, err = jwt.CreateToken(float64(id), level)
 	err = srv.repo.SaveToken(t)
 	return
@@ -56,6 +53,9 @@ func (srv AuthService) RefreshToken(tkn models.Token) (token models.Token, err e
 	}
 
 	new_token, err := jwt.RefreshToken(tkn)
+	if err != nil {
+		return
+	}
 	err = srv.repo.UpdateToken(tkn, new_token)
 	token = new_token
 	return

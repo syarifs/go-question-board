@@ -2,8 +2,8 @@ package mocks
 
 import (
 	"errors"
-	"go-question-board/internal/core/entity/models"
 	"go-question-board/internal/core/entity/request"
+	"go-question-board/internal/core/entity/response"
 	"go-question-board/internal/core/service"
 	"go-question-board/internal/utils"
 	"testing"
@@ -23,7 +23,7 @@ func TestLogin(t *testing.T) {
 			Password: "test",
 		}
 
-		ret := models.User{
+		ret := response.UserDetails{
 			Email: data.Email,
 			Password: password,
 		}
@@ -35,7 +35,7 @@ func TestLogin(t *testing.T) {
 
 	t.Run("Fail", func(t *testing.T) {
 		data := request.LoginRequest{}
-		ret := models.User{}
+		ret := response.UserDetails{}
 		mockAuth.On("Login", "").Return(ret, errors.New("fail")).Once()
 		res, err := authService.Login(data)
 		assert.Empty(t, res)

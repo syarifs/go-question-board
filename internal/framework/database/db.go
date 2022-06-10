@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitDatabase() (sqldb *gorm.DB, mongodb *mongo.Client) {
+func InitDatabase() (sqldb *gorm.DB, mongodb *mongo.Database) {
 	var err error
 
 	mongodb = initMongoDB()

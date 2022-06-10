@@ -6,7 +6,7 @@ type User struct {
 	ID uint `json:"id"`
 	Email string `json:"email"`
 	Name string `json:"name"`
-	Level m.Level `json:"level"`
+	Level m.Role `json:"level"`
 	Tag []m.Tag	`json:"tags"`
 	Status int `json:"status"`
 }

@@ -8,13 +8,13 @@ type User struct {
 	Name string `json:"name"`
 	Password string `json:"password"`
 	Status int `json:"status"`
-	LevelID int `json:"level_id"`
+	RoleID int `json:"level_id"`
 	MajorID *int `json:"major_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	Tags []Tag `json:"tags" gorm:"many2many:user_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Subject *[]Subject `json:"subject" gorm:"many2many:student_subject;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	TeacherSubject []TeacherSubject `json:"teacher_subject" gorm:"constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
-	Level Level `json:"level"`
+	Role Role `json:"role"`
 	Major Major `json:"major"`
 	CreatedAt time.Time
 	UpdatedAt time.Time

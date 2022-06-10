@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewRepository(db *gorm.DB, mongo *mongo.Client) *repository.Repository {
+func NewRepository(db *gorm.DB, mongo *mongo.Database) *repository.Repository {
 	return &repository.Repository{
 		Auth: NewAuthRepository(db, mongo),
 		User: NewUserRepository(db),

@@ -70,7 +70,7 @@ func TestGetEvaluateQuest(t *testing.T) {
 		ID:     1,
 		Email:  "student@web.io",
 		Name:   "Student",
-		Level:  models.Level{},
+		Level:  models.Role{},
 		Tag:    []models.Tag{
 			{
 				ID: 1,

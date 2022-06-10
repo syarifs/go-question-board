@@ -10,7 +10,7 @@ func migrateDB(db *gorm.DB) (err error) {
 	err = db.AutoMigrate(
 		models.Major{},
 		models.Subject{},
-		models.Level{},
+		models.Role{},
 		models.User{},
 		models.Questionnaire{},
 		models.Question{},
