@@ -28,10 +28,8 @@ func NewSeeders(db *gorm.DB) {
 func seedAll() []Seed {
 	return []Seed{
 		levelSeeder(),
-		majorSeeder(),
-		subjectSeeder(),
-		tagSeeder(),
 		userSeeder(),
+		profileSeeder(),
 	}
 }
 

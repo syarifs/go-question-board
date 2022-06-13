@@ -35,21 +35,19 @@ func NewAuthController(srv *service.AuthService) *AuthController {
 func (acon AuthController) Login(c echo.Context) error {
 	var login request.LoginRequest
 	c.Bind(&login)
+
+	if r, ok := errors.CheckHTTP(nil, login.Validate(), "Validate"); !ok {
+		return c.JSON(r.Code, r.Result)
+	}
+
 	res, err := acon.srv.Login(login)
-	if err != nil {
-		error := err.(*errors.RequestError)
-		return c.JSON(error.Code(), response.Error{
-			Message: "Failed to Log User In",
-			Error: err.Error(),
-		})
+	if r, ok := errors.CheckHTTP(res, err, "User Log In"); !ok {
+		return c.JSON(r.Code, r.Result)
 	}
 
 	jwt, err := acon.srv.CreateToken(res.ID, res.Role)
-	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, response.Error{
-			Message: "Failed to Create Authentication Token",
-			Error: err.Error(),
-		})
+	if r, ok := errors.CheckHTTP(res, err, "Create Authentication Token"); !ok {
+		return c.JSON(r.Code, r.Result)
 	}
 	
 	return c.JSON(http.StatusOK, response.MessageDataJWT{

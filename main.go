@@ -45,7 +45,8 @@ func main() {
 
 	api := e.Group("/api")
 	middleware.NewJWTConnection(mongodb)
-	routes.NewRoutes(api, ctrl, middleware.JWT)
+	// routes.NewRoutes(api, ctrl, middleware.JWT)
+	routes.NewRoutes(api, ctrl)
 
 	middleware.Logging(e)
 

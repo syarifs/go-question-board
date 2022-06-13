@@ -7,11 +7,5 @@ import (
 )
 
 func NewRoutes (e *echo.Group, ctrl *controller.Controller, middleware ...echo.MiddlewareFunc) {
-	NewAuthRoutes(e, ctrl.Auth, middleware...)
-	NewUserRoutes(e, ctrl.User, middleware...)
-	NewMajorRoutes(e, ctrl.Major, middleware...)
-	NewTagRoutes(e, ctrl.Tag, middleware...)
-	NewSubjectRoutes(e, ctrl.Subject, middleware...)
-	NewQuestionnaireRoutes(e, ctrl.Questionnare, middleware...)
-	NewEvaluateRoutes(e, ctrl.Evaluate, middleware...)
+	NewAuthRoutes(e, ctrl.Auth)
 }

@@ -32,8 +32,8 @@ func JWT(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		db := client.Collection("token")
-		res := db.FindOne(context.TODO(), filter)
-		if res.Err() != nil {
+		_, err = db.Find(context.TODO(), filter)
+		if err != nil {
 			return c.JSON(http.StatusUnauthorized, response.MessageOnly{
 				Message: "invalid or expired token",
 			})

@@ -8,9 +8,9 @@ import (
 
 func levelSeeder() Seed {
 	seeds := []models.Role{
-		{Name: "Administrator"},
-		{Name: "Teacher"},
-		{Name: "Student"},
+		{Name: "Admin"},
+		{Name: "Doctor"},
+		{Name: "Nurse"},
 	}
 	model := &models.Role{}
 

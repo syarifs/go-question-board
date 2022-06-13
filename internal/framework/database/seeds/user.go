@@ -8,35 +8,25 @@ import (
 )
 
 func userSeeder() Seed {
-	major := 1
 	password, _ := utils.HashPassword("password")
 	seeds := []models.User{
 		{
-			Name: "Administrator",
 			Email: "admin@web.io",
 			Password: password,
 			RoleID: 1,
 			Status: 1,
 		},
 		{
-			Name: "Ach. Dafid",
-			Email: "dafid@web.io",
+			Email: "teacher@web.io",
 			Password: password,
 			RoleID: 2,
 			Status: 1,
-			MajorID: &major,
 		},
 		{
-			Name: "Syarif Ubaidillah",
-			Email: "syarif@web.io",
+			Email: "student@web.io",
 			Password: password,
 			RoleID: 3,
 			Status: 1,
-			MajorID: &major,
-			Tags: []models.Tag{
-				{ID: 1, Name: "Year", Value: "2019"},
-				{ID: 4, Name: "Class", Value: "A"},
-			},
 		},
 	}
 	model := &models.User{}

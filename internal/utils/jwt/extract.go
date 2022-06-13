@@ -22,11 +22,12 @@ func GetTokenData(c echo.Context, data string) (extracted interface{}, err error
 
 func GetToken(c echo.Context) (header string, err error) {
 	header = c.Request().Header.Get("Authorization")
-	if header == "" {
+	headers := strings.Split(header, " ")
+	if header == "" || len(headers) < 2 {
 		err = errors.New("No Token Provided")
 		return
 	}
-	header = strings.Split(header, " ")[1]
+	header = headers[1]
 	_, err = ExtractToken(header)
 	return
 }
