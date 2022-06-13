@@ -17,20 +17,20 @@ Aplikasi REST API untuk membuat survey, polling, atau melakukan evaluasi guru di
 - [x] Authentication
 	- [x] User Login
 	- [x] Generate JSON Web Token
-- [x] Basic CRUD
-	- [x] Tags
-	- [x] Subject
-	- [x] Major
-	- [x] User
-	- [x] Questionnaire
-- [x] Subject
-	- [x] Register Teacher to Subject
-- [x] Questionnaire
-	- [x] Create Survey
-	- [x] View Survey Response
-	- [x] Answer Survey
-	- [x] Filter By Tags
-	- [x] Filter Completed Survey
-- [x] Teacher Evaluation
-	- [x] Evaluate Teacher by Subject
-	- [x] View Evaluated Data from Teacher Side
+- [ ] Basic CRUD
+	- [ ] Tags
+	- [ ] Subject
+	- [ ] Major
+	- [ ] User
+	- [ ] Questionnaire
+- [ ] Subject
+	- [ ] Register Teacher to Subject
+- [ ] Questionnaire
+	- [ ] Create Quiz
+	- [ ] View Quiz Response
+	- [ ] Answer Quiz
+	- [ ] Filter By Tags
+	- [ ] Filter Completed Quiz
+- [ ] Teacher Evaluation
+	- [ ] Evaluate Teacher by Subject
+	- [ ] View Evaluated Data
